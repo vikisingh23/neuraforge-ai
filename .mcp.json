@@ -53,13 +53,6 @@
       "url": "https://mcp.figma.com/mcp",
       "type": "http"
     },
-    "expo-mcp": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "expo-mcp"
-      ]
-    },
     "cali-mcp": {
       "command": "npx",
       "args": [
@@ -78,13 +71,6 @@
       "command": "dart",
       "args": [
         "mcp-server"
-      ]
-    },
-    "flutter-mcp": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "flutter-mcp"
       ]
     },
     "remotion-mcp": {
@@ -149,7 +135,7 @@
       "args": [
         "-y",
         "@neuraforge/office-mcp",
-        "--pptx"
+        "pptx"
       ]
     },
     "neuraforge-office-docx": {
@@ -157,7 +143,7 @@
       "args": [
         "-y",
         "@neuraforge/office-mcp",
-        "--docx"
+        "docx"
       ]
     },
     "neuraforge-office-xlsx": {
@@ -165,7 +151,7 @@
       "args": [
         "-y",
         "@neuraforge/office-mcp",
-        "--xlsx"
+        "xlsx"
       ]
     },
     "neuraforge-loadtest": {

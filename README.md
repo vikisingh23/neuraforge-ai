@@ -6,7 +6,7 @@
   <p align="center">
     <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache%202.0-blue.svg" alt="License"></a>
     <img src="https://img.shields.io/badge/agents-40-blueviolet" alt="40 Agents">
-    <img src="https://img.shields.io/badge/MCP%20servers-24-orange" alt="24 MCP Servers">
+    <img src="https://img.shields.io/badge/MCP%20servers-22-orange" alt="22 MCP Servers">
     <img src="https://img.shields.io/badge/skills-35-green" alt="35 Skills">
     <img src="https://img.shields.io/badge/stacks-7-red" alt="7 Stacks">
     <img src="https://img.shields.io/badge/platform-Windows%20%7C%20Mac%20%7C%20Linux-lightgrey" alt="Cross-platform">
@@ -168,7 +168,7 @@ Enforced across all 7 stacks by every forge and reviewer:
 </details>
 
 <details>
-<summary><strong>24 MCP Servers</strong> (click to expand)</summary>
+<summary><strong>22 MCP Servers</strong> (click to expand)</summary>
 
 **Design**: Figma DevMode, MUI
 **Frontend**: Vite React, Storybook, ReactBits
