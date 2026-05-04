@@ -176,7 +176,7 @@ Enforced across all 7 stacks by every forge and reviewer:
 **Backend**: Swagger, OpenAPI
 **Quality**: SonarQube, Playwright, a11y
 **Media**: Remotion, FFmpeg, Media Processor, Short Video Maker
-**Documents**: office-mcp, document-mcp-server
+**Documents**: @neuraforge/office-mcp (PPTX, DOCX, XLSX)
 
 </details>
 

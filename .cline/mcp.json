@@ -118,20 +118,6 @@
         "PEXELS_API_KEY": "${PEXELS_API_KEY}"
       }
     },
-    "office-mcp": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "office-mcp"
-      ]
-    },
-    "document-mcp-server": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "document-mcp-server"
-      ]
-    },
     "github-mcp": {
       "command": "npx",
       "args": [
@@ -157,6 +143,37 @@
         "graphify-out/graph.json"
       ],
       "_note": "Optional. Install: pip install graphifyy && graphify install. Build graph: /graphify ."
+    },
+    "neuraforge-office-pptx": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@neuraforge/office-mcp",
+        "--pptx"
+      ]
+    },
+    "neuraforge-office-docx": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@neuraforge/office-mcp",
+        "--docx"
+      ]
+    },
+    "neuraforge-office-xlsx": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@neuraforge/office-mcp",
+        "--xlsx"
+      ]
+    },
+    "neuraforge-loadtest": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@neuraforge/loadtest-mcp"
+      ]
     }
   }
 }
