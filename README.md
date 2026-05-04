@@ -246,3 +246,55 @@ Copy `.aider.conf.yml` + `AGENTS.md` + `agents/` to your project. Aider reads co
 
 See `chatgpt/README.md` for setup. Copy `chatgpt/GPT_INSTRUCTIONS.md` into your Custom GPT's instructions field.
 </details>
+
+---
+
+## FAQ
+
+<details>
+<summary><strong>Does it send my code anywhere?</strong></summary>
+
+No. All agent prompts are local markdown files. MCP servers run locally via npx. The only external connection is Figma DevMode (optional, uses your own OAuth). No telemetry, no analytics, no data collection.
+</details>
+
+<details>
+<summary><strong>Does it work offline?</strong></summary>
+
+The agent prompts and rules work offline. MCP servers that use npx need internet on first run to download packages (cached after that). The AI model itself (Claude, Copilot, Gemini) requires internet.
+</details>
+
+<details>
+<summary><strong>Can I customize the rules?</strong></summary>
+
+Yes. Edit any file in `agents/` or `rules/`. Line limits, architecture principles, review scoring — all configurable. See `rules/core/ARCHITECTURE_PRINCIPLES.md` for the threshold config format.
+</details>
+
+<details>
+<summary><strong>Which AI model does it use?</strong></summary>
+
+Whatever your platform provides. Claude Code uses Claude. Cursor uses GPT-4/Claude. Gemini CLI uses Gemini. NeuraForge provides the instructions — the model is up to your platform.
+</details>
+
+<details>
+<summary><strong>Is it free?</strong></summary>
+
+Yes. Apache 2.0 — free for personal and commercial use. The AI platform you use (Claude, Cursor, etc.) may have its own pricing.
+</details>
+
+<details>
+<summary><strong>35 skills is overwhelming. Where do I start?</strong></summary>
+
+See [QUICKSTART.md](QUICKSTART.md). Start with `/debug` (paste any error), then `/scaffold` (bootstrap a project), then try a forge agent for your stack.
+</details>
+
+<details>
+<summary><strong>Can I use it with my existing project?</strong></summary>
+
+Yes. Copy `AGENTS.md` + `agents/` + `rules/` into your project root. The agents will search your existing codebase before generating new code.
+</details>
+
+<details>
+<summary><strong>How is this different from Cursor rules or Copilot instructions?</strong></summary>
+
+NeuraForge is a complete SDLC platform, not just coding rules. It includes: requirements agents, code generation across 7 stacks, 10 code reviewers, testing, debugging, refactoring, database design, API design, CI/CD, and document generation — all with a plan-before-act workflow.
+</details>
