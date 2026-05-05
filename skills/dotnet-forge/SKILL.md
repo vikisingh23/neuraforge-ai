@@ -1,6 +1,11 @@
 ---
 name: dotnet-forge
 description: Generate production-ready .NET Core APIs with Entity Framework, repository pattern, CQRS, and enterprise standards
+category: software-development
+triggers:
+  - "build a dotnet api"
+  - "create .net api"
+  - "generate c# api"
 ---
 
 # .NET API Generation

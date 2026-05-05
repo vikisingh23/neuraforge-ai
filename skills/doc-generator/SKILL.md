@@ -1,6 +1,11 @@
 ---
 name: doc-generator
 description: Generate PowerPoint presentations, Word documents, and Excel reports from plain English descriptions
+category: devops
+triggers:
+  - "create presentation"
+  - "generate document"
+  - "make pptx"
 ---
 
 Create PowerPoint, Word, and Excel documents.

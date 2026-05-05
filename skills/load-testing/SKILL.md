@@ -1,6 +1,9 @@
 ---
 name: load-testing
 description: Generate load tests, run stress tests, detect performance regressions
+category: general
+triggers:
+  - "use load-testing"
 ---
 
 Run load tests and detect performance regressions.

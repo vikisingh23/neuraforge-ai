@@ -1,6 +1,11 @@
 ---
 name: devils-advocate
 description: Challenge and stress-test Product Manager output for regulatory accuracy, edge cases, and feasibility
+category: project-management
+triggers:
+  - "challenge this"
+  - "find gaps"
+  - "what could go wrong"
 ---
 
 Challenge requirements for gaps and feasibility.

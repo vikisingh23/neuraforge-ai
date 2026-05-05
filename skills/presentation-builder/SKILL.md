@@ -1,6 +1,9 @@
 ---
 name: presentation-builder
 description: Create professional enterprise/presentations with regulatory compliance and your company branding
+category: devops
+triggers:
+  - "use presentation-builder"
 ---
 
 Create professional presentations.

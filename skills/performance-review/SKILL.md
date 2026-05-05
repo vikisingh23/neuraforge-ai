@@ -1,6 +1,11 @@
 ---
 name: performance-review
 description: Review for N+1 queries, missing memoization, unbounded queries, re-renders, caching gaps
+category: code-quality
+triggers:
+  - "check performance"
+  - "find n+1"
+  - "performance audit"
 ---
 
 Review code for performance issues.

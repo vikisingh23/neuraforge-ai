@@ -1,6 +1,9 @@
 ---
 name: fullstack-orchestrator
 description: Coordinate complete feature development from Figma UI to database schema to API to frontend
+category: project-management
+triggers:
+  - "use fullstack-orchestrator"
 ---
 
 Coordinate full-stack feature development.

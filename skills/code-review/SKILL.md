@@ -1,6 +1,11 @@
 ---
 name: code-review
 description: Review code against enterprise standards — auto-detects stack (.NET, NestJS, React, RN, Flutter)
+category: code-quality
+triggers:
+  - "review this code"
+  - "check code quality"
+  - "score this"
 ---
 
 # enterprise Code Review

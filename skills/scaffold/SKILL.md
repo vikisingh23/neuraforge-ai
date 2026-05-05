@@ -1,6 +1,11 @@
 ---
 name: scaffold
 description: Bootstrap a new project with your stack, auth, database, and standards pre-configured
+category: developer-tools
+triggers:
+  - "bootstrap project"
+  - "create new project"
+  - "scaffold"
 ---
 
 Bootstrap a new project with enterprise standards pre-configured.

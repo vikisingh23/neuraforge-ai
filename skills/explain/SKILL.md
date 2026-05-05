@@ -1,6 +1,11 @@
 ---
 name: explain
 description: Point at a file or folder — get documentation explaining what it does, data flow, and key decisions
+category: developer-tools
+triggers:
+  - "explain this code"
+  - "document this"
+  - "what does this do"
 ---
 
 Generate documentation for files, folders, or entire projects.

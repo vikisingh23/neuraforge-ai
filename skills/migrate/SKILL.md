@@ -1,6 +1,11 @@
 ---
 name: migrate
 description: Code migration assistant — upgrade frameworks, convert languages, modernize patterns
+category: developer-tools
+triggers:
+  - "migrate to"
+  - "upgrade framework"
+  - "convert to typescript"
 ---
 
 Migrate code between frameworks, languages, and patterns.

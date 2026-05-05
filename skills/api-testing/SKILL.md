@@ -1,6 +1,9 @@
 ---
 name: api-testing
 description: Generate and run Postman collections, validate API responses, manage test suites
+category: general
+triggers:
+  - "use api-testing"
 ---
 
 Generate and run API test collections.

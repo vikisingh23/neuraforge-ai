@@ -298,3 +298,16 @@ Yes. Copy `AGENTS.md` + `agents/` + `rules/` into your project root. The agents 
 
 NeuraForge is a complete SDLC platform, not just coding rules. It includes: requirements agents, code generation across 7 stacks, 10 code reviewers, testing, debugging, refactoring, database design, API design, CI/CD, and document generation — all with a plan-before-act workflow.
 </details>
+
+<details>
+<summary><strong>Hermes Agent</strong></summary>
+
+```bash
+# Copy skills to Hermes directory
+cp -r skills/* ~/.hermes/skills/
+# Or symlink for auto-updates
+ln -s $(pwd)/skills ~/.hermes/skills/neuraforge
+```
+
+Skills include `triggers` for auto-activation. Hermes will auto-discover and use them based on your prompts.
+</details>

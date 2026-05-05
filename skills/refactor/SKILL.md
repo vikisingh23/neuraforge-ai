@@ -1,6 +1,11 @@
 ---
 name: refactor
 description: Point at a file or folder — get it broken down into focused, testable pieces following enterprise patterns
+category: developer-tools
+triggers:
+  - "refactor this"
+  - "break down this file"
+  - "split this"
 ---
 
 Break down complex files into focused, testable pieces.

@@ -1,6 +1,11 @@
 ---
 name: design-sync
 description: Sync DESIGN.md with your Figma design library — auto-update colors, typography, spacing, and component tokens
+category: devops
+triggers:
+  - "sync design"
+  - "update from figma"
+  - "sync design tokens"
 ---
 
 Keep your DESIGN.md in sync with Figma. The agent reads your design library, extracts tokens, shows a diff, and updates the file.

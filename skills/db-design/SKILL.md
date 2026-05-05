@@ -1,6 +1,11 @@
 ---
 name: db-design
 description: Describe your data needs in plain English — get entities, relationships, migrations, and indexes
+category: developer-tools
+triggers:
+  - "design database"
+  - "create schema"
+  - "design tables"
 ---
 
 Design database schemas from plain English requirements.

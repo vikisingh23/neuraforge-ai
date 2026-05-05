@@ -1,6 +1,11 @@
 ---
 name: spring-forge
 description: Generate production-ready Spring Boot + JPA APIs with layered architecture, MapStruct, Jakarta validation, and audit trails
+category: software-development
+triggers:
+  - "build spring boot api"
+  - "create java api"
+  - "generate spring"
 ---
 
 Generate Spring Boot + JPA APIs following enterprise patterns.

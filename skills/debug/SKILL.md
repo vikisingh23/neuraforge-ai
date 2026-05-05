@@ -1,6 +1,11 @@
 ---
 name: debug
 description: Paste an error, stack trace, or describe a bug — get a diagnosis and fix across any stack
+category: developer-tools
+triggers:
+  - "fix this error"
+  - "debug this"
+  - "why is this broken"
 ---
 
 Analyze errors, stack traces, and bugs across any stack.

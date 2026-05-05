@@ -1,6 +1,9 @@
 ---
 name: feature-pipeline
 description: End-to-end feature pipeline — BRS → Review → Development → Code Review → Handoff
+category: project-management
+triggers:
+  - "use feature-pipeline"
 ---
 
 Orchestrate end-to-end feature development.

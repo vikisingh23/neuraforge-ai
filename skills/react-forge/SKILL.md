@@ -1,6 +1,11 @@
 ---
 name: react-forge
 description: Generate production-ready React components with React Query, design tokens, and enterprise standards
+category: software-development
+triggers:
+  - "create a react component"
+  - "build react screen"
+  - "generate react"
 ---
 
 # React Component Generation

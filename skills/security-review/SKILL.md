@@ -1,6 +1,11 @@
 ---
 name: security-review
 description: Review code for security vulnerabilities — SQL injection, XSS, hardcoded secrets, weak crypto, PII exposure
+category: code-quality
+triggers:
+  - "check security"
+  - "find vulnerabilities"
+  - "security audit"
 ---
 
 Scan code for security vulnerabilities.

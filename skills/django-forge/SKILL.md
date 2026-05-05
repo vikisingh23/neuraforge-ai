@@ -1,6 +1,11 @@
 ---
 name: django-forge
 description: Generate production-ready Django + DRF APIs following Controller → Repository → Serializer pattern with Celery
+category: software-development
+triggers:
+  - "build django api"
+  - "create django"
+  - "generate python api"
 ---
 
 Generate Django + DRF APIs following Controller → Repository → Serializer pattern.

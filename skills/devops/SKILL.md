@@ -1,6 +1,9 @@
 ---
 name: devops
 description: Generate Dockerfiles, GitLab CI pipelines, K8s configs, and deployment setups
+category: devops
+triggers:
+  - "use devops"
 ---
 
 Generate Docker, CI/CD, and deployment configs.

@@ -1,6 +1,11 @@
 ---
 name: pr-review
 description: Review current branch changes — reads git diff, runs stack-appropriate review, outputs structured feedback
+category: code-quality
+triggers:
+  - "review my pr"
+  - "review this branch"
+  - "check my code"
 ---
 
 Review current branch changes against base branch.

@@ -1,6 +1,11 @@
 ---
 name: changelog
 description: Auto-generate changelog from git commits — grouped by feat/fix/docs with PR links
+category: developer-tools
+triggers:
+  - "generate changelog"
+  - "what changed"
+  - "release notes"
 ---
 
 Auto-generate changelog from git commits.

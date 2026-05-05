@@ -1,6 +1,11 @@
 ---
 name: rn-forge
 description: Generate production-ready React Native screens with React Query, typed navigation, and enterprise standards
+category: software-development
+triggers:
+  - "create react native screen"
+  - "build mobile screen"
+  - "generate rn"
 ---
 
 # React Native Screen Generation

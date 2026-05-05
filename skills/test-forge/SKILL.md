@@ -1,6 +1,11 @@
 ---
 name: test-forge
 description: Generate comprehensive tests across all stacks — .NET, NestJS, React, React Native, Flutter
+category: software-development
+triggers:
+  - "generate tests"
+  - "write tests"
+  - "create test suite"
 ---
 
 # Test Generation

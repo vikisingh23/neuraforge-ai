@@ -1,6 +1,9 @@
 ---
 name: domain-setup
 description: Configure your industry domain, country, and regulatory context — agents automatically adapt to your business
+category: general
+triggers:
+  - "use domain-setup"
 ---
 
 # Domain Setup

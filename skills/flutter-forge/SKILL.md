@@ -1,6 +1,11 @@
 ---
 name: flutter-forge
 description: Generate production-ready Flutter screens with Riverpod, Freezed, GoRouter, and enterprise standards
+category: software-development
+triggers:
+  - "create flutter screen"
+  - "build flutter widget"
+  - "generate dart"
 ---
 
 # Flutter Screen Generation

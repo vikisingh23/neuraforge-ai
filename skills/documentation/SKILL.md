@@ -1,6 +1,9 @@
 ---
 name: documentation
 description: Generate API docs, feature docs, system architecture docs, and onboarding guides
+category: devops
+triggers:
+  - "use documentation"
 ---
 
 Generate project documentation.

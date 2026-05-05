@@ -1,6 +1,9 @@
 ---
 name: ui-validation
 description: Compare generated UI against Figma designs — screenshot, diff, iterate until 85%+ match
+category: general
+triggers:
+  - "use ui-validation"
 ---
 
 Compare generated UI against Figma designs.

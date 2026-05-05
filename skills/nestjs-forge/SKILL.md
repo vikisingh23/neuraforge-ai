@@ -1,6 +1,11 @@
 ---
 name: nestjs-forge
 description: Generate production-ready NestJS + TypeORM APIs with modules, guards, interceptors, and enterprise standards
+category: software-development
+triggers:
+  - "build a nestjs api"
+  - "create nestjs"
+  - "generate node api"
 ---
 
 # NestJS API Generation

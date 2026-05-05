@@ -1,6 +1,11 @@
 ---
 name: api-design
 description: Describe your API needs in plain English — get OpenAPI 3.0 spec, then optionally generate implementation
+category: developer-tools
+triggers:
+  - "design api"
+  - "create openapi spec"
+  - "design endpoints"
 ---
 
 Design REST APIs from requirements, generate OpenAPI 3.0 spec.

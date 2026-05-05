@@ -22,6 +22,7 @@ detect_platform() {
   if command -v kiro &>/dev/null || command -v kiro-cli &>/dev/null; then echo "kiro"; return; fi
   if command -v opencode &>/dev/null; then echo "opencode"; return; fi
   if command -v gh &>/dev/null; then echo "copilot"; return; fi
+  if command -v hermes &>/dev/null; then echo "hermes"; return; fi
   echo "unknown"
 }
 
