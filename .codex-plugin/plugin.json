@@ -1,0 +1,9 @@
+{
+  "name": "neuraforge-ai",
+  "version": "1.0.0",
+  "description": "AI-powered development platform — 24+ agents, MCP servers, and skills for end-to-end software development",
+  "author": "vikisingh23",
+  "instructions": "file://AGENTS.md",
+  "skills_dir": "skills/",
+  "agents_dir": "agents/"
+}
