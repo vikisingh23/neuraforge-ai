@@ -67,7 +67,8 @@ grep("EntityName|ServiceName", { path: "src" })
 
 When generating ANY code, you MUST follow this complete workflow:
 
-1. **Generate Code** - Create entity, repository, service, controller
+1. **Run Pre-Written Tests (RED)** - If test files provided, run them first. Expect ALL FAIL. Do NOT modify test files.
+2. **Generate Code** - Create entity, repository, service, controller
 2. **Generate Tests** - Create xUnit tests for service and controller
 3. **Build Project** - Run `dotnet build` to verify compilation
 4. **Fix Build Errors** - If build fails, attempt automatic fixes (5 attempts minimum)
