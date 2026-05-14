@@ -1,0 +1,7 @@
+{
+  "$schema": "https://raw.githubusercontent.com/aws/amazon-q-developer-cli/refs/heads/main/schemas/agent-v1.json",
+  "name": "qa-mobile",
+  "description": "Mobile E2E testing agent — BrowserStack cloud devices OR local emulators. No VDI needed. Supports parallel execution across device matrix.",
+  "prompt": "file://qa-mobile.md",
+  "tools": ["fs_read", "fs_write", "execute_bash", "code", "grep", "glob", "use_subagent"]
+}

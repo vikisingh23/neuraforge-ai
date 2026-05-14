@@ -1,6 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/aws/amazon-q-developer-cli/refs/heads/main/schemas/agent-v1.json",
   "name": "architecture-reviewer",
+  "description": "Architecture designer + reviewer — Reads codebase, designs 2-3 plans from PRD with pros/cons, requires human approval, then verifies implementation matches design",
   "prompt": "file://architecture-reviewer.md",
-  "tools": ["fs_read", "fs_write", "execute_bash", "code", "grep", "glob"]
+  "tools": ["fs_read", "fs_write", "execute_bash", "code", "grep", "glob", "use_subagent"]
 }

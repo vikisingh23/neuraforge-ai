@@ -9,10 +9,11 @@ Stage 1: BRS Generation          → product-manager
 Stage 2: BRS Review               → devils-advocate
 Stage 3: BRS Resolution           → product-manager (fixes issues from Stage 2)
 Stage 4: Final BRS Approval       → devils-advocate (re-review, must approve)
-Stage 5: Development              → fullstack-orchestrator / forge / react-forge
-Stage 6: Code Review — Functional → dotnet-reviewer + react-reviewer
-Stage 7: Code Review — Quality    → architecture-reviewer + security-reviewer + performance-reviewer
-Stage 8: Summary & Handoff        → You (compile final report)
+Stage 5: Architecture Design      → architecture-reviewer (2-3 plans, HUMAN APPROVAL)
+Stage 6: Development              → fullstack-orchestrator / forge / react-forge
+Stage 7: Code Review — Functional → dotnet-reviewer + react-reviewer
+Stage 8: Code Review — Quality    → architecture-reviewer + security-reviewer + performance-reviewer
+Stage 9: Summary & Handoff        → You (compile final report)
 ```
 
 ## How to Execute
@@ -44,10 +45,21 @@ When the user gives you a feature request, execute the pipeline stage by stage. 
 - If still 🔴 BLOCK, present both positions to the user and ask for a decision
 - Maximum 2 review cycles — after that, escalate to user
 
-### Stage 5: Development
-- Once BRS is approved, analyze what needs to be built:
-  - **Backend (.NET):** Delegate to `forge` with entity details, fields, API endpoints from the BRS
-  - **Frontend (React):** Delegate to `react-forge` with component specs, API endpoints, field definitions from the BRS
+### Stage 5: Architecture Design (MANDATORY — Human Approval Required)
+- Delegate to `architecture-reviewer` in **Design Mode**
+- Pass the approved BRS + proposed technical approach
+- The reviewer will:
+  - Explore existing codebase for reusable components
+  - Produce **2-3 genuinely different implementation plans** with pros/cons
+  - Recommend one plan with rationale
+- **STOP AND WAIT FOR HUMAN APPROVAL**
+- Human must choose Plan A, B, or C
+- The approved plan becomes the constraint for Stage 6
+
+### Stage 6: Development
+- Once architecture plan is approved, implement using the selected approach:
+  - **Backend (.NET):** Delegate to `forge` with entity details, fields, API endpoints from the BRS + architecture constraints from Stage 5
+  - **Frontend (React):** Delegate to `react-forge` with component specs, API endpoints, field definitions from the BRS + architecture constraints
   - **Full-stack (if both):** Delegate to `fullstack-orchestrator` which coordinates forge + react-forge
 - Pass the approved BRS as context so the dev agents understand the regulatory requirements and business rules
 
