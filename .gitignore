@@ -2,3 +2,7 @@ node_modules/
 .DS_Store
 *.log
 .env
+.neuraforge/state/
+.neuraforge/locks/
+.neuraforge/analytics.log
+.neuraforge/contracts/
