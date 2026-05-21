@@ -1,0 +1,85 @@
+# Pipeline Definition — Feature Development
+# This file defines the FIXED stage sequence. The orchestrator follows it mechanically.
+
+stages:
+  - stage: 1
+    name: "BRS Generation"
+    agent: product-manager
+    type: generate
+    output: "01-brs.md"
+    
+  - stage: 2
+    name: "BRS Review"
+    agent: devils-advocate
+    type: review
+    input: "01-brs.md"
+    output: "02-review.md"
+    max_loops: 2
+    loop_target: 1
+
+  - stage: 3
+    name: "BRS Resolution"
+    agent: product-manager
+    type: resolve
+    input: "02-review.md"
+    output: "01-brs.md"
+    condition: "previous.verdict == needs-revision"
+
+  - stage: 4
+    name: "Final BRS Approval"
+    agent: devils-advocate
+    type: review
+    input: "01-brs.md"
+    output: "02-review-final.md"
+    condition: "stage_3.ran == true"
+    max_loops: 1
+    escalate_on_fail: true
+
+  - stage: 5
+    name: "Architecture Design"
+    agent: amc-architecture-reviewer
+    type: gate
+    input: "01-brs.md"
+    output: "03-arch-plan.md"
+    gate_prompt: "Select Plan A, B, or C"
+
+  - stage: 6
+    name: "Test Generation (TDD)"
+    agent: test-forge
+    type: generate
+    input: ["01-brs.md", "03-arch-plan.md"]
+    output: "04-tests/"
+
+  - stage: 7
+    name: "Implementation"
+    agent: forge
+    type: generate
+    input: ["03-arch-plan.md", "04-tests/"]
+    output: "05-implementation/"
+
+  - stage: 8
+    name: "Code Review — Functional"
+    agent: [amc-dotnet-reviewer, amc-react-reviewer]
+    type: review
+    input: "05-implementation/"
+    output: "06-reviews/"
+    parallel: true
+    max_loops: 2
+    loop_target: 7
+
+  - stage: 9
+    name: "Code Review — Quality"
+    agent: [amc-architecture-reviewer, amc-security-reviewer, amc-performance-reviewer]
+    type: review
+    input: "05-implementation/"
+    output: "06-reviews/"
+    parallel: true
+    max_loops: 1
+    loop_target: 7
+
+  - stage: 10
+    name: "Summary & Handoff"
+    agent: self
+    type: generate
+    input: "06-reviews/"
+    output: "07-summary.md"
