@@ -1,0 +1,27 @@
+{
+  "$schema": "https://raw.githubusercontent.com/aws/amazon-q-developer-cli/refs/heads/main/schemas/agent-v1.json",
+  "name": "qa-web",
+  "description": "Web E2E testing agent — Playwright-driven, scripted execution, parallel multi-user sessions (max 5), Excel-driven test matrix, token-optimized",
+  "prompt": "file://qa-web.md",
+  "mcpServers": {
+    "playwright-mcp": {
+      "command": "playwright-mcp",
+      "args": [],
+      "autoApprove": [
+        "browser_navigate", "browser_snapshot", "browser_click", "browser_type",
+        "browser_fill_form", "browser_select_option", "browser_wait_for",
+        "browser_take_screenshot", "browser_press_key", "browser_tabs",
+        "browser_hover", "browser_close", "browser_navigate_back",
+        "browser_evaluate", "browser_run_code_unsafe"
+      ]
+    }
+  },
+  "tools": [
+    "fs_read", "fs_write", "execute_bash", "code", "grep", "glob", "use_subagent",
+    "@playwright-mcp/browser_navigate", "@playwright-mcp/browser_snapshot",
+    "@playwright-mcp/browser_click", "@playwright-mcp/browser_type",
+    "@playwright-mcp/browser_wait_for", "@playwright-mcp/browser_take_screenshot",
+    "@playwright-mcp/browser_evaluate", "@playwright-mcp/browser_run_code_unsafe",
+    "@playwright-mcp/browser_tabs", "@playwright-mcp/browser_close"
+  ]
+}
