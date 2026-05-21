@@ -1,0 +1,36 @@
+# NeuraForge Governance Rules
+# Enforced by the governance blade at runtime
+
+agent_permissions:
+  forge:
+    can_create: ["src/Services/**", "src/Controllers/**", "src/Models/**", "src/Repositories/**", "Migrations/**"]
+    can_modify: ["src/Services/**", "src/Controllers/**", "src/Models/**"]
+    cannot_touch: [".github/**", "src/Auth/**", "infrastructure/**", ".neuraforge/governance.yaml"]
+  react-forge:
+    can_create: ["src/components/**", "src/pages/**", "src/hooks/**", "src/services/**"]
+    cannot_touch: ["src/auth/**", "public/**", ".env*"]
+  test-forge:
+    can_create: ["tests/**", "src/**/*.test.*"]
+    cannot_touch: ["src/Auth/**", ".github/**"]
+
+protected_paths:
+  - pattern: ".github/workflows/**"
+    policy: "DevOps team approval required"
+    approver: devops-team
+  - pattern: "src/Auth/**"
+    policy: "Security team approval required"
+    approver: security-team
+  - pattern: "Migrations/**"
+    policy: "DBA review required for production databases"
+    approver: dba-team
+  - pattern: "infrastructure/**"
+    policy: "Platform team approval required"
+    approver: platform-team
+
+service_boundaries:
+  - service: "SipService"
+    owner: "mf-transactions-team"
+    change_policy: "notify-consumers"
+  - service: "MandateService"
+    owner: "mf-payments-team"
+    change_policy: "consumer-contract-test"

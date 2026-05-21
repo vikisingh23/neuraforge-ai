@@ -1,0 +1,37 @@
+# NeuraForge AI — Kiro CLI Rules
+
+Read AGENTS.md for full instructions on code generation, review, debugging, and architecture principles.
+
+## Hub & Blade Architecture
+
+NeuraForge uses a Unified Hub (MCP server) for shared services. The Hub is a TOOLBOX, not an orchestrator.
+
+**Hub tools available:**
+- `state_*` — pipeline state management (init, advance, loop, list)
+- `govern_*` — permission checks, boundary enforcement, handoff validation
+- `analytics_*` — event logging, metrics
+- `critical_*` — critical items accumulation (add, resolve, defer, override)
+- `lock_*` — cross-pipeline mutual exclusion
+
+**Orchestration:** The `feature-pipeline` agent is the orchestrator. It follows a deterministic checklist and uses Hub tools for state management and enforcement.
+
+## Key Rules
+- Search codebase before creating new code
+- Plan before acting — present approach, wait for approval
+- Reuse → Extend → Refactor → Create (never duplicate)
+- Controllers <150 lines, services <300, components <150
+- Data fetching at the leaf level
+- Loading / Error / Empty states on every screen
+- All handoffs use protocol v3 (see rules/core/HANDOFF_PROTOCOL.md)
+
+## Agent Selection
+- .NET → `agents/forge.md`
+- NestJS → `agents/nestjs-forge.md`
+- React → `agents/react-forge.md`
+- React Native → `agents/rn-forge.md`
+- Flutter → `agents/flutter-forge.md`
+- Full pipeline → `agents/feature-pipeline.md`
+
+## Standards
+Architecture, testing, security rules: `rules/`
+MCP Hub: `mcp/hub.mjs`
