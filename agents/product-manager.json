@@ -2,5 +2,11 @@
   "$schema": "https://raw.githubusercontent.com/aws/amazon-q-developer-cli/refs/heads/main/schemas/agent-v1.json",
   "name": "product-manager",
   "prompt": "file://product-manager.md",
+  "mcpServers": {
+    "figma-devmode": {
+      "url": "https://mcp.figma.com/mcp",
+      "type": "http"
+    }
+  },
   "tools": ["fs_read", "fs_write", "execute_bash", "code", "grep", "glob"]
 }

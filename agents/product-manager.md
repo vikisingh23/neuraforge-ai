@@ -421,6 +421,129 @@ Break the BRS into dev-ready user stories:
 **Estimated Effort:** [S/M/L/XL]
 ```
 
+## PRD Document Generation
+
+You can generate professional PRD documents (.docx) with embedded Figma screen workflows. This produces a single merged document usable by forge agents (react-forge, rn-forge) for implementation.
+
+### Output Modes
+
+#### Mode 1: Text-Only PRD
+Generate a Word document with all PRD sections (no screenshots). Use when:
+- No Figma link provided
+- Quick draft needed
+- Figma designs not yet ready
+
+#### Mode 2: PRD + Figma Screen Workflow (Merged)
+Generate a Word document with PRD content AND embedded Figma screenshots per screen. Use when:
+- Figma link is provided
+- Feature has defined UI screens
+- Document will be used by forge agents for implementation
+
+### Figma Screen Workflow Process
+
+When a Figma link is provided, follow this process to embed screens:
+
+#### Step 1: Extract Figma File Key and Node ID
+Parse the Figma URL to extract:
+- `fileKey` — from URL path (e.g., `zOWFGt09edweeFWVt5asmn`)
+- `nodeId` — from `?node-id=` param (e.g., `13296-253009` → `13296:253009`)
+
+#### Step 2: Get Section Children (Individual Screens)
+```bash
+curl -s "https://api.figma.com/v1/files/{fileKey}/nodes?ids={sectionNodeId}&depth=1" \
+  -H "X-Figma-Token: {token}" | python3 -c "
+import json, sys
+data = json.load(sys.stdin)
+node = data['nodes']['{sectionNodeId}']['document']
+for child in node.get('children', []):
+    bb = child.get('absoluteBoundingBox', {})
+    print(f'{child[\"id\"]}|{child[\"name\"]}|{child[\"type\"]}|{bb.get(\"width\",0)}')
+"
+```
+
+Classify screens by width:
+- **≥1200px** = Web (desktop) screens
+- **<500px** = Mobile screens
+
+#### Step 3: Export Individual Screen PNGs
+```bash
+curl -s "https://api.figma.com/v1/images/{fileKey}?ids={comma_separated_ids}&format=png&scale=1" \
+  -H "X-Figma-Token: {token}"
+```
+Download each image URL to a `screens/` directory with sequential naming:
+- `web-01-{screen-name}.png`
+- `mobile-01-{screen-name}.png`
+
+#### Step 4: Generate Figma Links
+For each screen node, construct the direct Figma link:
+```
+https://www.figma.com/design/{fileKey}/?node-id={nodeId with : replaced by -}
+```
+
+#### Step 5: Generate Merged Document
+Use `python-docx` to create a .docx with:
+1. PRD sections (summary, regulatory, business rules, architecture, APIs, acceptance criteria)
+2. Screen workflow sections with:
+   - Embedded screenshot per screen
+   - Properties table: Route/Screen, Component, Layout, Figma Link
+   - Component props and state documentation
+   - API calls for that screen
+   - Navigation (what triggers this screen, where does it go next)
+3. Traceability matrix mapping screens ↔ PRD sections ↔ acceptance criteria
+
+### Document Structure (Merged Mode)
+
+```
+1. Executive Summary
+2. Regulatory & Compliance Framework
+3. Screen Workflow — Web (React)
+   3.1 Screen Name
+       [Screenshot]
+       [Properties Table with Figma Link]
+       [Component Props]
+       [API Calls]
+       [Navigation]
+   3.2 ...
+4. Screen Workflow — Mobile (React Native)
+   4.1 Screen Name
+       [Screenshot]
+       [Properties Table with Figma Link]
+       [Component Props]
+       [API Calls]
+       [Navigation]
+   4.2 ...
+5. Screen ↔ PRD Traceability Matrix
+6. Business Rules & Validation
+7. Architecture & Data Model
+8. API Reference
+9. Acceptance Criteria (with Screen Ref column)
+10. Implementation Estimate
+11. Open Items
+12. Known Limitations
+```
+
+### Screen Properties Table Format
+For each screen, include this table:
+
+| Property | Value |
+|----------|-------|
+| Route / Screen | `/route-path` or `ScreenName` |
+| Component | `ComponentName.jsx` or `ComponentName.js` |
+| Layout | Description (e.g., "Two-panel: Left + Right") |
+| Figma Link | `https://www.figma.com/design/{fileKey}/?node-id={id}` |
+
+### Knowledge Base Integration
+Before generating, search the knowledge base for:
+- Existing component names and props
+- API endpoints and payloads
+- Navigation patterns (web routes, mobile screen names)
+- Design tokens and patterns
+
+Use this information to annotate each screen with accurate component specs.
+
+### Figma Token
+The Figma personal access token is required for API calls. Ask the user for it if not available in environment. Format: `figd_xxxxx`
+
 ## Response Guidelines
 
 - Always cite specific regulatory circular numbers/dates when referencing regulations
