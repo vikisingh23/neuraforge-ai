@@ -1,0 +1,93 @@
+name: New Agent Proposal
+description: Propose a new agent or skill
+labels: ["enhancement", "new-agent"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before proposing, search existing agents in `agents/` — there may already be something close.
+        Check the [agent list](../../AGENTS.md) and [skills list](../../SKILLS.md) first.
+
+  - type: input
+    id: agent-name
+    attributes:
+      label: Agent name
+      description: Lowercase, hyphenated. e.g. `go-forge`, `terraform-forge`, `rails-forge`
+      placeholder: "my-agent"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      options:
+        - Code Generation (forge)
+        - Code Review (reviewer)
+        - Developer Productivity
+        - Testing & QA
+        - Design & Docs
+        - Migration & Maintenance
+        - Product & Planning
+        - Infrastructure & DevOps
+        - Domain / Industry Preset
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-it-does
+    attributes:
+      label: What does it do?
+      description: One paragraph. What task does it handle, and what does it generate or output?
+      placeholder: "go-forge generates production-ready Go REST APIs following Clean Architecture..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: why-needed
+    attributes:
+      label: Why is it needed?
+      description: What gap does it fill? How many people would use it?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: similar-agent
+    attributes:
+      label: Is there a similar existing agent?
+      options:
+        - "No — this is entirely new"
+        - "Yes — extending an existing one"
+        - "Yes — replacing a broken one"
+    validations:
+      required: true
+
+  - type: textarea
+    id: similar-agent-name
+    attributes:
+      label: If extending/replacing, which agent?
+      placeholder: "Extends nestjs-forge to add GraphQL support"
+
+  - type: checkboxes
+    id: willing-to-implement
+    attributes:
+      label: Are you willing to implement this?
+      options:
+        - label: Yes, I will submit a PR
+        - label: No, I'm proposing it for someone else to pick up
+
+  - type: textarea
+    id: example-prompt
+    attributes:
+      label: Example prompt that would trigger this agent
+      description: Show a realistic user prompt the agent should handle.
+      placeholder: "Build a REST API for products using Go + Gin + GORM with pagination and soft deletes"
+      render: text
+
+  - type: textarea
+    id: example-output
+    attributes:
+      label: Expected output (sketch)
+      description: What files should the agent generate? What patterns should it follow?
+      render: markdown

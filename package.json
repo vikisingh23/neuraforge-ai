@@ -1,0 +1,65 @@
+{
+  "name": "neuraforge-ai",
+  "version": "1.0.0",
+  "description": "40 AI agents, 35 skills, 22 MCP servers — enterprise code generation across 7 stacks",
+  "type": "module",
+  "bin": {
+    "neuraforge": "./install.mjs"
+  },
+  "scripts": {
+    "install:claude":   "node install.mjs claude",
+    "install:cursor":   "node install.mjs cursor",
+    "install:gemini":   "node install.mjs gemini",
+    "install:kiro":     "node install.mjs kiro",
+    "install:copilot":  "node install.mjs copilot",
+    "install:codex":    "node install.mjs codex",
+    "install:opencode": "node install.mjs opencode",
+    "install:auto":     "node install.mjs",
+    "doctor":           "node install.mjs --doctor",
+    "dry-run":          "node install.mjs --dry-run",
+    "validate":         "node --input-type=module < validate.mjs 2>/dev/null || python3 -m pytest .github/workflows/ 2>/dev/null || echo 'Run CI locally: act -j validate'"
+  },
+  "keywords": [
+    "ai",
+    "agents",
+    "code-generation",
+    "mcp",
+    "claude",
+    "cursor",
+    "gemini",
+    "copilot",
+    "nestjs",
+    "dotnet",
+    "react",
+    "flutter",
+    "django",
+    "spring"
+  ],
+  "author": "Vikas Singh <vikisingh23@github.com>",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/vikisingh23/neuraforge-ai",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vikisingh23/neuraforge-ai.git"
+  },
+  "bugs": {
+    "url": "https://github.com/vikisingh23/neuraforge-ai/issues"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "files": [
+    "agents/",
+    "rules/",
+    "skills/",
+    "presets/",
+    "examples/",
+    "AGENTS.md",
+    "SKILLS.md",
+    "DESIGN.md",
+    ".mcp.json",
+    ".neuraforge.yml",
+    "install.mjs",
+    "install.sh"
+  ]
+}

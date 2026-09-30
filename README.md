@@ -106,15 +106,17 @@ Each stage works independently too — use what you need.
 
 ## 7 Stacks
 
-| Stack | Generate | Review | Test |
-|-------|----------|--------|------|
-| **.NET Core** | `forge` | `dotnet-reviewer` | xUnit + Moq |
-| **NestJS + TypeORM** | `nestjs-forge` | `nestjs-reviewer` | Jest + supertest |
-| **Django + DRF** | `django-forge` | `django-reviewer` | pytest + DRF test |
-| **Spring Boot + JPA** | `spring-forge` | `spring-reviewer` | JUnit 5 + Mockito |
-| **React** | `react-forge` | `react-reviewer` | Vitest + RTL |
-| **React Native** | `rn-forge` | `rn-reviewer` | Jest + RNTL |
-| **Flutter** | `flutter-forge` | `flutter-reviewer` | flutter_test + mocktail |
+| Stack | Generate | Review | Test | Status |
+|-------|----------|--------|------|--------|
+| **.NET Core** | `forge` | `dotnet-reviewer` | xUnit + Moq | ✅ Stable |
+| **NestJS + TypeORM** | `nestjs-forge` | `nestjs-reviewer` | Jest + supertest | ✅ Stable |
+| **React** | `react-forge` | `react-reviewer` | Vitest + RTL | ✅ Stable |
+| **Django + DRF** | `django-forge` | `django-reviewer` | pytest + DRF test | 🔶 Beta |
+| **Spring Boot + JPA** | `spring-forge` | `spring-reviewer` | JUnit 5 + Mockito | 🔶 Beta |
+| **React Native** | `rn-forge` | `rn-reviewer` | Jest + RNTL | 🔶 Beta |
+| **Flutter** | `flutter-forge` | `flutter-reviewer` | flutter_test + mocktail | 🔶 Beta |
+
+> ✅ Stable — battle-tested in production. 🔶 Beta — functional but less proven; feedback welcome.
 
 ---
 
@@ -188,6 +190,8 @@ Enforced across all 7 stacks by every forge and reviewer:
 ## Contributing
 
 PRs welcome! See [CONTRIBUTING.md](CONTRIBUTING.md).
+
+**Questions? Ideas?** Use [GitHub Discussions](https://github.com/vikisingh23/neuraforge-ai/discussions) — not Issues.
 
 ## Acknowledgements
 

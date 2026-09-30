@@ -1,5 +1,8 @@
 name: Validate
-on: [push, pull_request]
+
+on:
+  push:
+  pull_request:
 
 jobs:
   validate:
@@ -10,32 +13,119 @@ jobs:
       - name: Validate JSON files
         run: |
           echo "Checking JSON files..."
-          for f in $(find . -name "*.json" -not -path "./node_modules/*"); do
-            python3 -m json.tool "$f" > /dev/null || { echo "❌ Invalid JSON: $f"; exit 1; }
-          done
+          failed=0
+          while IFS= read -r -d '' f; do
+            if ! python3 -m json.tool "$f" > /dev/null 2>&1; then
+              echo "❌ Invalid JSON: $f"
+              failed=1
+            fi
+          done < <(find . -name "*.json" -not -path "./node_modules/*" -print0)
+          if [ "$failed" -eq 1 ]; then exit 1; fi
           echo "✅ All JSON valid"
+
+      - name: Validate YAML files
+        run: |
+          pip install pyyaml --quiet
+          echo "Checking YAML files..."
+          failed=0
+          while IFS= read -r -d '' f; do
+            if ! python3 -c "import yaml, sys; yaml.safe_load(open('$f'))" 2>/dev/null; then
+              echo "❌ Invalid YAML: $f"
+              failed=1
+            fi
+          done < <(find . \( -name "*.yml" -o -name "*.yaml" \) -not -path "./node_modules/*" -print0)
+          if [ "$failed" -eq 1 ]; then exit 1; fi
+          echo "✅ All YAML valid"
 
       - name: Check skills have SKILL.md
         run: |
           echo "Checking skills..."
+          failed=0
           for dir in skills/*/; do
             if [ ! -f "${dir}SKILL.md" ]; then
               echo "❌ Missing SKILL.md in $dir"
-              exit 1
+              failed=1
             fi
           done
+          if [ "$failed" -eq 1 ]; then exit 1; fi
           echo "✅ All skills have SKILL.md"
 
-      - name: Check agents exist
+      - name: Check every agent has .md and .json
         run: |
-          echo "Checking agents..."
-          count=$(ls agents/*.md | wc -l)
-          echo "✅ Found $count agent files"
+          echo "Checking agent file pairs..."
+          failed=0
+          for md in agents/*.md; do
+            base="${md%.md}"
+            name=$(basename "$base")
+            # Skip the contributor template
+            if [ "$name" = "_TEMPLATE" ]; then continue; fi
+            if [ ! -f "agents/${name}.json" ]; then
+              echo "❌ Missing agents/${name}.json (every agent needs both .md and .json)"
+              failed=1
+            fi
+          done
+          for json in agents/*.json; do
+            base="${json%.json}"
+            name=$(basename "$base")
+            if [ "$name" = "_TEMPLATE" ]; then continue; fi
+            if [ ! -f "agents/${name}.md" ]; then
+              echo "❌ Missing agents/${name}.md (found .json without matching .md)"
+              failed=1
+            fi
+          done
+          if [ "$failed" -eq 1 ]; then exit 1; fi
+          echo "✅ All agents have matching .md and .json"
+
+      - name: Check AGENTS.md references exist
+        run: |
+          echo "Checking AGENTS.md cross-references..."
+          failed=0
+          # Extract agent names referenced in AGENTS.md (pattern: agents/foo.md)
+          grep -oP 'agents/\K[a-z0-9_-]+(?=\.md)' AGENTS.md | sort -u | while read -r name; do
+            if [ ! -f "agents/${name}.md" ]; then
+              echo "❌ AGENTS.md references agents/${name}.md which does not exist"
+              failed=1
+            fi
+          done
+          if [ "$failed" -eq 1 ]; then exit 1; fi
+          echo "✅ All AGENTS.md references resolve"
+
+      - name: Check skills SKILL.md references exist
+        run: |
+          echo "Checking SKILL.md cross-references..."
+          failed=0
+          for skill_file in skills/*/SKILL.md; do
+            # Find all agent file references in the skill
+            grep -oP '`[^`]*agents/\K[^`]+(?=`)' "$skill_file" 2>/dev/null | while read -r ref; do
+              # ref may be like "foo.md" or "core/BAR.md"
+              if [ ! -f "agents/$ref" ]; then
+                echo "❌ $skill_file references agents/$ref which does not exist"
+                failed=1
+              fi
+            done
+          done
+          if [ "$failed" -eq 1 ]; then exit 1; fi
+          echo "✅ All SKILL.md agent references resolve"
+
+      - name: Guard against @latest in .mcp.json
+        run: |
+          echo "Checking for unpinned @latest in .mcp.json..."
+          if grep -q '@latest' .mcp.json; then
+            echo "❌ Found @latest in .mcp.json — pin to an exact version"
+            grep -n '@latest' .mcp.json
+            exit 1
+          fi
+          echo "✅ No @latest found — all MCP packages pinned"
 
       - name: Inventory
         run: |
+          echo ""
           echo "📊 Inventory:"
-          echo "  Agents: $(ls agents/*.md | wc -l)"
-          echo "  Skills: $(ls skills/*/SKILL.md | wc -l)"
-          echo "  MCP Servers: $(python3 -c "import json; print(len(json.load(open('.mcp.json'))['mcpServers']))")"
-          echo "  Rules: $(find rules -name '*.md' | wc -l)"
+          agent_count=$(find agents -maxdepth 1 -name "*.md" ! -name "_TEMPLATE.md" | wc -l | tr -d ' ')
+          skill_count=$(find skills -name "SKILL.md" | wc -l | tr -d ' ')
+          mcp_count=$(python3 -c "import json; print(len(json.load(open('.mcp.json'))['mcpServers']))")
+          rule_count=$(find rules -name "*.md" | wc -l | tr -d ' ')
+          echo "  Agents:      $agent_count"
+          echo "  Skills:      $skill_count"
+          echo "  MCP Servers: $mcp_count"
+          echo "  Rules:       $rule_count"

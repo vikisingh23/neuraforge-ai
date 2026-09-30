@@ -4,49 +4,49 @@
       "command": "npx",
       "args": [
         "-y",
-        "swagger-mcp"
+        "swagger-mcp@1.0.8"
       ]
     },
     "openapi-mcp": {
       "command": "npx",
       "args": [
         "-y",
-        "openapi-mcp-server"
+        "openapi-mcp-server@2.1.0"
       ]
     },
     "sonarqube-mcp": {
       "command": "npx",
       "args": [
         "-y",
-        "sonarqube-mcp-server"
+        "sonarqube-mcp-server@1.10.21"
       ]
     },
     "playwright-mcp": {
       "command": "npx",
       "args": [
         "-y",
-        "@playwright/mcp@latest"
+        "@playwright/mcp@0.0.83"
       ]
     },
     "mui-mcp": {
       "command": "npx",
       "args": [
         "-y",
-        "@mui/mcp@latest"
+        "@mui/mcp@0.1.6"
       ]
     },
     "a11y-mcp": {
       "command": "npx",
       "args": [
         "-y",
-        "a11y-mcp"
+        "a11y-mcp@1.1.0"
       ]
     },
     "reactbits-mcp": {
       "command": "npx",
       "args": [
         "-y",
-        "reactbits-dev-mcp-server"
+        "reactbits-dev-mcp-server@1.1.2"
       ]
     },
     "figma-devmode": {
@@ -57,14 +57,14 @@
       "command": "npx",
       "args": [
         "-y",
-        "cali-mcp-server"
+        "cali-mcp-server@0.3.1"
       ]
     },
     "gluestack-ui-mcp": {
       "command": "npx",
       "args": [
         "-y",
-        "gluestack-ui-mcp-server"
+        "gluestack-ui-mcp-server@1.0.4"
       ]
     },
     "dart-mcp-server": {
@@ -77,28 +77,28 @@
       "command": "npx",
       "args": [
         "-y",
-        "@remotion/mcp@latest"
+        "@remotion/mcp@4.0.529"
       ]
     },
     "ffmpeg-mcp": {
       "command": "npx",
       "args": [
         "-y",
-        "ffmpeg-mcp"
+        "ffmpeg-mcp@0.0.3"
       ]
     },
     "media-processor": {
       "command": "npx",
       "args": [
         "-y",
-        "mcp-media-processor"
+        "mcp-media-processor@1.0.8"
       ]
     },
     "short-video-maker": {
       "command": "npx",
       "args": [
         "-y",
-        "short-video-maker"
+        "short-video-maker@1.3.0"
       ],
       "env": {
         "PEXELS_API_KEY": "${PEXELS_API_KEY}"
@@ -108,7 +108,7 @@
       "command": "npx",
       "args": [
         "-y",
-        "@modelcontextprotocol/server-github"
+        "@modelcontextprotocol/server-github@2025.4.8"
       ],
       "env": {
         "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_TOKEN}"
@@ -118,7 +118,7 @@
       "command": "npx",
       "args": [
         "-y",
-        "@modelcontextprotocol/server-memory"
+        "@modelcontextprotocol/server-memory@2026.8.31"
       ]
     },
     "graphify": {
@@ -134,7 +134,7 @@
       "command": "npx",
       "args": [
         "-y",
-        "@neuraforge/office-mcp",
+        "@neuraforge/office-mcp@1.0.1",
         "--pptx"
       ]
     },
@@ -142,7 +142,7 @@
       "command": "npx",
       "args": [
         "-y",
-        "@neuraforge/office-mcp",
+        "@neuraforge/office-mcp@1.0.1",
         "--docx"
       ]
     },
@@ -150,7 +150,7 @@
       "command": "npx",
       "args": [
         "-y",
-        "@neuraforge/office-mcp",
+        "@neuraforge/office-mcp@1.0.1",
         "--xlsx"
       ]
     },
@@ -158,7 +158,7 @@
       "command": "npx",
       "args": [
         "-y",
-        "@neuraforge/loadtest-mcp"
+        "@neuraforge/loadtest-mcp@1.0.0"
       ]
     }
   }

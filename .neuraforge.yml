@@ -1,0 +1,99 @@
+# NeuraForge AI — Project Configuration
+# Copy this file to your project root and customize for your team.
+# Agents read this file to adapt behavior to your codebase.
+#
+# To apply: place .neuraforge.yml in your project root directory.
+
+# ── Version ───────────────────────────────────────────────────────────────────
+# Pin to a specific NeuraForge release so agent behavior stays consistent
+# across your team. Check https://github.com/vikisingh23/neuraforge-ai/releases
+version: "1.0.0"
+
+# ── Domain Context ────────────────────────────────────────────────────────────
+# Agents use this to enforce industry-specific rules (audit fields, compliance, etc.)
+domain:
+  industry: generic          # generic | financial | healthcare | ecommerce | saas
+  country: us                # us | in | eu | uk (affects compliance rules)
+  # financial: SEBI/AMFI audit trails, decimal for money, soft deletes
+  # healthcare: HIPAA PHI encryption, consent flows, audit logging
+  # ecommerce: inventory, cart, idempotent payment APIs
+  # saas: multi-tenancy, billing, subscription management
+
+# ── Stack ─────────────────────────────────────────────────────────────────────
+# Tell agents what stacks are active in this project.
+# Omit stacks not in use — agents skip generation for disabled stacks.
+stacks:
+  backend: []                # dotnet | nestjs | django | spring
+  frontend: []               # react | react-native | flutter
+
+# ── Line Limits ───────────────────────────────────────────────────────────────
+# Agents flag files that exceed these limits and suggest refactoring.
+limits:
+  controller: 150            # lines — thin controllers only
+  service: 300               # lines — single concern per service
+  repository: 200            # lines
+  component: 150             # lines — React/Flutter/RN components
+  entity: 100                # lines
+
+# ── Agents ────────────────────────────────────────────────────────────────────
+# Disable agents your project doesn't need. Disabled agents are skipped
+# during auto-routing in AGENTS.md.
+agents:
+  enabled:
+    - dotnet-forge
+    - nestjs-forge
+    - react-forge
+    - rn-forge
+    - flutter-forge
+    - django-forge
+    - spring-forge
+    - debug
+    - scaffold
+    - code-review
+    - security-review
+    - architecture-review
+    - performance-review
+    - test-forge
+    - pr-review
+    - refactor
+    - explain
+    - db-design
+    - api-design
+    - feature-pipeline
+    - fullstack-orchestrator
+    - devops
+    - documentation
+    - product-manager
+    - changelog
+    - deps-audit
+    - migrate
+    - load-testing
+    - ui-validation
+
+# ── Code Generation ───────────────────────────────────────────────────────────
+generation:
+  # Agents present a plan and wait for approval before generating any code.
+  # Set to false only in fully automated pipelines.
+  plan_before_act: true
+
+  # After generation, run the stack's reviewer agent automatically.
+  auto_review: true
+
+  # Include inline comments explaining non-obvious decisions.
+  inline_comments: true
+
+# ── Testing ───────────────────────────────────────────────────────────────────
+testing:
+  # Require generated code to include tests. Agents skip test generation if false.
+  require_tests: true
+
+  # Minimum test coverage target (informational — agents reference this in reports).
+  coverage_target: 80        # percent
+
+# ── MCP Servers ───────────────────────────────────────────────────────────────
+# Control which MCP integrations agents may invoke.
+mcp:
+  figma: false               # set true and add FIGMA_TOKEN to use design-to-code
+  sonarqube: false           # set true and configure SONAR_HOST_URL + SONAR_TOKEN
+  github: false              # set true and add GITHUB_TOKEN for PR review features
+  graphify: false            # set true after running: pip install graphifyy && graphify install

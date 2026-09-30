@@ -29,6 +29,17 @@ Thanks for your interest in contributing to the Agentic Dev Platform!
 - **npx only** — MCP servers must use `npx -y`, no local file paths
 - **Conventional commits** — `feat:`, `fix:`, `docs:`, `refactor:`
 
+## Questions and Discussion
+
+- **Questions / ideas** → [GitHub Discussions](https://github.com/vikisingh23/neuraforge-ai/discussions)
+- **Bug reports** → [GitHub Issues](https://github.com/vikisingh23/neuraforge-ai/issues) (use the bug report template)
+- **New agent proposals** → [GitHub Issues](https://github.com/vikisingh23/neuraforge-ai/issues) (use the new agent template)
+
+## New Agent Template
+
+When creating a new agent, start from `agents/_TEMPLATE.md`. It has all the mandatory sections:
+plan phase, workflow, code patterns, rules, domain awareness, and post-generation review.
+
 ## Code of Conduct
 
 Be respectful, constructive, and inclusive. We're all here to build better tools.

@@ -1,0 +1,117 @@
+name: Bug Report
+description: Something isn't working as expected
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug. Fill in as much as you can — it helps us fix it faster.
+
+  - type: dropdown
+    id: agent
+    attributes:
+      label: Which agent or skill?
+      description: Which agent or skill triggered the issue?
+      options:
+        - dotnet-forge
+        - nestjs-forge
+        - react-forge
+        - rn-forge
+        - flutter-forge
+        - django-forge
+        - spring-forge
+        - debug
+        - scaffold
+        - refactor
+        - code-review
+        - security-review
+        - architecture-review
+        - performance-review
+        - pr-review
+        - test-forge
+        - db-design
+        - api-design
+        - feature-pipeline
+        - fullstack-orchestrator
+        - devops
+        - product-manager
+        - install.mjs / install.sh
+        - MCP server
+        - Other (describe below)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: platform
+    attributes:
+      label: AI platform
+      options:
+        - Claude Code
+        - Cursor
+        - Gemini CLI
+        - GitHub Copilot
+        - Kiro
+        - OpenCode / Codex
+        - Windsurf
+        - Cline
+        - Continue.dev
+        - Aider
+        - ChatGPT (Custom GPT)
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: stack
+    attributes:
+      label: Stack (if code generation)
+      options:
+        - .NET Core
+        - NestJS + TypeORM
+        - Django + DRF
+        - Spring Boot + JPA
+        - React
+        - React Native
+        - Flutter
+        - Not applicable
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Describe the bug. What did the agent do that it shouldn't have?
+      placeholder: "The react-forge agent generated a useState + useEffect pattern instead of using React Query..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+      placeholder: "Expected a useQuery hook with proper query options..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: prompt
+    attributes:
+      label: Prompt you used
+      description: Paste the exact prompt or instruction you gave the agent.
+      render: text
+    validations:
+      required: true
+
+  - type: textarea
+    id: output
+    attributes:
+      label: Agent output (or relevant snippet)
+      description: Paste the generated code or response that was wrong.
+      render: text
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: OS, Node.js version, any custom modifications to agent files, `.neuraforge.yml` config if set.
