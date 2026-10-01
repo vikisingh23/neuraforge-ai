@@ -1,0 +1,70 @@
+{
+  "agent": "react-forge",
+  "stack": "react",
+  "description": "Golden output assertions for react-forge generated examples",
+  "cases": [
+    {
+      "id": "RF-001",
+      "description": "List component uses React Query — never useState+useEffect for API data",
+      "file": "examples/react/OrderList.tsx",
+      "must_contain": [
+        "useOrders",
+        "isLoading",
+        "isError",
+        "refetch"
+      ],
+      "must_not_contain": [
+        "useEffect(() =>",
+        "fetch(",
+        "axios.get("
+      ]
+    },
+    {
+      "id": "RF-002",
+      "description": "List component handles all 4 UX states: loading, error, empty, data",
+      "file": "examples/react/OrderList.tsx",
+      "must_contain": [
+        "isLoading",
+        "isError",
+        "EmptyState",
+        "Skeleton"
+      ],
+      "must_not_contain": []
+    },
+    {
+      "id": "RF-003",
+      "description": "Query hook uses query key factory pattern with staleTime",
+      "file": "examples/react/useOrders.ts",
+      "must_contain": [
+        "useQuery",
+        "queryKey",
+        "staleTime",
+        "ordersKeys"
+      ],
+      "must_not_contain": [
+        "useState",
+        "useEffect"
+      ]
+    },
+    {
+      "id": "RF-004",
+      "description": "Query hook does not use float/number for monetary staleTime (sanity check on file structure)",
+      "file": "examples/react/useOrders.ts",
+      "must_contain": [
+        "placeholderData"
+      ],
+      "must_not_contain": []
+    },
+    {
+      "id": "RF-005",
+      "description": "Pagination is present — never unbounded list",
+      "file": "examples/react/OrderList.tsx",
+      "must_contain": [
+        "Pagination",
+        "page",
+        "totalPages"
+      ],
+      "must_not_contain": []
+    }
+  ]
+}

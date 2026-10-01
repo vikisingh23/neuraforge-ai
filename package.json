@@ -23,7 +23,9 @@
     "feedback:list":    "node tools/feedback/index.mjs list",
     "feedback:submit":  "node tools/feedback/index.mjs submit",
     "feedback:clean":   "node tools/feedback/index.mjs clean",
-    "feedback:lessons": "node tools/feedback/index.mjs lessons"
+    "feedback:lessons": "node tools/feedback/index.mjs lessons",
+    "eval":             "node tools/eval/index.mjs",
+    "eval:agent":       "node tools/eval/index.mjs --agent"
   },
   "keywords": [
     "ai",

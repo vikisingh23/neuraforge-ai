@@ -1,0 +1,72 @@
+{
+  "agent": "spring-forge",
+  "stack": "spring",
+  "description": "Golden output assertions for spring-forge generated examples",
+  "cases": [
+    {
+      "id": "SP-001",
+      "description": "Controller is annotated with @RestController and delegates to service (not business logic in controller)",
+      "file": "examples/spring/OrderController.java",
+      "must_contain": [
+        "@RestController",
+        "@RequestMapping",
+        "orderService."
+      ],
+      "must_not_contain": [
+        "EntityManager",
+        "repository.save(",
+        "repository.findAll("
+      ]
+    },
+    {
+      "id": "SP-002",
+      "description": "Controller returns DTO — not raw entity",
+      "file": "examples/spring/OrderController.java",
+      "must_contain": [
+        "Dto",
+        "ResponseEntity"
+      ],
+      "must_not_contain": [
+        "ResponseEntity<Order>",
+        "List<Order>"
+      ]
+    },
+    {
+      "id": "SP-003",
+      "description": "No double or float for monetary values",
+      "file": "examples/spring/OrderController.java",
+      "must_not_contain": [
+        "double amount",
+        "float amount",
+        "Double amount",
+        "Float amount"
+      ],
+      "must_contain": []
+    },
+    {
+      "id": "SP-004",
+      "description": "Paginated list response via PagedResponse wrapper — not raw List<>",
+      "file": "examples/spring/OrderController.java",
+      "must_contain": [
+        "PagedResponse",
+        "PaginationParams"
+      ],
+      "must_not_contain": [
+        "List<OrderDto>",
+        "List<Order>"
+      ]
+    },
+    {
+      "id": "SP-005",
+      "description": "Kebab-case API paths",
+      "file": "examples/spring/OrderController.java",
+      "must_contain": [
+        "orders"
+      ],
+      "must_not_contain": [
+        "\"Orders\"",
+        "\"getOrders\""
+      ]
+    }
+  ]
+}

@@ -40,6 +40,14 @@ Thanks for your interest in contributing to the Agentic Dev Platform!
 When creating a new agent, start from `agents/_TEMPLATE.md`. It has all the mandatory sections:
 plan phase, workflow, code patterns, rules, domain awareness, and post-generation review.
 
+## Maintainer Setup Checklist
+
+If you fork this repo and want the full experience working, enable these GitHub features in repo **Settings**:
+
+- **Discussions** (Settings → General → Features → Discussions) — Questions, ideas, and show-and-tell go here. The issue templates already redirect to Discussions; enabling this makes the redirect live.
+- **Issues** — Already on by default.
+- **Dependabot** — Already configured in `.github/dependabot.yml`; will auto-open PRs for MCP version bumps once the repo is public.
+
 ## Code of Conduct
 
 Be respectful, constructive, and inclusive. We're all here to build better tools.

@@ -1,0 +1,59 @@
+{
+  "agent": "rn-forge",
+  "stack": "react-native",
+  "description": "Golden output assertions for rn-forge generated examples",
+  "cases": [
+    {
+      "id": "RN-001",
+      "description": "FlatList used for lists — not ScrollView with map",
+      "file": "examples/react-native/OrderListScreen.tsx",
+      "must_contain": [
+        "FlatList"
+      ],
+      "must_not_contain": [
+        "ScrollView",
+        ".map((order"
+      ]
+    },
+    {
+      "id": "RN-002",
+      "description": "Pull-to-refresh via RefreshControl",
+      "file": "examples/react-native/OrderListScreen.tsx",
+      "must_contain": [
+        "RefreshControl",
+        "refreshing"
+      ],
+      "must_not_contain": []
+    },
+    {
+      "id": "RN-003",
+      "description": "Infinite scroll / pagination via onEndReached",
+      "file": "examples/react-native/OrderListScreen.tsx",
+      "must_contain": [
+        "onEndReached"
+      ],
+      "must_not_contain": []
+    },
+    {
+      "id": "RN-004",
+      "description": "Uses React Query — not useState+useEffect for API data",
+      "file": "examples/react-native/OrderListScreen.tsx",
+      "must_contain": [
+        "useQuery"
+      ],
+      "must_not_contain": [
+        "useEffect(() =>"
+      ]
+    },
+    {
+      "id": "RN-005",
+      "description": "All 4 UX states handled — loading, error, empty, data",
+      "file": "examples/react-native/OrderListScreen.tsx",
+      "must_contain": [
+        "isLoading",
+        "isError"
+      ],
+      "must_not_contain": []
+    }
+  ]
+}

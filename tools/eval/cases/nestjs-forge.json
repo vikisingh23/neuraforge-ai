@@ -1,0 +1,72 @@
+{
+  "agent": "nestjs-forge",
+  "stack": "nestjs",
+  "description": "Golden output assertions for nestjs-forge generated examples",
+  "cases": [
+    {
+      "id": "NF-001",
+      "description": "Entity uses decimal(18,4) — never float or number for monetary columns",
+      "file": "examples/nestjs/order.entity.ts",
+      "must_contain": [
+        "decimal",
+        "precision: 18",
+        "scale: 4"
+      ],
+      "must_not_contain": [
+        "'float'",
+        "\"float\"",
+        ": number;  // amount",
+        "amount: number"
+      ]
+    },
+    {
+      "id": "NF-002",
+      "description": "Entity has all mandatory audit fields and soft delete",
+      "file": "examples/nestjs/order.entity.ts",
+      "must_contain": [
+        "isDeleted",
+        "createdBy",
+        "modifiedBy",
+        "createdAt",
+        "modifiedAt"
+      ],
+      "must_not_contain": []
+    },
+    {
+      "id": "NF-003",
+      "description": "Controller has JWT guard, Swagger decorators, and typed pipes",
+      "file": "examples/nestjs/orders.controller.ts",
+      "must_contain": [
+        "UseGuards",
+        "ApiTags",
+        "ParseIntPipe"
+      ],
+      "must_not_contain": []
+    },
+    {
+      "id": "NF-004",
+      "description": "Controller route path and Swagger tag are lowercase kebab-case",
+      "file": "examples/nestjs/orders.controller.ts",
+      "must_contain": [
+        "@Controller('api/v1/orders')",
+        "@ApiTags('orders')"
+      ],
+      "must_not_contain": [
+        "@Controller('api/v1/Orders')",
+        "@ApiTags('Orders')"
+      ]
+    },
+    {
+      "id": "NF-005",
+      "description": "Decimal amount returned as string from TypeORM — not parsed to float at entity level",
+      "file": "examples/nestjs/order.entity.ts",
+      "must_contain": [
+        "amount: string"
+      ],
+      "must_not_contain": [
+        "amount: number",
+        "parseFloat("
+      ]
+    }
+  ]
+}

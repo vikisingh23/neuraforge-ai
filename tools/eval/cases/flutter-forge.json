@@ -1,0 +1,62 @@
+{
+  "agent": "flutter-forge",
+  "stack": "flutter",
+  "description": "Golden output assertions for flutter-forge generated examples",
+  "cases": [
+    {
+      "id": "FL-001",
+      "description": "Uses Riverpod ref.watch via ConsumerStatefulWidget — not plain StatefulWidget for data fetching",
+      "file": "examples/flutter/order_list_screen.dart",
+      "must_contain": [
+        "ref.watch",
+        "ConsumerStatefulWidget",
+        "ConsumerState"
+      ],
+      "must_not_contain": [
+        "extends StatefulWidget",
+        "extends StatelessWidget"
+      ]
+    },
+    {
+      "id": "FL-002",
+      "description": "Uses AsyncValue.when() for loading/error/data states",
+      "file": "examples/flutter/order_list_screen.dart",
+      "must_contain": [
+        ".when(",
+        "loading:",
+        "error:"
+      ],
+      "must_not_contain": []
+    },
+    {
+      "id": "FL-003",
+      "description": "Uses ListView.builder — not ListView with children: for lists",
+      "file": "examples/flutter/order_list_screen.dart",
+      "must_contain": [
+        "ListView.builder"
+      ],
+      "must_not_contain": [
+        "ListView(children:"
+      ]
+    },
+    {
+      "id": "FL-004",
+      "description": "Pagination or infinite scroll present",
+      "file": "examples/flutter/order_list_screen.dart",
+      "must_contain": [
+        "page"
+      ],
+      "must_not_contain": []
+    },
+    {
+      "id": "FL-005",
+      "description": "Empty state handled explicitly",
+      "file": "examples/flutter/order_list_screen.dart",
+      "must_contain": [
+        "isEmpty",
+        "data:"
+      ],
+      "must_not_contain": []
+    }
+  ]
+}

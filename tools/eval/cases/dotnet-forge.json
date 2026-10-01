@@ -1,0 +1,70 @@
+{
+  "agent": "dotnet-forge",
+  "stack": "dotnet",
+  "description": "Golden output assertions for dotnet-forge generated examples",
+  "cases": [
+    {
+      "id": "DN-001",
+      "description": "Entity uses decimal — never float or double for monetary fields",
+      "file": "examples/dotnet/Order.cs",
+      "must_contain": [
+        "decimal",
+        "decimal(18,4)"
+      ],
+      "must_not_contain": [
+        "float Amount",
+        "double Amount",
+        "Float Amount"
+      ]
+    },
+    {
+      "id": "DN-002",
+      "description": "Entity has all mandatory audit fields and soft delete",
+      "file": "examples/dotnet/Order.cs",
+      "must_contain": [
+        "IsDeleted",
+        "CreatedBy",
+        "ModifiedBy",
+        "CreatedAt",
+        "ModifiedAt"
+      ],
+      "must_not_contain": []
+    },
+    {
+      "id": "DN-003",
+      "description": "Controller methods are async with ConfigureAwait(false)",
+      "file": "examples/dotnet/OrdersController.cs",
+      "must_contain": [
+        "async",
+        "ConfigureAwait(false)",
+        "Task<"
+      ],
+      "must_not_contain": [
+        ".Result",
+        ".Wait()"
+      ]
+    },
+    {
+      "id": "DN-004",
+      "description": "Controller uses kebab-case route paths",
+      "file": "examples/dotnet/OrdersController.cs",
+      "must_contain": [
+        "orders"
+      ],
+      "must_not_contain": [
+        "\"Orders\"",
+        "\"GetOrders\""
+      ]
+    },
+    {
+      "id": "DN-005",
+      "description": "Entity has Row Version for optimistic concurrency",
+      "file": "examples/dotnet/Order.cs",
+      "must_contain": [
+        "[Timestamp]",
+        "RowVersion"
+      ],
+      "must_not_contain": []
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "agent": "django-forge",
+  "stack": "django",
+  "description": "Golden output assertions for django-forge generated examples",
+  "cases": [
+    {
+      "id": "DJ-001",
+      "description": "ViewSet does not expose hard delete — uses soft delete override",
+      "file": "examples/django/views.py",
+      "must_contain": [
+        "is_deleted",
+        "destroy"
+      ],
+      "must_not_contain": [
+        "instance.delete()",
+        ".delete()"
+      ]
+    },
+    {
+      "id": "DJ-002",
+      "description": "queryset filters out soft-deleted records",
+      "file": "examples/django/views.py",
+      "must_contain": [
+        "is_deleted=False"
+      ],
+      "must_not_contain": []
+    },
+    {
+      "id": "DJ-003",
+      "description": "ViewSet has pagination_class configured",
+      "file": "examples/django/views.py",
+      "must_contain": [
+        "pagination_class"
+      ],
+      "must_not_contain": []
+    },
+    {
+      "id": "DJ-004",
+      "description": "No FloatField for monetary values",
+      "file": "examples/django/views.py",
+      "must_not_contain": [
+        "FloatField",
+        "float("
+      ],
+      "must_contain": []
+    },
+    {
+      "id": "DJ-005",
+      "description": "Uses ModelViewSet — not plain APIView for CRUD",
+      "file": "examples/django/views.py",
+      "must_contain": [
+        "ModelViewSet"
+      ],
+      "must_not_contain": []
+    }
+  ]
+}

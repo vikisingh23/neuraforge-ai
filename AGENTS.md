@@ -39,15 +39,37 @@ This is how the agents improve. Every corrected feedback item becomes a new anti
 
 ## Code Generation
 
-When asked to generate code, detect the stack and follow the corresponding agent:
+When asked to generate code, detect the stack using the signals below, then follow the corresponding agent.
 
-### Backend
+### Stack Detection (content-based — check in order)
+
+Use these file/content signals. Extension alone is not enough.
+
+| Signal | Stack |
+|--------|-------|
+| `*.csproj` present **or** `*.cs` imports `Microsoft.AspNetCore` | **.NET Core** |
+| `package.json` contains `"@nestjs/core"` | **NestJS** |
+| `package.json` contains `"react-native"` | **React Native** |
+| `package.json` contains `"react"` (and not RN above) | **React** |
+| `requirements.txt` / `*.py` imports `from rest_framework` | **Django + DRF** |
+| `requirements.txt` / `*.py` imports `from fastapi` | **FastAPI** (use `django-forge` as base, note FastAPI differences) |
+| `pom.xml` contains `spring-boot` **or** `build.gradle` contains `org.springframework.boot` | **Spring Boot** |
+| `pubspec.yaml` present **or** `*.dart` files present | **Flutter** |
+
+**Tie-break rules:**
+- If `package.json` exists but no framework import is visible yet, ask the user which backend framework (NestJS vs plain Express vs other).
+- If both `.csproj` and `package.json` exist, generate for both and separate the output by stack.
+- When in doubt, state your detected stack and ask for confirmation before generating.
+
+### Agents by Stack
+
+#### Backend
 - **.NET Core** → Read `agents/forge.md` — EF Core, CQRS, Repository Pattern, FluentValidation
 - **NestJS** → Read `agents/nestjs-forge.md` — TypeORM, Guards, Interceptors, Modules
 - **Django** → Read `agents/django-forge.md` — DRF, BaseRepository, Celery, Serializers
 - **Spring Boot** → Read `agents/spring-forge.md` — JPA, MapStruct, Jakarta Validation, Flyway
 
-### Frontend / Mobile
+#### Frontend / Mobile
 - **React** → Read `agents/react-forge.md` — React Query mandatory, Design Tokens
 - **React Native** → Read `agents/rn-forge.md` — Typed Navigation, Platform-Aware
 - **Flutter** → Read `agents/flutter-forge.md` — Riverpod, Freezed, GoRouter
@@ -58,7 +80,7 @@ When asked to generate code, detect the stack and follow the corresponding agent
 
 ## Code Review
 
-When asked to review code, detect the stack:
+When asked to review code, use the Stack Detection table above, then load:
 - **.NET** → Read `agents/dotnet-reviewer.md`
 - **NestJS** → Read `agents/nestjs-reviewer.md`
 - **Django** → Read `agents/django-reviewer.md`

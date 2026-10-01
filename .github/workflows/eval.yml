@@ -1,0 +1,42 @@
+name: Eval — Golden Output Tests
+
+on:
+  pull_request:
+    paths:
+      - "agents/**"
+      - "examples/**"
+      - "rules/**"
+      - "tools/eval/**"
+  push:
+    branches: [main]
+    paths:
+      - "agents/**"
+      - "examples/**"
+      - "rules/**"
+      - "tools/eval/**"
+  workflow_dispatch: {}
+
+jobs:
+  eval:
+    name: Validate golden examples against agent rules
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Run eval (all agents)
+        run: node tools/eval/index.mjs --verbose
+        env:
+          NO_COLOR: "1"
+
+      - name: Upload results on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eval-results
+          path: |
+            tools/eval/cases/
+          retention-days: 7
