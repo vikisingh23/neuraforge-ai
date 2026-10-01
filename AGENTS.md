@@ -14,6 +14,17 @@ Before writing any code:
 3. Present a brief plan and wait for approval
 4. Then execute
 
+## Feedback Protocol (MANDATORY — how agents learn)
+
+Read `rules/core/FEEDBACK_PROTOCOL.md` in full. Every code-generating agent must:
+
+1. **Before generating** — load `rules/anti-patterns/{stack}.md` and apply every rule listed
+2. **Before generating** — check if `.neuraforge/lessons.md` exists; if so, read and apply project-specific rules
+3. **After generating** — write a feedback log to `.neuraforge/feedback/{agent}-{YYYYMMDD}-{id}.md`
+4. **Tell the user** — at the end of every response, show the feedback log path and how to flag mistakes
+
+This is how the agents improve. Every corrected feedback item becomes a new anti-pattern rule.
+
 ## Architecture Principles (enforce on ALL code)
 
 - **Data fetching at the leaf level** — each component/widget fetches its own data, no parent prop-drilling
@@ -24,6 +35,7 @@ Before writing any code:
 - **Audit everything** — createdBy, modifiedBy, createdAt, modifiedAt, soft deletes
 - **Pagination on all lists** — never return unbounded collections
 - **Loading / Error / Empty states** — on every data-driven screen
+- **API URL paths: always lowercase-hyphenated (kebab-case)** — `/api/v1/bank-accounts`, `/api/v1/transaction-history`, NOT `/api/v1/BankAccounts` or `/api/v1/bankAccounts`. Enforced across ALL stacks (.NET, NestJS, Django, Spring Boot, React, RN, Flutter).
 
 ## Code Generation
 
@@ -41,7 +53,8 @@ When asked to generate code, detect the stack and follow the corresponding agent
 - **Flutter** → Read `agents/flutter-forge.md` — Riverpod, Freezed, GoRouter
 
 ### Testing
-- Any stack → Read `agents/test-forge.md` — auto-detects stack, generates unit + integration + e2e
+- **Unit/Integration tests** → Read `agents/test-forge.md` — TDD, auto-detects stack, generates unit + integration tests
+- **E2E / QA** → Read `agents/qa-agent.md` — web, mobile, API, cross-platform E2E testing (mode auto-detected)
 
 ## Code Review
 

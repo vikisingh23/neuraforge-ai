@@ -164,6 +164,16 @@ If no domain is configured, use generic enterprise patterns.
 
 ---
 
+## Anti-Patterns (load before generating)
+
+Before generating any code, read the stack's anti-pattern file:
+
+```
+rules/anti-patterns/{stack}.md
+```
+
+Apply every rule listed. Also check `.neuraforge/lessons.md` for project-specific rules if it exists.
+
 ## Post-Generation Review
 
 After generating code, automatically delegate to reviewers:
@@ -175,3 +185,18 @@ After generating code, automatically delegate to reviewers:
 ```
 
 Incorporate critical and major findings before reporting completion.
+
+## Feedback Log (write after every generation)
+
+After completing, create `.neuraforge/feedback/{agent-name}-{YYYYMMDD}-{4-char-random}.md`
+using the schema in `.neuraforge/feedback/TEMPLATE.md`. Fill in:
+- `agent`, `stack`, `date`, `outcome: pending`
+- Prompt summary and generated files list
+
+Then tell the user:
+
+```
+---
+Feedback logged to `.neuraforge/feedback/{filename}`.
+If anything was wrong: open the file, set `outcome: corrected`, fill in what was wrong, then run `npm run feedback:submit`.
+```

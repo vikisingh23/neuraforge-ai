@@ -1,0 +1,63 @@
+name: Agent Bug Report (via feedback CLI)
+description: Submitted by the NeuraForge feedback tool — do not fill manually, use npm run feedback:submit
+labels: ["prompt-fix"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This template is used by the `npm run feedback:submit` CLI.
+        For manual bug reports, use the **Bug Report** template instead.
+
+  - type: input
+    id: agent
+    attributes:
+      label: Agent
+      placeholder: "react-forge"
+    validations:
+      required: true
+
+  - type: input
+    id: stack
+    attributes:
+      label: Stack
+      placeholder: "react"
+    validations:
+      required: true
+
+  - type: input
+    id: feedback-id
+    attributes:
+      label: Feedback ID
+      placeholder: "react-forge-20260930-a3f2"
+
+  - type: textarea
+    id: prompt
+    attributes:
+      label: Prompt Summary
+    validations:
+      required: true
+
+  - type: textarea
+    id: generated
+    attributes:
+      label: Generated Files
+
+  - type: textarea
+    id: wrong
+    attributes:
+      label: What was wrong
+    validations:
+      required: true
+
+  - type: textarea
+    id: correct
+    attributes:
+      label: Correct approach
+    validations:
+      required: true
+
+  - type: textarea
+    id: rule
+    attributes:
+      label: Suggested rule to add to the agent
+      description: One clear rule that would prevent this mistake.

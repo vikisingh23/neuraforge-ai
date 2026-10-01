@@ -2,3 +2,8 @@ node_modules/
 .DS_Store
 *.log
 .env
+
+# NeuraForge feedback logs are project-local — do not commit them
+.neuraforge/feedback/*.md
+!.neuraforge/feedback/TEMPLATE.md
+.neuraforge/lessons.md
