@@ -11,7 +11,7 @@
  */
 
 import { execSync } from 'child_process';
-import { existsSync, mkdirSync } from 'fs';
+import { existsSync, mkdirSync, readFileSync } from 'fs';
 import { join } from 'path';
 import { homedir, platform as osPlatform } from 'os';
 
@@ -161,11 +161,11 @@ function runDoctor() {
   });
   check('.mcp.json exists and is valid JSON', () => {
     if (!existsSync('.mcp.json')) throw new Error();
-    JSON.parse(require('fs').readFileSync('.mcp.json', 'utf8'));
+    JSON.parse(readFileSync('.mcp.json', 'utf8'));
   });
   check('No @latest in .mcp.json', () => {
     if (!existsSync('.mcp.json')) throw new Error();
-    const content = require('fs').readFileSync('.mcp.json', 'utf8');
+    const content = readFileSync('.mcp.json', 'utf8');
     if (content.includes('@latest')) throw new Error();
   });
   check('Node.js 18+ available', () => {
@@ -249,3 +249,11 @@ if (!success) {
 
 ok('40 agents · 22 MCP servers · 35 skills · 7 stacks');
 console.log(`Docs: ${REPO}`);
+
+if (!isDryRun && success) {
+  console.log('');
+  log('If this saves you time, a star helps other devs find it:');
+  console.log(`   ${REPO}`);
+  log('Something generated wrong? Tell the agent to run `npm run feedback:submit` —');
+  log('that\'s how the anti-pattern rules get sharper for everyone.');
+}

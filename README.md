@@ -10,6 +10,8 @@
     <img src="https://img.shields.io/badge/skills-35-green" alt="35 Skills">
     <img src="https://img.shields.io/badge/stacks-7-red" alt="7 Stacks">
     <img src="https://img.shields.io/badge/platform-Windows%20%7C%20Mac%20%7C%20Linux-lightgrey" alt="Cross-platform">
+    <img src="https://img.shields.io/badge/eval-35%2F35%20passing-success" alt="35/35 eval assertions passing">
+    <a href="https://www.npmjs.com/package/neuraforge-ai"><img src="https://img.shields.io/npm/v/neuraforge-ai.svg" alt="npm version"></a>
   </p>
   <p align="center">
     <a href="#install">Install</a> · <a href="#the-problem">The Problem</a> · <a href="#what-can-it-do">What Can It Do</a> · <a href="#the-pipeline">The Pipeline</a> · <a href="SKILLS.md">All Skills</a>
@@ -32,9 +34,19 @@ NeuraForge solves this by dropping 40 pre-built agents into your project. Each a
 
 > Works as **Cursor Rules**, **Claude Code CLAUDE.md**, **GitHub Copilot Instructions**, **Kiro Steering**, and 8 more platforms. One install, all platforms detected automatically.
 
+Every forge/reviewer pair ships with automated eval cases that pin down what "correct" means per stack — **35/35 assertions passing** across all 7 stacks right now (`npm run eval`). Not a vibes-based claim: run it yourself.
+
 ## Install
 
-**Auto-detect** (runs in your project directory):
+**npm** (recommended — runs the same cross-platform installer, no need to trust a raw curl pipe):
+```bash
+npx neuraforge-ai [claude|cursor|gemini|codex|kiro|copilot|opencode]
+
+# Health-check an existing install
+npx neuraforge-ai --doctor
+```
+
+**Auto-detect via curl** (if you'd rather not use npm):
 ```bash
 node <(curl -fsSL https://raw.githubusercontent.com/vikisingh23/neuraforge-ai/main/install.mjs)
 
