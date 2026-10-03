@@ -1,7 +1,7 @@
 {
   "name": "neuraforge-ai",
   "version": "1.0.0",
-  "description": "40 AI agents, 35 skills, 22 MCP servers — enterprise code generation across 7 stacks",
+  "description": "40 agents for Claude Code, Cursor & Copilot that enforce architecture rules across .NET, NestJS, React, Flutter, Django, Spring Boot & React Native. Drop in, one command, works immediately.",
   "type": "module",
   "bin": {
     "neuraforge": "./install.mjs"
@@ -28,20 +28,26 @@
     "eval:agent":       "node tools/eval/index.mjs --agent"
   },
   "keywords": [
-    "ai",
-    "agents",
+    "cursor-rules",
+    "claude-code",
+    "copilot-instructions",
+    "ai-agents",
+    "llm",
+    "prompt-engineering",
     "code-generation",
     "mcp",
-    "claude",
-    "cursor",
-    "gemini",
-    "copilot",
     "nestjs",
     "dotnet",
     "react",
     "flutter",
     "django",
-    "spring"
+    "spring-boot",
+    "react-native",
+    "ai-rules",
+    "cursor",
+    "gemini",
+    "kiro",
+    "copilot"
   ],
   "author": "Vikas Singh <vikisingh23@github.com>",
   "license": "Apache-2.0",

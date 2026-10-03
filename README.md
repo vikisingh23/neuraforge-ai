@@ -1,7 +1,7 @@
 <p align="center">
   <h1 align="center">🧠 NeuraForge AI</h1>
   <p align="center">
-    <strong>Describe a feature in plain English. Get code that follows enterprise patterns.</strong>
+    <strong>Stop correcting the same AI mistakes.<br>Drop in 40 agents that teach Claude Code, Cursor & Copilot your team's architecture rules.</strong>
   </p>
   <p align="center">
     <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache%202.0-blue.svg" alt="License"></a>
@@ -12,7 +12,7 @@
     <img src="https://img.shields.io/badge/platform-Windows%20%7C%20Mac%20%7C%20Linux-lightgrey" alt="Cross-platform">
   </p>
   <p align="center">
-    <a href="#install">Install</a> · <a href="#what-can-it-do">What Can It Do</a> · <a href="#the-pipeline">The Pipeline</a> · <a href="SKILLS.md">All Skills</a>
+    <a href="#install">Install</a> · <a href="#the-problem">The Problem</a> · <a href="#what-can-it-do">What Can It Do</a> · <a href="#the-pipeline">The Pipeline</a> · <a href="SKILLS.md">All Skills</a>
   </p>
 </p>
 
@@ -21,6 +21,16 @@
 <p align="center">
   <img src="assets/demo.png" alt="NeuraForge AI Demo" width="100%">
 </p>
+
+## The Problem
+
+You use Cursor, Claude Code, or Copilot. You ask for a NestJS CRUD API. You get tutorial-quality output — `float` for monetary values, hard deletes, no audit fields, no pagination, controllers with business logic baked in. You spend the next 20 minutes fixing what took 20 seconds to generate.
+
+The model isn't broken. It just doesn't know *your* rules.
+
+NeuraForge solves this by dropping 40 pre-built agents into your project. Each agent encodes real architecture rules for a specific stack — and the AI reads them before generating anything. The first output is already close to what you'd actually commit.
+
+> Works as **Cursor Rules**, **Claude Code CLAUDE.md**, **GitHub Copilot Instructions**, **Kiro Steering**, and 8 more platforms. One install, all platforms detected automatically.
 
 ## Install
 
