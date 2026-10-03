@@ -181,12 +181,12 @@ use_subagent({
 use_subagent({
   subagents: [
     {
-      agent_name: "amc-react-reviewer",
+      agent_name: "react-reviewer",
       query: "Review generated React Native screen for enterprise standards",
       relevant_context: "<screen + hooks + service code>"
     },
     {
-      agent_name: "amc-performance-reviewer",
+      agent_name: "performance-reviewer",
       query: "Performance review of React Native screen (list perf, re-renders, images)",
       relevant_context: "<screen code>"
     }

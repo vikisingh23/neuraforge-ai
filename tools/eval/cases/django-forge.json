@@ -52,6 +52,35 @@
         "ModelViewSet"
       ],
       "must_not_contain": []
+    },
+    {
+      "id": "DJ-006",
+      "description": "Audit fields (created_by, modified_by) populated on create/update",
+      "file": "examples/django/views.py",
+      "must_contain": [
+        "created_by",
+        "modified_by"
+      ],
+      "must_not_contain": []
+    },
+    {
+      "id": "DJ-007",
+      "description": "Avoids N+1 — eager-loads related fields instead of per-row queries",
+      "file": "examples/django/views.py",
+      "must_contain": [
+        "select_related"
+      ],
+      "must_not_contain": []
+    },
+    {
+      "id": "DJ-008",
+      "description": "Separate Create serializer from Response serializer — never reuse one serializer for both",
+      "file": "examples/django/views.py",
+      "must_contain": [
+        "CreateOrderSerializer",
+        "get_serializer_class"
+      ],
+      "must_not_contain": []
     }
   ]
 }

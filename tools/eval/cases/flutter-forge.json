@@ -41,10 +41,12 @@
     },
     {
       "id": "FL-004",
-      "description": "Pagination or infinite scroll present",
+      "description": "Real infinite-scroll pagination — scroll listener driving page state, not just the word 'page'",
       "file": "examples/flutter/order_list_screen.dart",
       "must_contain": [
-        "page"
+        "ScrollController",
+        "_onScroll",
+        "totalPages"
       ],
       "must_not_contain": []
     },
@@ -55,6 +57,17 @@
       "must_contain": [
         "isEmpty",
         "data:"
+      ],
+      "must_not_contain": []
+    },
+    {
+      "id": "FL-006",
+      "description": "const discipline on static widgets — not just one incidental const",
+      "file": "examples/flutter/order_list_screen.dart",
+      "must_contain": [
+        "const OrderListScreen",
+        "const EdgeInsets",
+        "const EmptyState"
       ],
       "must_not_contain": []
     }

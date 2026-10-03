@@ -8,7 +8,8 @@
       "description": "FlatList used for lists — not ScrollView with map",
       "file": "examples/react-native/OrderListScreen.tsx",
       "must_contain": [
-        "FlatList"
+        "FlatList",
+        "keyExtractor"
       ],
       "must_not_contain": [
         "ScrollView",
@@ -21,7 +22,8 @@
       "file": "examples/react-native/OrderListScreen.tsx",
       "must_contain": [
         "RefreshControl",
-        "refreshing"
+        "refreshing",
+        "onRefresh"
       ],
       "must_not_contain": []
     },
@@ -30,7 +32,8 @@
       "description": "Infinite scroll / pagination via onEndReached",
       "file": "examples/react-native/OrderListScreen.tsx",
       "must_contain": [
-        "onEndReached"
+        "onEndReached",
+        "onEndReachedThreshold"
       ],
       "must_not_contain": []
     },
@@ -39,19 +42,63 @@
       "description": "Uses React Query — not useState+useEffect for API data",
       "file": "examples/react-native/OrderListScreen.tsx",
       "must_contain": [
-        "useQuery"
+        "useOrders",
+        "isLoading",
+        "isError",
+        "refetch"
       ],
       "must_not_contain": [
-        "useEffect(() =>"
+        "useEffect(() =>",
+        "fetch(",
+        "axios.get("
       ]
     },
     {
       "id": "RN-005",
-      "description": "All 4 UX states handled — loading, error, empty, data",
+      "description": "All 4 UX states handled — loading, error, empty, data — via real components, not inline strings",
       "file": "examples/react-native/OrderListScreen.tsx",
       "must_contain": [
         "isLoading",
-        "isError"
+        "isError",
+        "EmptyState",
+        "ErrorRetry"
+      ],
+      "must_not_contain": []
+    },
+    {
+      "id": "RN-006",
+      "description": "No hardcoded colors — design tokens only (AP-004)",
+      "file": "examples/react-native/OrderListScreen.tsx",
+      "must_contain": [
+        "theme/tokens",
+        "colors.brand.primary"
+      ],
+      "must_not_contain": [
+        "#1976D2",
+        "color=\"#"
+      ]
+    },
+    {
+      "id": "RN-007",
+      "description": "Query hook uses query key factory pattern with staleTime (parity with react-forge RF-003)",
+      "file": "examples/react-native/useOrders.ts",
+      "must_contain": [
+        "useQuery",
+        "queryKey",
+        "staleTime",
+        "ordersKeys"
+      ],
+      "must_not_contain": [
+        "useState",
+        "useEffect"
+      ]
+    },
+    {
+      "id": "RN-008",
+      "description": "Query hook supports paginated placeholderData — no flash to empty between pages (parity with react-forge RF-004)",
+      "file": "examples/react-native/useOrders.ts",
+      "must_contain": [
+        "placeholderData"
       ],
       "must_not_contain": []
     }

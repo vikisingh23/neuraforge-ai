@@ -123,10 +123,10 @@ For fan-out (e.g., multiple reviewers in parallel):
 
 ```
 .kiro/workspace/{feature}/06-reviews/
-├── dotnet-review.md       # Written by amc-dotnet-reviewer
-├── react-review.md        # Written by amc-react-reviewer
-├── security-review.md     # Written by amc-security-reviewer
-└── performance-review.md  # Written by amc-performance-reviewer
+├── dotnet-review.md       # Written by dotnet-reviewer
+├── react-review.md        # Written by react-reviewer
+├── security-review.md     # Written by security-reviewer
+└── performance-review.md  # Written by performance-reviewer
 ```
 
 Orchestrator polls: `ls .kiro/workspace/{feature}/06-reviews/*.md | wc -l`

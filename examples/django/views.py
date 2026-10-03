@@ -24,8 +24,10 @@ class OrderViewSet(ModelViewSet):
     http_method_names = ['get', 'post', 'put', 'delete']
 
     def get_queryset(self):
-        # Exclude soft-deleted records
-        qs = Order.objects.filter(is_deleted=False).order_by('-created_at')
+        # Exclude soft-deleted records; eager-load to avoid N+1 on serialization
+        qs = Order.objects.filter(is_deleted=False) \
+            .select_related('customer') \
+            .order_by('-created_at')
 
         # Optional filters
         customer_id = self.request.query_params.get('customerId')

@@ -10,7 +10,7 @@
     <img src="https://img.shields.io/badge/skills-35-green" alt="35 Skills">
     <img src="https://img.shields.io/badge/stacks-7-red" alt="7 Stacks">
     <img src="https://img.shields.io/badge/platform-Windows%20%7C%20Mac%20%7C%20Linux-lightgrey" alt="Cross-platform">
-    <img src="https://img.shields.io/badge/eval-35%2F35%20passing-success" alt="35/35 eval assertions passing">
+    <img src="https://img.shields.io/badge/eval-42%2F42%20passing-success" alt="42/42 eval assertions passing">
     <a href="https://www.npmjs.com/package/neuraforge-ai"><img src="https://img.shields.io/npm/v/neuraforge-ai.svg" alt="npm version"></a>
   </p>
   <p align="center">
@@ -34,7 +34,7 @@ NeuraForge solves this by dropping 40 pre-built agents into your project. Each a
 
 > Works as **Cursor Rules**, **Claude Code CLAUDE.md**, **GitHub Copilot Instructions**, **Kiro Steering**, and 8 more platforms. One install, all platforms detected automatically.
 
-Every forge/reviewer pair ships with automated eval cases that pin down what "correct" means per stack — **35/35 assertions passing** across all 7 stacks right now (`npm run eval`). Not a vibes-based claim: run it yourself.
+Every forge/reviewer pair ships with automated eval cases that pin down what "correct" means per stack — **42/42 assertions passing** across all 7 stacks right now (`npm run eval`). Not a vibes-based claim: run it yourself.
 
 ## Install
 
@@ -133,12 +133,12 @@ Each stage works independently too — use what you need.
 | **.NET Core** | `forge` | `dotnet-reviewer` | xUnit + Moq | ✅ Stable |
 | **NestJS + TypeORM** | `nestjs-forge` | `nestjs-reviewer` | Jest + supertest | ✅ Stable |
 | **React** | `react-forge` | `react-reviewer` | Vitest + RTL | ✅ Stable |
-| **Django + DRF** | `django-forge` | `django-reviewer` | pytest + DRF test | 🔶 Beta |
-| **Spring Boot + JPA** | `spring-forge` | `spring-reviewer` | JUnit 5 + Mockito | 🔶 Beta |
-| **React Native** | `rn-forge` | `rn-reviewer` | Jest + RNTL | 🔶 Beta |
-| **Flutter** | `flutter-forge` | `flutter-reviewer` | flutter_test + mocktail | 🔶 Beta |
+| **Django + DRF** | `django-forge` | `django-reviewer` | pytest + DRF test | ✅ Stable |
+| **Spring Boot + JPA** | `spring-forge` | `spring-reviewer` | JUnit 5 + Mockito | ✅ Stable |
+| **React Native** | `rn-forge` | `rn-reviewer` | Jest + RNTL | ✅ Stable |
+| **Flutter** | `flutter-forge` | `flutter-reviewer` | flutter_test + mocktail | ✅ Stable |
 
-> ✅ Stable — battle-tested in production. 🔶 Beta — functional but less proven; feedback welcome.
+> ✅ Stable — reviewer agent, anti-pattern coverage, and eval validation all at parity across every stack (42/42 eval assertions passing, `npm run eval`). .NET, NestJS, and React additionally have the longest real-world production track record; the other four reached equivalent rigor more recently.
 
 ---
 
@@ -237,7 +237,7 @@ This is a v1. Here's what to expect:
 
 - **Agents are sophisticated prompts, not autonomous systems.** They guide AI models to follow patterns — they don't self-correct or chain actions independently. Quality depends on the underlying model.
 - **Line limits are opinionated.** The "controllers <150 lines" rule works for our teams. Your mileage may vary. Treat these as starting points, not gospel.
-- **.NET and React agents are the most battle-tested.** Django and Spring Boot agents are newer and less proven in production. Feedback welcome.
+- **.NET, NestJS, and React agents have the longest production track record.** Django, Spring Boot, React Native, and Flutter reached the same reviewer/eval rigor more recently (see `npm run eval`) — same bar, less wall-clock time in production. Feedback welcome, especially from real usage.
 - **Domain presets are starting points.** The AI adapts based on its training data + your configuration. It won't replace a compliance expert.
 - **MCP servers are curated, not built by us.** We configure and test existing open-source MCP servers. The value is in the agent prompts and architecture rules.
 

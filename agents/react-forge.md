@@ -243,12 +243,12 @@ After UI validation passes, run a parallel code review before reporting:
 use_subagent({
   subagents: [
     {
-      agent_name: "amc-react-reviewer",
+      agent_name: "react-reviewer",
       query: "Review generated React component for enterprise standards",
       relevant_context: "<component + hooks + service code>"
     },
     {
-      agent_name: "amc-performance-reviewer",
+      agent_name: "performance-reviewer",
       query: "Performance review of generated React component",
       relevant_context: "<component code>"
     }

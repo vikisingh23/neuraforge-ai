@@ -105,6 +105,9 @@ public class Transaction {
     @Column(nullable = false)
     private boolean isDeleted = false;
 
+    @Column(nullable = false, unique = true, length = 100)
+    private String idempotencyKey; // client-supplied, enforced unique at the DB level too
+
     @Version
     private Long version; // Optimistic locking
 }
@@ -126,7 +129,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, UUID> 
         @Param("investorId") UUID investorId,
         @Param("status") TransactionStatus status);
 
-    boolean existsByIdempotencyKey(String idempotencyKey);
+    Optional<Transaction> findByIdempotencyKey(String idempotencyKey);
 }
 ```
 
@@ -143,7 +146,10 @@ public record CreateTransactionRequest(
     BigDecimal amount,
 
     @NotNull
-    UUID investorId
+    UUID investorId,
+
+    @NotBlank(message = "Idempotency-Key is required")
+    String idempotencyKey
 ) {}
 
 // TransactionResponse.java
@@ -184,14 +190,31 @@ public class TransactionService {
 
     @Transactional
     public TransactionResponse create(CreateTransactionRequest request, String userId) {
+        // Idempotency check FIRST — a retried POST (client timeout, network retry) must
+        // return the original result, never create a second transaction.
+        var existing = transactionRepo.findByIdempotencyKey(request.idempotencyKey());
+        if (existing.isPresent()) {
+            return mapper.toResponse(existing.get());
+        }
+
         var transaction = Transaction.builder()
             .schemeName(request.schemeName())
             .amount(request.amount())
             .investorId(request.investorId())
+            .idempotencyKey(request.idempotencyKey())
             .status(TransactionStatus.PENDING)
             .build();
 
-        transaction = transactionRepo.save(transaction);
+        try {
+            transaction = transactionRepo.save(transaction);
+        } catch (DataIntegrityViolationException e) {
+            // Unique constraint on idempotencyKey caught a race (two concurrent retries) —
+            // fetch and return the winner instead of surfacing a 500.
+            return transactionRepo.findByIdempotencyKey(request.idempotencyKey())
+                .map(mapper::toResponse)
+                .orElseThrow(() -> e);
+        }
+
         eventPublisher.publishEvent(new TransactionCreatedEvent(transaction.getId()));
         return mapper.toResponse(transaction);
     }
@@ -337,7 +360,8 @@ class TransactionServiceTest {
 
     @Test
     void create_setsAuditFieldsAndPublishesEvent() {
-        var request = new CreateTransactionRequest("Test Fund", BigDecimal.valueOf(5000), UUID.randomUUID());
+        var request = new CreateTransactionRequest("Test Fund", BigDecimal.valueOf(5000), UUID.randomUUID(), "idem-key-1");
+        when(transactionRepo.findByIdempotencyKey("idem-key-1")).thenReturn(Optional.empty());
         when(transactionRepo.save(any())).thenAnswer(inv -> inv.getArgument(0));
         when(mapper.toResponse(any())).thenReturn(TestFactory.transactionResponse());
 
@@ -345,6 +369,19 @@ class TransactionServiceTest {
 
         verify(transactionRepo).save(any());
         verify(eventPublisher).publishEvent(any(TransactionCreatedEvent.class));
+    }
+
+    @Test
+    void create_withKnownIdempotencyKey_returnsExistingWithoutCreatingDuplicate() {
+        var request = new CreateTransactionRequest("Test Fund", BigDecimal.valueOf(5000), UUID.randomUUID(), "idem-key-1");
+        var existing = TestFactory.transaction();
+        when(transactionRepo.findByIdempotencyKey("idem-key-1")).thenReturn(Optional.of(existing));
+        when(mapper.toResponse(existing)).thenReturn(TestFactory.transactionResponse());
+
+        service.create(request, "user-1");
+
+        verify(transactionRepo, never()).save(any());
+        verify(eventPublisher, never()).publishEvent(any());
     }
 }
 ```
@@ -401,6 +438,9 @@ src/main/resources/
 ### 8. `@Version` for optimistic locking on financial entities
 ### 9. Spring Events for side effects — not direct service calls
 ### 10. Flyway for migrations — forward-only, versioned
+### 11. Idempotency key on financial create endpoints — never let a retried POST double-charge or double-book
+### 12. Never log or return raw PII (PAN, account number, phone) — mask it (`****1234`)
+### 13. Resilience4j `@CircuitBreaker`/`@Retry`/`@TimeLimiter` + explicit timeout on every external/downstream HTTP call
 
 ## ⚠️ Anti-Patterns
 
@@ -443,6 +483,32 @@ transactions.forEach(t -> t.getInvestor().getName());
 // ✅ EntityGraph or JOIN FETCH
 @EntityGraph(attributePaths = {"investor"})
 Page<Transaction> findByStatus(TransactionStatus status, Pageable pageable);
+
+// ❌ Create endpoint with no idempotency key — a client retry double-books
+public TransactionResponse create(CreateTransactionRequest request)
+
+// ✅ Idempotency key checked before insert
+public TransactionResponse create(CreateTransactionRequest request) {
+    var existing = transactionRepo.findByIdempotencyKey(request.idempotencyKey());
+    if (existing.isPresent()) return mapper.toResponse(existing.get());
+    // ... proceed to create
+}
+
+// ❌ Raw PII in logs
+log.info("Processing transaction for PAN {}", pan);
+
+// ✅ Masked
+log.info("Processing transaction for PAN {}", maskPan(pan)); // "****1234"
+
+// ❌ External call with no resilience
+Order order = restTemplate.getForObject(url, Order.class);
+
+// ✅ Resilience4j circuit breaker + timeout
+@CircuitBreaker(name = "orderService", fallbackMethod = "fallback")
+@TimeLimiter(name = "orderService")
+public CompletableFuture<Order> getOrder(String id) {
+    return CompletableFuture.supplyAsync(() -> restTemplate.getForObject(url, Order.class));
+}
 ```
 
 ## Empathy & API Consumer Experience

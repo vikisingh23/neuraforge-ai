@@ -13,6 +13,7 @@ import { EmptyState } from '../common/EmptyState';
 import { ErrorRetry } from '../common/ErrorRetry';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { RootStackParamList } from '../navigation/types';
+import { colors } from '../theme/tokens'; // from get_design_tokens — never hardcode hex values
 
 type Props = NativeStackScreenProps<RootStackParamList, 'OrderList'>;
 
@@ -35,7 +36,7 @@ export function OrderListScreen({ navigation }: Props) {
   if (isLoading && page === 1) {
     return (
       <View style={styles.centered}>
-        <ActivityIndicator size="large" color="#1976D2" />
+        <ActivityIndicator size="large" color={colors.brand.primary} />
       </View>
     );
   }

@@ -47,14 +47,29 @@ Always load:
 - No model instances in task args — pass IDs only
 - Exponential backoff on retries
 
-### 6. Security
+### 6. Idempotency (CRITICAL for payments)
+- POST endpoints creating financial records (orders, payments, transactions) MUST accept an idempotency key (header or body field) and check for a duplicate before insert
+- Flag any payment/transaction create endpoint without duplicate detection
+- Celery tasks that charge/settle must check `status` before acting (see Celery Tasks) — this is the task-level half of idempotency
+
+### 7. Concurrency Control
+- Financial records mutated by concurrent requests (payment processing, balance updates) MUST use `select_for_update()` inside `@transaction.atomic` — flag read-then-write sequences on financial rows without row locking
+- Flag any "check status, then update" sequence on a shared row that isn't wrapped in `transaction.atomic` + `select_for_update()` — classic race condition (double-charge, double-process)
+
+### 8. Data Protection & PII
+- Sensitive fields (PAN, Aadhaar, bank account, phone) MUST be encrypted at rest (field-level encryption, e.g. `django-fernet-fields`, or DB-level encryption) — flag plain `CharField` for these
+- No PII in log messages — must be masked (`****1234`); flag `logger.info(f"...{user.pan}...")` style logging
+- No sensitive data in exception messages or DRF error responses
+- No PII in Celery task args logged by default task logging — pass IDs, fetch fresh inside the task
+
+### 9. Security
 - `@login_required` or permission classes on every endpoint
 - No `CORS_ALLOW_ALL_ORIGINS = True` in production
 - Rate limiting via throttle classes
 - Input validation via serializers
 - No secrets in settings.py — use environment variables
 
-### 7. Testing
+### 10. Testing
 - Tests for all repository methods
 - Tests for serializer validation
 - Tests for controller responses (status codes, response structure)
@@ -89,17 +104,38 @@ Always load:
 
 ## Scoring
 
-Rate 0-100. Score 90+ to pass.
+Rate 0-100:
+
+- **95-100**: Production ready, finance-grade
+- **85-94**: Minor improvements needed
+- **70-84**: Significant gaps — not safe for financial operations
+- **50-69**: Major rewrite needed
+- **Below 50**: Reject — critical compliance/security risks
+
+Score 90+ to pass.
 
 ## Output Format
 
 ```
 Score: XX/100
 
-🔴 Critical: [line X] Model.objects.filter() in controller — use repository
-🟡 Major: [line X] Missing @handle_unknown_exception_api_view
-🟢 Minor: [line X] Could use select_related to avoid N+1
-💡 Suggestion: Extract this to a Celery task
+🔴 Critical (must fix before deploy):
+- [line X] Hard delete on financial record — use soft delete
+- [line X] Payment endpoint without idempotency check
+- [line X] PII logged without masking
+
+🟡 Major (fix before code review approval):
+- [line X] Missing @handle_unknown_exception_api_view
+- [line X] Read-then-write on financial row without select_for_update
+
+🟢 Minor (improve when possible):
+- [line X] Could use select_related to avoid N+1
+
+💡 Suggestions:
+- Extract this to a Celery task
+
+🏦 Compliance Notes:
+- [any regulatory/audit concerns specific to the configured domain]
 ```
 
 ### Production Hygiene Flags
@@ -110,3 +146,14 @@ Score: XX/100
 - [ ] **.DS_Store committed** — flag. Add to .gitignore
 - [ ] **Heavy imports at module level** — flag if importing ffmpeg/PIL/etc globally. Use lazy imports
 - [ ] **celerybeat.pid committed** — flag. Add to .gitignore
+
+## Domain Awareness
+
+Before generating any output, read `rules/domain-context.md` for the configured industry, country, and regulatory context.
+
+- **Industry**: ${user_config.industry} — adapt terminology, entities, compliance rules
+- **Country**: ${user_config.country} — adapt regulatory framework, formatting, currency
+- **Domain Details**: ${user_config.domain_context} — specific compliance requirements
+- **Currency**: ${user_config.currency} — use for all monetary formatting
+
+If no domain is configured, use generic enterprise patterns.

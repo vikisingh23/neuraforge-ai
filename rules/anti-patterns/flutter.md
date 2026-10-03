@@ -86,4 +86,48 @@ class Order with _$Order {
 
 ---
 
+### [AP-004] Never use BuildContext after an await without checking mounted
+**Added:** 2026-10-03 | **Source:** seed rule
+**Pattern to avoid:**
+```dart
+onPressed: () async {
+  await orderRepository.cancel(orderId);
+  Navigator.of(context).pop();  // context may belong to a disposed widget
+}
+```
+**Correct approach:**
+```dart
+onPressed: () async {
+  await orderRepository.cancel(orderId);
+  if (context.mounted) Navigator.of(context).pop();
+}
+```
+**Rule:** Any `BuildContext` used after an `await` must be guarded with `if (context.mounted)` (or `if (mounted)` in a `State`). The analyzer's `use_build_context_synchronously` lint must stay clean — never suppress it.
+
+---
+
+### [AP-005] Missing const constructors on static widgets
+**Added:** 2026-10-03 | **Source:** seed rule
+**Pattern to avoid:**
+```dart
+Widget build(BuildContext context) {
+  return Padding(
+    padding: EdgeInsets.all(16),       // not const — rebuilt every frame
+    child: Text('No orders yet'),      // not const
+  );
+}
+```
+**Correct approach:**
+```dart
+Widget build(BuildContext context) {
+  return const Padding(
+    padding: EdgeInsets.all(16),
+    child: Text('No orders yet'),
+  );
+}
+```
+**Rule:** Every widget/constructor that takes no runtime-dependent arguments must be `const`. This is not cosmetic — it lets Flutter skip rebuilding that subtree entirely. Flag any missing `const` the compiler would accept.
+
+---
+
 <!-- New anti-patterns are added here via: npm run feedback:submit -->

@@ -72,4 +72,42 @@ export function OrderListScreen({ navigation }: Props) {
 
 ---
 
+### [AP-004] Never hardcode colors, spacing, or font sizes in StyleSheet
+**Added:** 2026-10-03 | **Source:** seed rule
+**Pattern to avoid:**
+```tsx
+<ActivityIndicator size="large" color="#1976D2" />
+const styles = StyleSheet.create({ card: { padding: 16, backgroundColor: '#fff' } });
+```
+**Correct approach:**
+```tsx
+import { colors, spacing } from '../theme/tokens'; // from get_design_tokens
+
+<ActivityIndicator size="large" color={colors.brand.primary} />
+const styles = StyleSheet.create({ card: { padding: spacing.md, backgroundColor: colors.surface } });
+```
+**Rule:** Always use design tokens from `get_design_tokens`, both in `StyleSheet.create` values and in inline component props (e.g. `ActivityIndicator`'s `color`). Never hardcode hex values or raw numbers for spacing.
+
+---
+
+### [AP-005] Every data-driven screen must handle all 4 UX states
+**Added:** 2026-10-03 | **Source:** seed rule
+**Pattern to avoid:**
+```tsx
+const { data } = useOrders({ page });
+return <FlatList data={data.items} renderItem={...} />; // crashes while loading, blank on error/empty
+```
+**Correct approach:**
+```tsx
+const { data, isLoading, isError, refetch } = useOrders({ page });
+
+if (isLoading) return <ActivityIndicator />;             // loading
+if (isError) return <ErrorRetry onRetry={refetch} />;    // error
+if (!data?.items.length) return <EmptyState ... />;      // empty
+return <FlatList data={data.items} renderItem={...} />;  // data
+```
+**Rule:** All 4 states (loading, error, empty, data) are mandatory on every screen that fetches data — not just the happy path.
+
+---
+
 <!-- New anti-patterns are added here via: npm run feedback:submit -->
