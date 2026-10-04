@@ -21,8 +21,9 @@
 ---
 
 <p align="center">
-  <img src="assets/demo.png" alt="NeuraForge AI Demo" width="100%">
+  <img src="assets/install-demo.gif" alt="npx neuraforge-ai claude — real terminal recording of the install flow" width="100%">
 </p>
+<p align="center"><sub>Real recording — one command, your Claude Code setup is ready. No edits, no trimming.</sub></p>
 
 ## The Problem
 
@@ -35,6 +36,10 @@ NeuraForge solves this by dropping 40 pre-built agents into your project. Each a
 > Works as **Cursor Rules**, **Claude Code CLAUDE.md**, **GitHub Copilot Instructions**, **Kiro Steering**, and 8 more platforms. One install, all platforms detected automatically.
 
 Every forge/reviewer pair ships with automated eval cases that pin down what "correct" means per stack — **42/42 assertions passing** across all 7 stacks right now (`npm run eval`). Not a vibes-based claim: run it yourself.
+
+<p align="center">
+  <img src="assets/eval-demo.gif" alt="npm run eval — real terminal recording, 42/42 passing" width="70%">
+</p>
 
 ## Install
 
