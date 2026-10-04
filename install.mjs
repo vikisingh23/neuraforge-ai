@@ -131,6 +131,42 @@ function copyFiles(files) {
   return allOk;
 }
 
+// Copy a whole directory's contents into a differently-named destination
+// directory — for platforms whose native discovery path doesn't match this
+// repo's own top-level folder names (e.g. Claude Code only auto-discovers
+// project subagents/skills under .claude/agents/ and .claude/skills/, not a
+// bare top-level agents/ or skills/ folder; Kiro uses .kiro/agents/ and
+// .kiro/steering/).
+function copyDirTo(srcRelDir, destRelDir) {
+  const src = join(CLONE_DIR, srcRelDir);
+  const dst = join(process.cwd(), destRelDir);
+  const isWindows = osPlatform() === 'win32';
+
+  if (!existsSync(src)) {
+    warn(`Source not found, skipping: ${srcRelDir}`);
+    return false;
+  }
+
+  if (isDryRun) {
+    log(`[dry-run] Would copy: ${srcRelDir}/* -> ${destRelDir}/`);
+    return true;
+  }
+
+  try {
+    if (!existsSync(dst)) mkdirSync(dst, { recursive: true });
+    if (isWindows) {
+      execSync(`xcopy "${src}" "${dst}" /E /I /Y /Q`, { stdio: 'pipe' });
+    } else {
+      execSync(`cp -r "${src}/." "${dst}/"`, { stdio: 'pipe' });
+    }
+    ok(`${destRelDir}/`);
+    return true;
+  } catch (e) {
+    err(`Failed to copy ${srcRelDir} -> ${destRelDir}: ${e.stderr?.toString().trim() || e.message}`);
+    return false;
+  }
+}
+
 // Copy .mcp.json to a different destination path/name — for platforms that
 // use the same mcpServers schema but look for it somewhere other than
 // ".mcp.json" in the project root (e.g. Antigravity expects
@@ -238,7 +274,13 @@ switch (detectedPlatform) {
   case 'claude':
     log('Configuring for Claude Code...');
     success = copyFiles([...common, 'skills', '.mcp.json']);
-    if (!isDryRun && success) ok('Files installed. Add agents/ and rules/ to your project root.');
+    // Native discovery: project subagents live at .claude/agents/*.md and
+    // project Skills at .claude/skills/<name>/SKILL.md — a bare top-level
+    // agents/ or skills/ folder is NOT picked up as subagents/slash-command
+    // Skills on its own. Mirror both into .claude/ so they actually register.
+    success = copyDirTo('agents', '.claude/agents') && success;
+    success = copyDirTo('skills', '.claude/skills') && success;
+    if (!isDryRun && success) ok('Files installed — AGENTS.md + .claude/agents (subagents) + .claude/skills (slash commands) + project .mcp.json.');
     break;
 
   case 'cursor':
@@ -255,11 +297,21 @@ switch (detectedPlatform) {
 
   case 'codex':
   case 'opencode':
-  case 'kiro':
   case 'copilot':
     log(`Configuring for ${detectedPlatform}...`);
     success = copyFiles([...common, '.mcp.json']);
     if (!isDryRun && success) ok(`${detectedPlatform} configured. AGENTS.md will be auto-discovered.`);
+    break;
+
+  case 'kiro':
+    log('Configuring for Kiro...');
+    success = copyFiles([...common, '.mcp.json']);
+    // kiro-cli chat --agent <name> resolves against .kiro/agents/<name>.md,
+    // and steering context is pulled from .kiro/steering/ — not the bare
+    // top-level agents/ or rules/ folders this repo ships at its own root.
+    success = copyDirTo('agents', '.kiro/agents') && success;
+    success = copyDirTo('rules', '.kiro/steering') && success;
+    if (!isDryRun && success) ok('Kiro configured — .kiro/agents + .kiro/steering wired for `kiro-cli chat --agent <name>`.');
     break;
 
   case 'antigravity':
