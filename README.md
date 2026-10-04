@@ -1,13 +1,13 @@
 <p align="center">
   <h1 align="center">🧠 NeuraForge AI</h1>
   <p align="center">
-    <strong>Stop correcting the same AI mistakes.<br>Drop in 40 agents that teach Claude Code, Cursor & Copilot your team's architecture rules.</strong>
+    <strong>Stop correcting the same AI mistakes.<br>Drop in 45 agents that teach Claude Code, Cursor & Copilot your team's architecture rules.</strong>
   </p>
   <p align="center">
     <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache%202.0-blue.svg" alt="License"></a>
-    <img src="https://img.shields.io/badge/agents-40-blueviolet" alt="40 Agents">
+    <img src="https://img.shields.io/badge/agents-45-blueviolet" alt="45 Agents">
     <img src="https://img.shields.io/badge/MCP%20servers-22-orange" alt="22 MCP Servers">
-    <img src="https://img.shields.io/badge/skills-35-green" alt="35 Skills">
+    <img src="https://img.shields.io/badge/skills-39-green" alt="39 Skills">
     <img src="https://img.shields.io/badge/stacks-7-red" alt="7 Stacks">
     <img src="https://img.shields.io/badge/platform-Windows%20%7C%20Mac%20%7C%20Linux-lightgrey" alt="Cross-platform">
     <img src="https://img.shields.io/badge/eval-42%2F42%20passing-success" alt="42/42 eval assertions passing">
@@ -31,7 +31,7 @@ You use Cursor, Claude Code, or Copilot. You ask for a NestJS CRUD API. You get 
 
 The model isn't broken. It just doesn't know *your* rules.
 
-NeuraForge solves this by dropping 40 pre-built agents into your project. Each agent encodes real architecture rules for a specific stack — and the AI reads them before generating anything. The first output is already close to what you'd actually commit.
+NeuraForge solves this by dropping 45 pre-built agents into your project. Each agent encodes real architecture rules for a specific stack — and the AI reads them before generating anything. The first output is already close to what you'd actually commit.
 
 > Works as **Cursor Rules**, **Claude Code CLAUDE.md**, **GitHub Copilot Instructions**, **Kiro Steering**, and 10 more platforms (including Codex, Gemini CLI, and Antigravity). One install, all platforms detected automatically.
 
@@ -183,7 +183,7 @@ Enforced across all 7 stacks by every forge and reviewer:
 ## Full Inventory
 
 <details>
-<summary><strong>35 Skills</strong> (click to expand)</summary>
+<summary><strong>39 Skills</strong> (click to expand)</summary>
 
 **Code Generation**: dotnet-forge, nestjs-forge, react-forge, rn-forge, flutter-forge, test-forge
 
@@ -227,6 +227,7 @@ PRs welcome! See [CONTRIBUTING.md](CONTRIBUTING.md).
 ## Acknowledgements
 
 - Codebase knowledge graph powered by [graphify](https://github.com/safishamsi/graphify) by Safi Shamsi
+- `rules/core/MINIMAL_SOLUTION.md` is adapted from the ideas in [Ponytail](https://github.com/DietrichGebert/ponytail) by Dietrich Gebert (MIT) — rewritten against NeuraForge's own non-negotiables rather than used verbatim
 
 ## License
 
@@ -317,7 +318,7 @@ Yes. Apache 2.0 — free for personal and commercial use. The AI platform you us
 </details>
 
 <details>
-<summary><strong>35 skills is overwhelming. Where do I start?</strong></summary>
+<summary><strong>39 skills is overwhelming. Where do I start?</strong></summary>
 
 See [QUICKSTART.md](QUICKSTART.md). Start with `/debug` (paste any error), then `/scaffold` (bootstrap a project), then try a forge agent for your stack.
 </details>

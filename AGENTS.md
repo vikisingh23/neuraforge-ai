@@ -9,7 +9,7 @@ When the user asks you to generate code, review code, debug, scaffold, or any de
 ## Plan Before Acting
 
 Before writing any code:
-1. Search the codebase for existing similar code
+1. Search the codebase for existing similar code — use the `codebase-graph` skill (graphify) if it's available, for anything beyond a trivial grep
 2. Identify what to reuse, extend, or refactor
 3. Present a brief plan and wait for approval
 4. Then execute
@@ -24,6 +24,16 @@ Read `rules/core/FEEDBACK_PROTOCOL.md` in full. Every code-generating agent must
 4. **Tell the user** — at the end of every response, show the feedback log path and how to flag mistakes
 
 This is how the agents improve. Every corrected feedback item becomes a new anti-pattern rule.
+
+## Minimal Solution Principle (MANDATORY — how much to generate)
+
+Read `rules/core/MINIMAL_SOLUTION.md` in full before generating. Work down its
+ladder — does this need to exist, does it already exist, does the framework
+already do it, is there an approved dependency, can an existing file absorb
+it — and stop at the first rung that resolves the request. The "never skip"
+list in that file (audit fields, decimal money, validation, idempotency,
+pagination, auth, UX states) stays mandatory regardless of how small the
+request is.
 
 ## Architecture Principles (enforce on ALL code)
 
@@ -116,6 +126,7 @@ Score 0-100. Format: 🔴 Critical / 🟡 Major / 🟢 Minor / 💡 Suggestions.
 
 Shared standards are in the `rules/` directory:
 - `rules/core/ARCHITECTURE_PRINCIPLES.md` — universal principles
+- `rules/core/MINIMAL_SOLUTION.md` — how much to generate (MANDATORY, see above)
 - `rules/core/NAMING_CONVENTIONS.md` — naming standards (if present)
 - `rules/core/ERROR_TAXONOMY.md` — HTTP codes, error response format
 - `rules/core/TESTING_STRATEGY.md` — test pyramid, coverage targets
@@ -125,12 +136,9 @@ Shared standards are in the `rules/` directory:
 
 ## Codebase Knowledge Graph (optional)
 
-If graphify is installed, use it for deeper understanding:
-```
-/graphify .
-/graphify query "what connects X to Y?"
-/graphify explain "ClassName"
-```
+See `skills/codebase-graph/SKILL.md` — wraps [graphify](https://github.com/Graphify-Labs/graphify)
+to back the "search codebase first" step above with something more thorough
+than grep. Entirely optional; every agent works without it.
 
 ## MCP Servers
 

@@ -357,7 +357,7 @@ if (!success) {
   process.exit(1);
 }
 
-ok('40 agents · 22 MCP servers · 35 skills · 7 stacks');
+ok('45 agents · 22 MCP servers · 39 skills · 7 stacks');
 console.log(`Docs: ${REPO}`);
 
 if (!isDryRun && success) {

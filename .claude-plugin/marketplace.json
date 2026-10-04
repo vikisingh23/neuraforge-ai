@@ -4,7 +4,7 @@
   "plugins": [
     {
       "name": "neuraforge-ai",
-      "description": "24 agents + 19 MCP servers + 21 skills across 5 stacks",
+      "description": "45 agents + 22 MCP servers + 39 skills across 7 stacks",
       "path": "."
     }
   ]

@@ -1,7 +1,7 @@
 {
   "name": "neuraforge-ai",
   "version": "1.0.0",
-  "description": "AI-powered development platform — 24 agents, 19 MCP servers, 21 skills for end-to-end software development across React, React Native, Flutter, .NET, and NestJS",
+  "description": "AI-powered development platform — 45 agents, 22 MCP servers, 39 skills for end-to-end software development across React, React Native, Flutter, .NET, and NestJS",
   "author": {
     "name": "Vikas Singh",
     "url": "https://github.com/vikisingh23"

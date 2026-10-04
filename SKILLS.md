@@ -1,6 +1,6 @@
 # NeuraForge AI — All Skills
 
-## Code Generation (6)
+## Code Generation (8)
 
 | Skill | Stack | What it generates |
 |-------|-------|-------------------|
@@ -9,6 +9,8 @@
 | `/react-forge` | React | Component + Hooks + QueryOptions + Service + Tests (8 files) |
 | `/rn-forge` | React Native | Screen + Components + Hooks + Queries + Service + Tests |
 | `/flutter-forge` | Flutter | Model + Repository + Provider + Screen + Widgets + Tests |
+| `/django-forge` | Django + DRF | Model + Serializer + Repository + Celery task + Tests |
+| `/spring-forge` | Spring Boot + JPA | Entity + Repository + Service + Controller + MapStruct + Tests |
 | `/test-forge` | All stacks | Auto-detects stack, generates unit + integration + e2e tests |
 
 ## Code Review (5)
@@ -21,7 +23,7 @@
 | `/performance-review` | N+1 queries, re-renders, caching gaps, bundle size |
 | `/ui-validation` | Compare generated UI vs Figma designs (85%+ match) |
 
-## Developer Productivity (5)
+## Developer Productivity (7)
 
 | Skill | What it does |
 |-------|-------------|
@@ -30,14 +32,17 @@
 | `/scaffold` | Bootstrap new project with enterprise standards pre-configured |
 | `/refactor` | Break down god classes/components into focused testable pieces |
 | `/db-design` | Plain English → entities, relationships, migrations, indexes |
+| `/codebase-graph` | Build a queryable knowledge graph (via graphify) before generating/reviewing |
+| `/git-worktrees` | Isolated worktree per feature so the main branch stays clean |
 
-## Design & Documentation (3)
+## Design & Documentation (4)
 
 | Skill | What it does |
 |-------|-------------|
 | `/api-design` | Plain English → OpenAPI 3.0 spec → optional implementation |
 | `/doc-generator` | Create PowerPoint, Word, Excel documents from plain English |
 | `/video-creator` | Create videos using Remotion, FFmpeg, short-form for social |
+| `/design-sync` | Sync DESIGN.md with your Figma library — colors, typography, tokens |
 
 ## Migration & Maintenance (4)
 
@@ -64,7 +69,7 @@
 | `/feature-pipeline` | BRS → Review → Development → Code Review → Handoff |
 | `/fullstack-orchestrator` | Figma → DB schema → API → Frontend → Validation |
 
-## Infrastructure & Setup (4)
+## Infrastructure & Setup (5)
 
 | Skill | What it does |
 |-------|-------------|
@@ -72,3 +77,4 @@
 | `/documentation` | API docs, architecture docs, onboarding guides |
 | `/presentation-builder` | Professional presentations with branding |
 | `/domain-setup` | Configure industry, country, regulatory context |
+| `/workspace-protocol` | Shared file-based protocol multi-agent orchestrators use to communicate |

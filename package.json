@@ -1,7 +1,7 @@
 {
   "name": "neuraforge-ai",
   "version": "1.1.0",
-  "description": "40 agents for Claude Code, Cursor & Copilot that enforce architecture rules across .NET, NestJS, React, Flutter, Django, Spring Boot & React Native. Drop in, one command, works immediately.",
+  "description": "45 agents for Claude Code, Cursor & Copilot that enforce architecture rules across .NET, NestJS, React, Flutter, Django, Spring Boot & React Native. Drop in, one command, works immediately.",
   "type": "module",
   "bin": {
     "neuraforge": "./install.mjs"
