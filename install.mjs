@@ -38,13 +38,18 @@ if (platformArg && !KNOWN_PLATFORMS.includes(platformArg)) {
   process.exit(1);
 }
 
-function detect() {
-  // Directory-based detection is more reliable than CLI --version probing
-  if (existsSync(join(homedir(), '.cursor'))) return 'cursor';
-  if (existsSync(join(homedir(), '.gemini'))) return 'gemini';
-  if (existsSync(join(homedir(), '.kiro'))) return 'kiro';
+// Detect every platform present on this machine, not just the first match —
+// someone with both Claude Code and Cursor installed should get both wired
+// up in one run rather than having to re-run the installer per tool.
+function detectAll() {
+  const found = new Set();
 
-  // Fall back to CLI presence checks
+  // Directory-based detection is more reliable than CLI --version probing
+  if (existsSync(join(homedir(), '.cursor'))) found.add('cursor');
+  if (existsSync(join(homedir(), '.gemini'))) found.add('gemini');
+  if (existsSync(join(homedir(), '.kiro'))) found.add('kiro');
+
+  // CLI presence checks — covers tools with no telltale home directory
   const checks = [
     ['claude', 'claude'],
     ['cursor', 'cursor'],
@@ -56,12 +61,13 @@ function detect() {
   for (const [name, cmd] of checks) {
     try {
       execSync(`${cmd} --version`, { stdio: 'ignore' });
-      return name;
+      found.add(name);
     } catch {
       // not installed or not in PATH — continue
     }
   }
-  return 'unknown';
+
+  return [...found];
 }
 
 function cloneRepo() {
@@ -256,82 +262,95 @@ if (isDoctor) {
   process.exit(0);
 }
 
+const common = ['AGENTS.md', 'agents', 'rules'];
+
+function installForPlatform(detectedPlatform) {
+  let success = true;
+
+  switch (detectedPlatform) {
+    case 'claude':
+      log('Configuring for Claude Code...');
+      success = copyFiles([...common, 'skills', '.mcp.json']);
+      // Native discovery: project subagents live at .claude/agents/*.md and
+      // project Skills at .claude/skills/<name>/SKILL.md — a bare top-level
+      // agents/ or skills/ folder is NOT picked up as subagents/slash-command
+      // Skills on its own. Mirror both into .claude/ so they actually register.
+      success = copyDirTo('agents', '.claude/agents') && success;
+      success = copyDirTo('skills', '.claude/skills') && success;
+      if (!isDryRun && success) ok('Files installed — AGENTS.md + .claude/agents (subagents) + .claude/skills (slash commands) + project .mcp.json.');
+      break;
+
+    case 'cursor':
+      log('Configuring for Cursor...');
+      success = copyFiles([...common, '.cursor', '.mcp.json']);
+      if (!isDryRun && success) ok('Cursor rules + MCP servers configured. Restart Cursor.');
+      break;
+
+    case 'gemini':
+      log('Configuring for Gemini CLI...');
+      success = copyFiles([...common, '.gemini', 'GEMINI.md', '.mcp.json']);
+      if (!isDryRun && success) ok('Gemini CLI configured.');
+      break;
+
+    case 'codex':
+    case 'opencode':
+    case 'copilot':
+      log(`Configuring for ${detectedPlatform}...`);
+      success = copyFiles([...common, '.mcp.json']);
+      if (!isDryRun && success) ok(`${detectedPlatform} configured. AGENTS.md will be auto-discovered.`);
+      break;
+
+    case 'kiro':
+      log('Configuring for Kiro...');
+      success = copyFiles([...common, '.mcp.json']);
+      // kiro-cli chat --agent <name> resolves against .kiro/agents/<name>.md,
+      // and steering context is pulled from .kiro/steering/ — not the bare
+      // top-level agents/ or rules/ folders this repo ships at its own root.
+      success = copyDirTo('agents', '.kiro/agents') && success;
+      success = copyDirTo('rules', '.kiro/steering') && success;
+      if (!isDryRun && success) ok('Kiro configured — .kiro/agents + .kiro/steering wired for `kiro-cli chat --agent <name>`.');
+      break;
+
+    case 'antigravity':
+      log('Configuring for Antigravity...');
+      success = copyFiles([...common, '.mcp.json']);
+      // Antigravity doesn't read .mcp.json from the project root — it looks for
+      // .agents/mcp_config.json (same mcpServers schema, different path).
+      success = copyMcpConfigTo('.agents/mcp_config.json') && success;
+      if (!isDryRun && success) ok('Antigravity configured. AGENTS.md auto-discovered; MCP servers at .agents/mcp_config.json.');
+      break;
+
+    default:
+      warn('Platform not detected. Installing universal config...');
+      success = copyFiles([...common, '.mcp.json']);
+      if (!isDryRun && success) ok('AGENTS.md + agents + rules + MCP config installed.');
+      console.log('');
+      console.log(`Specify platform: node install.mjs [${KNOWN_PLATFORMS.join('|')}]`);
+  }
+
+  console.log('');
+  return success;
+}
+
 log('NeuraForge AI Installer');
 if (isDryRun) warn('Dry-run mode — no files will be written');
 console.log('');
 
-const detectedPlatform = platformArg || detect();
-log(`Platform: ${detectedPlatform}`);
+const platformsToInstall = platformArg ? [platformArg] : detectAll();
+if (platformsToInstall.length === 0) platformsToInstall.push('unknown');
+
+log(platformsToInstall.length > 1
+  ? `Detected platforms: ${platformsToInstall.join(', ')}`
+  : `Platform: ${platformsToInstall[0]}`);
 console.log('');
 
 cloneRepo();
 console.log('');
 
-const common = ['AGENTS.md', 'agents', 'rules'];
 let success = true;
-
-switch (detectedPlatform) {
-  case 'claude':
-    log('Configuring for Claude Code...');
-    success = copyFiles([...common, 'skills', '.mcp.json']);
-    // Native discovery: project subagents live at .claude/agents/*.md and
-    // project Skills at .claude/skills/<name>/SKILL.md — a bare top-level
-    // agents/ or skills/ folder is NOT picked up as subagents/slash-command
-    // Skills on its own. Mirror both into .claude/ so they actually register.
-    success = copyDirTo('agents', '.claude/agents') && success;
-    success = copyDirTo('skills', '.claude/skills') && success;
-    if (!isDryRun && success) ok('Files installed — AGENTS.md + .claude/agents (subagents) + .claude/skills (slash commands) + project .mcp.json.');
-    break;
-
-  case 'cursor':
-    log('Configuring for Cursor...');
-    success = copyFiles([...common, '.cursor', '.mcp.json']);
-    if (!isDryRun && success) ok('Cursor rules + MCP servers configured. Restart Cursor.');
-    break;
-
-  case 'gemini':
-    log('Configuring for Gemini CLI...');
-    success = copyFiles([...common, '.gemini', 'GEMINI.md', '.mcp.json']);
-    if (!isDryRun && success) ok('Gemini CLI configured.');
-    break;
-
-  case 'codex':
-  case 'opencode':
-  case 'copilot':
-    log(`Configuring for ${detectedPlatform}...`);
-    success = copyFiles([...common, '.mcp.json']);
-    if (!isDryRun && success) ok(`${detectedPlatform} configured. AGENTS.md will be auto-discovered.`);
-    break;
-
-  case 'kiro':
-    log('Configuring for Kiro...');
-    success = copyFiles([...common, '.mcp.json']);
-    // kiro-cli chat --agent <name> resolves against .kiro/agents/<name>.md,
-    // and steering context is pulled from .kiro/steering/ — not the bare
-    // top-level agents/ or rules/ folders this repo ships at its own root.
-    success = copyDirTo('agents', '.kiro/agents') && success;
-    success = copyDirTo('rules', '.kiro/steering') && success;
-    if (!isDryRun && success) ok('Kiro configured — .kiro/agents + .kiro/steering wired for `kiro-cli chat --agent <name>`.');
-    break;
-
-  case 'antigravity':
-    log('Configuring for Antigravity...');
-    success = copyFiles([...common, '.mcp.json']);
-    // Antigravity doesn't read .mcp.json from the project root — it looks for
-    // .agents/mcp_config.json (same mcpServers schema, different path).
-    success = copyMcpConfigTo('.agents/mcp_config.json') && success;
-    if (!isDryRun && success) ok('Antigravity configured. AGENTS.md auto-discovered; MCP servers at .agents/mcp_config.json.');
-    break;
-
-  default:
-    warn('Platform not detected. Installing universal config...');
-    success = copyFiles([...common, '.mcp.json']);
-    if (!isDryRun && success) ok('AGENTS.md + agents + rules + MCP config installed.');
-    console.log('');
-    console.log(`Specify platform: node install.mjs [${KNOWN_PLATFORMS.join('|')}]`);
+for (const p of platformsToInstall) {
+  success = installForPlatform(p) && success;
 }
-
-console.log('');
 
 if (!success) {
   err('Installation completed with errors. Check the messages above.');
