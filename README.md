@@ -33,7 +33,7 @@ The model isn't broken. It just doesn't know *your* rules.
 
 NeuraForge solves this by dropping 40 pre-built agents into your project. Each agent encodes real architecture rules for a specific stack — and the AI reads them before generating anything. The first output is already close to what you'd actually commit.
 
-> Works as **Cursor Rules**, **Claude Code CLAUDE.md**, **GitHub Copilot Instructions**, **Kiro Steering**, and 8 more platforms. One install, all platforms detected automatically.
+> Works as **Cursor Rules**, **Claude Code CLAUDE.md**, **GitHub Copilot Instructions**, **Kiro Steering**, and 10 more platforms (including Codex, Gemini CLI, and Antigravity). One install, all platforms detected automatically.
 
 Every forge/reviewer pair ships with automated eval cases that pin down what "correct" means per stack — **42/42 assertions passing** across all 7 stacks right now (`npm run eval`). Not a vibes-based claim: run it yourself.
 
@@ -91,14 +91,18 @@ Copy `AGENTS.md` to your project root. Copilot reads it automatically.
 </details>
 
 <details>
-<summary><strong>Codex / OpenCode / Kiro CLI</strong></summary>
+<summary><strong>Codex / OpenCode / Kiro CLI / Antigravity</strong></summary>
 
-Copy `AGENTS.md` + `agents/` + `rules/` to your project. All three auto-discover `AGENTS.md`.
+```bash
+npx neuraforge-ai antigravity   # or codex / opencode / kiro
+```
+
+Or manually: copy `AGENTS.md` + `agents/` + `rules/` to your project. All four auto-discover `AGENTS.md` (Antigravity added native support in v1.20.3, March 2026).
 
 Kiro: `kiro-cli chat --agent forge`
 </details>
 
-Works on Windows, Mac, Linux. Needs Node.js 18+. Supports 12 AI platforms.
+Works on Windows, Mac, Linux. Needs Node.js 18+. Supports 14 AI platforms.
 
 ---
 

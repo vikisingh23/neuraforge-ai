@@ -7,7 +7,7 @@
  * Usage: npx neuraforge-ai-setup
  *    or: node install.mjs [platform] [--dry-run]
  *
- * Platforms: claude | cursor | gemini | codex | kiro | copilot | opencode
+ * Platforms: claude | cursor | gemini | codex | kiro | copilot | opencode | antigravity
  */
 
 import { execSync } from 'child_process';
@@ -18,7 +18,7 @@ import { homedir, platform as osPlatform } from 'os';
 const REPO = 'https://github.com/vikisingh23/neuraforge-ai';
 const CLONE_DIR = join(homedir(), '.neuraforge-ai');
 
-const KNOWN_PLATFORMS = ['claude', 'cursor', 'gemini', 'codex', 'kiro', 'copilot', 'opencode'];
+const KNOWN_PLATFORMS = ['claude', 'cursor', 'gemini', 'codex', 'kiro', 'copilot', 'opencode', 'antigravity'];
 
 const log = (msg) => console.log(`\x1b[34m⚒️  ${msg}\x1b[0m`);
 const ok = (msg) => console.log(`\x1b[32m✅ ${msg}\x1b[0m`);
@@ -227,6 +227,7 @@ switch (detectedPlatform) {
   case 'opencode':
   case 'kiro':
   case 'copilot':
+  case 'antigravity':
     log(`Configuring for ${detectedPlatform}...`);
     success = copyFiles([...common, '.mcp.json']);
     if (!isDryRun && success) ok(`${detectedPlatform} configured. AGENTS.md will be auto-discovered.`);
