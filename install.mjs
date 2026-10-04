@@ -11,8 +11,8 @@
  */
 
 import { execSync } from 'child_process';
-import { existsSync, mkdirSync, readFileSync } from 'fs';
-import { join } from 'path';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
+import { join, dirname } from 'path';
 import { homedir, platform as osPlatform } from 'os';
 
 const REPO = 'https://github.com/vikisingh23/neuraforge-ai';
@@ -131,6 +131,36 @@ function copyFiles(files) {
   return allOk;
 }
 
+// Copy .mcp.json to a different destination path/name — for platforms that
+// use the same mcpServers schema but look for it somewhere other than
+// ".mcp.json" in the project root (e.g. Antigravity expects
+// .agents/mcp_config.json).
+function copyMcpConfigTo(destRelPath) {
+  const src = join(CLONE_DIR, '.mcp.json');
+  const dst = join(process.cwd(), destRelPath);
+
+  if (!existsSync(src)) {
+    warn('Source not found, skipping: .mcp.json');
+    return false;
+  }
+
+  if (isDryRun) {
+    log(`[dry-run] Would copy: .mcp.json -> ${destRelPath}`);
+    return true;
+  }
+
+  try {
+    const parentDir = dirname(dst);
+    if (!existsSync(parentDir)) mkdirSync(parentDir, { recursive: true });
+    writeFileSync(dst, readFileSync(src));
+    ok(destRelPath);
+    return true;
+  } catch (e) {
+    err(`Failed to copy .mcp.json -> ${destRelPath}: ${e.message}`);
+    return false;
+  }
+}
+
 // ── Doctor mode ───────────────────────────────────────────────────────────────
 
 function runDoctor() {
@@ -227,10 +257,18 @@ switch (detectedPlatform) {
   case 'opencode':
   case 'kiro':
   case 'copilot':
-  case 'antigravity':
     log(`Configuring for ${detectedPlatform}...`);
     success = copyFiles([...common, '.mcp.json']);
     if (!isDryRun && success) ok(`${detectedPlatform} configured. AGENTS.md will be auto-discovered.`);
+    break;
+
+  case 'antigravity':
+    log('Configuring for Antigravity...');
+    success = copyFiles([...common, '.mcp.json']);
+    // Antigravity doesn't read .mcp.json from the project root — it looks for
+    // .agents/mcp_config.json (same mcpServers schema, different path).
+    success = copyMcpConfigTo('.agents/mcp_config.json') && success;
+    if (!isDryRun && success) ok('Antigravity configured. AGENTS.md auto-discovered; MCP servers at .agents/mcp_config.json.');
     break;
 
   default:
