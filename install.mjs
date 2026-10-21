@@ -18,7 +18,7 @@ import { homedir, platform as osPlatform } from 'os';
 const REPO = 'https://github.com/vikisingh23/neuraforge-ai';
 const CLONE_DIR = join(homedir(), '.neuraforge-ai');
 
-const KNOWN_PLATFORMS = ['claude', 'cursor', 'gemini', 'codex', 'kiro', 'copilot', 'opencode', 'antigravity'];
+const KNOWN_PLATFORMS = ['claude', 'cursor', 'gemini', 'codex', 'kiro', 'copilot', 'opencode', 'antigravity', 'hermes'];
 
 const log = (msg) => console.log(`\x1b[34m⚒️  ${msg}\x1b[0m`);
 const ok = (msg) => console.log(`\x1b[32m✅ ${msg}\x1b[0m`);
@@ -144,8 +144,18 @@ function copyFiles(files) {
 // bare top-level agents/ or skills/ folder; Kiro uses .kiro/agents/ and
 // .kiro/steering/).
 function copyDirTo(srcRelDir, destRelDir) {
+  return copyDirToPath(srcRelDir, join(process.cwd(), destRelDir), destRelDir);
+}
+
+// Same as copyDirTo, but to an absolute destination rather than one relative
+// to the current project — for platforms like Hermes whose skill directory
+// is a single global location (~/.hermes/skills/), not per-project.
+function copyDirToAbsolute(srcRelDir, destAbsDir, label) {
+  return copyDirToPath(srcRelDir, destAbsDir, label ?? destAbsDir);
+}
+
+function copyDirToPath(srcRelDir, dst, label) {
   const src = join(CLONE_DIR, srcRelDir);
-  const dst = join(process.cwd(), destRelDir);
   const isWindows = osPlatform() === 'win32';
 
   if (!existsSync(src)) {
@@ -154,7 +164,7 @@ function copyDirTo(srcRelDir, destRelDir) {
   }
 
   if (isDryRun) {
-    log(`[dry-run] Would copy: ${srcRelDir}/* -> ${destRelDir}/`);
+    log(`[dry-run] Would copy: ${srcRelDir}/* -> ${label}/`);
     return true;
   }
 
@@ -165,10 +175,10 @@ function copyDirTo(srcRelDir, destRelDir) {
     } else {
       execSync(`cp -r "${src}/." "${dst}/"`, { stdio: 'pipe' });
     }
-    ok(`${destRelDir}/`);
+    ok(`${label}/`);
     return true;
   } catch (e) {
-    err(`Failed to copy ${srcRelDir} -> ${destRelDir}: ${e.stderr?.toString().trim() || e.message}`);
+    err(`Failed to copy ${srcRelDir} -> ${label}: ${e.stderr?.toString().trim() || e.message}`);
     return false;
   }
 }
@@ -309,6 +319,22 @@ function installForPlatform(detectedPlatform) {
       success = copyDirTo('agents', '.kiro/agents') && success;
       success = copyDirTo('rules', '.kiro/steering') && success;
       if (!isDryRun && success) ok('Kiro configured — .kiro/agents + .kiro/steering wired for `kiro-cli chat --agent <name>`.');
+      break;
+
+    case 'hermes':
+      log('Configuring for Hermes...');
+      // Hermes' skill directory is a single global location, not per-project —
+      // skills installed anywhere else simply aren't discovered. AGENTS.md +
+      // agents/ + rules/ still go to the project root like every other
+      // platform, because each skill's own text says "for full instructions,
+      // read agents/{name}.md" — a path that only resolves when Hermes is
+      // run from inside a project that actually has that folder.
+      success = copyFiles([...common, '.mcp.json']);
+      success = copyDirToAbsolute('skills', join(homedir(), '.hermes', 'skills', 'neuraforge'), '~/.hermes/skills/neuraforge') && success;
+      if (!isDryRun && success) {
+        ok('Hermes configured — skills installed to ~/.hermes/skills/neuraforge (global), AGENTS.md + agents/ + rules/ in this project.');
+        warn('Run Hermes from this project directory — skills reference agents/*.md by a path relative to the project, not to the global skills folder.');
+      }
       break;
 
     case 'antigravity':

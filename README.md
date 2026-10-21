@@ -94,7 +94,7 @@ Copy `AGENTS.md` to your project root. Copilot reads it automatically.
 <summary><strong>Codex / OpenCode / Kiro CLI / Antigravity</strong></summary>
 
 ```bash
-npx neuraforge-ai antigravity   # or codex / opencode / kiro
+npx neuraforge-ai antigravity   # or codex / opencode / kiro / hermes
 ```
 
 Or manually: copy `AGENTS.md` + `agents/` + `rules/` to your project. All four auto-discover `AGENTS.md` (Antigravity added native support in v1.20.3, March 2026).
@@ -339,11 +339,23 @@ NeuraForge is a complete SDLC platform, not just coding rules. It includes: requ
 <summary><strong>Hermes Agent</strong></summary>
 
 ```bash
-# Copy skills to Hermes directory
-cp -r skills/* ~/.hermes/skills/
-# Or symlink for auto-updates
-ln -s $(pwd)/skills ~/.hermes/skills/neuraforge
+npx neuraforge-ai hermes
 ```
 
-Skills include `triggers` for auto-activation. Hermes will auto-discover and use them based on your prompts.
+Or manually:
+```bash
+# Hermes' skill directory is global (~/.hermes/skills/), not per-project
+cp -r skills/* ~/.hermes/skills/neuraforge/
+# Or symlink for auto-updates
+ln -s $(pwd)/skills ~/.hermes/skills/neuraforge
+# AGENTS.md + agents/ + rules/ still need to be in your project root —
+# each skill's "for full instructions, read agents/{name}.md" only
+# resolves when Hermes is run from a project that has that folder
+cp -r AGENTS.md agents rules /path/to/your/project/
+```
+
+Skills are discovered via `/skill-name` or by Hermes reading each skill's
+`description` in natural-language mode — Hermes doesn't use a `triggers`
+field (unlike this repo's own frontmatter, which is harmless extra metadata
+Hermes just ignores).
 </details>
