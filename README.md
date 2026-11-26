@@ -104,6 +104,21 @@ Kiro: `kiro-cli chat --agent forge`
 
 Works on Windows, Mac, Linux. Needs Node.js 18+. Supports 14 AI platforms.
 
+### How each tool is wired
+
+One source of truth (`agents/`, `skills/`, `rules/`, `AGENTS.md`). The installer writes what each tool actually discovers:
+
+| Tool | Agents | Skills | Instructions | MCP |
+|------|--------|--------|--------------|-----|
+| Claude Code | `.claude/agents/*.md` (generated, with frontmatter) | `.claude/skills/` | `CLAUDE.md` importing `AGENTS.md` | `.mcp.json` |
+| Kiro | `.kiro/agents/` (md + json) | `.kiro/skills/` | `.kiro/steering/` + `AGENTS.md` | `.mcp.json` |
+| Gemini CLI | `.gemini/agents/*.md` (generated) | `.agents/skills/` | `GEMINI.md` + `AGENTS.md` | `.gemini/settings.json` |
+| Antigravity | via skills | `.agents/skills/` | `AGENTS.md` | `.agents/mcp_config.json` |
+| Codex | `.codex/agents/*.toml` (generated) | `.agents/skills/` | `AGENTS.md` | `.codex/config.toml` (created only if absent) |
+| Cursor, Copilot, OpenCode, Hermes | `AGENTS.md` + `agents/` | `skills/` | tool rules / `AGENTS.md` | `.mcp.json` |
+
+The two orchestrators (`feature-pipeline`, `fullstack-orchestrator`) run in the main thread through their skills, because subagents cannot spawn subagents. Reviewers are read-only. Test an install without cloning: `NEURAFORGE_SRC=$PWD node install.mjs <tool> --dry-run`.
+
 ---
 
 ## What Can It Do

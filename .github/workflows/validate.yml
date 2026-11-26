@@ -10,6 +10,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Installer adapter tests
+        run: node --test tools/install/adapters.test.mjs
+
+      - name: Agent configs already normalized
+        run: node tools/normalize-agents/index.mjs | tail -1 | grep -q " 0 would change"
+
       - name: Validate JSON files
         run: |
           echo "Checking JSON files..."

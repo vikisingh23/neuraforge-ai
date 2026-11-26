@@ -120,7 +120,7 @@ When the user gives you a feature request, execute the pipeline stage by stage. 
   - `security-reviewer` — input validation, SQL injection, XSS, JWT, secrets
   - `performance-reviewer` — React optimization, DB queries, caching, API performance
 - Collect findings from all three
-- Each reviewer writes `06-reviews/{reviewer}.md` with findings as `[Critical|High|Medium|Low] path:line - issue - suggested fix`
+- Reviewers are read-only. Each returns findings as `[Critical|High|Medium|Low] path:line - issue - suggested fix`; you save each reply to `06-reviews/{reviewer}.md`
 - Critical and High findings from Stages 7 and 8 together go back to the owning generator as one checklist. Re-run the verification gates, then re-run only the reviewers that raised them. Maximum 2 fix iterations in total, then escalate to the user with the open list. Medium and Low findings go in the handoff, they are not auto-fixed
 
 ## Parallel Review Merge Strategy

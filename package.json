@@ -25,6 +25,7 @@
     "feedback:clean":   "node tools/feedback/index.mjs clean",
     "feedback:lessons": "node tools/feedback/index.mjs lessons",
     "normalize:agents": "node tools/normalize-agents/index.mjs",
+    "test:install":     "node --test tools/install/adapters.test.mjs",
     "eval":             "node tools/eval/index.mjs",
     "eval:agent":       "node tools/eval/index.mjs --agent"
   },

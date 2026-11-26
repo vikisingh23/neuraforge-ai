@@ -29,6 +29,9 @@ const FAST_AGENTS = new Set([
 // Agents whose prompts delegate to other agents need the sub-agent tool (it was missing from their configs).
 const DELEGATING = new Set(['feature-pipeline', 'fullstack-orchestrator', 'forge', 'react-forge', 'rn-forge', 'flutter-forge']);
 
+// Reviewers only read code and return findings. They get no write or shell tools (least privilege; the orchestrator saves their replies).
+const READ_ONLY = new Set(['dotnet-reviewer', 'react-reviewer', 'rn-reviewer', 'nestjs-reviewer', 'django-reviewer', 'spring-reviewer', 'flutter-reviewer', 'performance-reviewer', 'security-reviewer']);
+
 function describe(md) {
   const lines = md.split('\n').map((l) => l.trim());
   const mission = lines.find((l) => /^\*\*Your Mission:?\*\*/i.test(l));
@@ -55,7 +58,8 @@ for (const f of files) {
   for (const k of Object.keys(cfg)) if (!skip.includes(k)) out[k] = cfg[k];
   const model = cfg.model || (!NO_MODEL && FAST_AGENTS.has(name) ? FAST_MODEL : undefined);
   if (model) out.model = model;
-  out.tools = [...new Set([...(cfg.tools || []).map((t) => TOOL_MAP[t] || t), ...(DELEGATING.has(name) ? ['subagent'] : [])])];
+  out.tools = [...new Set([...(cfg.tools || []).map((t) => TOOL_MAP[t] || t), ...(DELEGATING.has(name) ? ['subagent'] : [])])]
+    .filter((t) => !(READ_ONLY.has(name) && (t === 'write' || t === 'shell')));
   if (cfg.subagents) out.subagents = cfg.subagents;
   out.allowedTools = cfg.allowedTools || [];
   out.permissions = cfg.permissions || { rules: [{ capability: 'fs_read', match: ['./**'], effect: 'allow' }] };

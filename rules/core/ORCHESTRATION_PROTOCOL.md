@@ -88,7 +88,7 @@ Detect the stack from the repo (`*.csproj`, `package.json`, `pubspec.yaml`, `pom
 
 ## 8. Review findings and fix loops
 
-Each reviewer writes `06-reviews/{reviewer}.md` with findings as:
+Reviewers are read-only (no write or shell tools). Each returns its findings in its reply as lines in this form, and the orchestrator saves each reply to `06-reviews/{reviewer}.md`:
 
 `[Critical|High|Medium|Low] path:line - issue - suggested fix`
 

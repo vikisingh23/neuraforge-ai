@@ -23,3 +23,8 @@ Generate a complete .NET Core API following enterprise enterprise patterns.
 7. Soft deletes mandatory — never hard delete financial data
 8. Pagination on ALL list endpoints
 9. `decimal` for money — never float/double
+
+## References (read on demand)
+
+- `references/code-patterns.md` — C# templates for entity, repository, service, controller, CQRS, DTOs, validators, tests. Read before generating any of these.
+- `references/payment-gateway-patterns.md` — only when the task involves a payment gateway.

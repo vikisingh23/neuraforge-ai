@@ -5,8 +5,6 @@
   "prompt": "file://security-reviewer.md",
   "tools": [
     "read",
-    "write",
-    "shell",
     "code",
     "grep",
     "glob"

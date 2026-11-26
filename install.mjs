@@ -11,12 +11,15 @@
  */
 
 import { execSync } from 'child_process';
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'fs';
-import { join, dirname } from 'path';
+import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'fs';
+import { join, dirname, resolve } from 'path';
 import { homedir, platform as osPlatform } from 'os';
+import { MAIN_THREAD_ONLY, toClaudeAgent, toGeminiAgent, toCodexAgentToml, mcpToCodexToml } from './tools/install/adapters.mjs';
 
 const REPO = 'https://github.com/vikisingh23/neuraforge-ai';
-const CLONE_DIR = join(homedir(), '.neuraforge-ai');
+// NEURAFORGE_SRC=/path/to/checkout installs from a local copy instead of cloning (used for testing and offline installs).
+const LOCAL_SRC = process.env.NEURAFORGE_SRC ? resolve(process.env.NEURAFORGE_SRC) : null;
+const CLONE_DIR = LOCAL_SRC ?? join(homedir(), '.neuraforge-ai');
 
 const KNOWN_PLATFORMS = ['claude', 'cursor', 'gemini', 'codex', 'kiro', 'copilot', 'opencode', 'antigravity', 'hermes'];
 
@@ -71,6 +74,14 @@ function detectAll() {
 }
 
 function cloneRepo() {
+  if (LOCAL_SRC) {
+    if (!existsSync(join(LOCAL_SRC, 'agents'))) {
+      err(`NEURAFORGE_SRC does not look like a NeuraForge checkout: ${LOCAL_SRC}`);
+      process.exit(1);
+    }
+    log(`Using local source: ${LOCAL_SRC}`);
+    return;
+  }
   if (existsSync(CLONE_DIR)) {
     log('Updating NeuraForge AI...');
     try {
@@ -213,6 +224,72 @@ function copyMcpConfigTo(destRelPath) {
   }
 }
 
+// ── Generated, tool-native files ──────────────────────────────────────────────
+// agents/<name>.md + .json stay the single source of truth. Each tool gets the
+// format it actually discovers (see tools/install/adapters.mjs).
+
+function readAgents() {
+  const dir = join(CLONE_DIR, 'agents');
+  if (!existsSync(dir)) return [];
+  return readdirSync(dir)
+    .filter((f) => f.endsWith('.json') && existsSync(join(dir, f.replace(/\.json$/, '.md'))))
+    .map((f) => {
+      const name = f.slice(0, -5);
+      return { name, cfg: JSON.parse(readFileSync(join(dir, f), 'utf8')), md: readFileSync(join(dir, `${name}.md`), 'utf8') };
+    });
+}
+
+// Write a generated file relative to the project. ifAbsent keeps user-owned files (config.toml, CLAUDE.md) untouched.
+function writeGenerated(relPath, content, { ifAbsent = false } = {}) {
+  const dst = join(process.cwd(), relPath);
+  if (ifAbsent && existsSync(dst)) {
+    warn(`${relPath} already exists, left unchanged`);
+    return true;
+  }
+  if (isDryRun) {
+    log(`[dry-run] Would write: ${relPath}`);
+    return true;
+  }
+  try {
+    mkdirSync(dirname(dst), { recursive: true });
+    writeFileSync(dst, content);
+    return true;
+  } catch (e) {
+    err(`Failed to write ${relPath}: ${e.message}`);
+    return false;
+  }
+}
+
+// kind: 'claude' | 'gemini' | 'codex'. Orchestrators are skipped: they spawn other agents, so they run in the main
+// thread through their skill (subagents cannot spawn subagents).
+function generateAgentFiles(kind) {
+  const agents = readAgents().filter((a) => !MAIN_THREAD_ONLY.has(a.name));
+  let allOk = true;
+  for (const { name, cfg, md } of agents) {
+    if (kind === 'claude') allOk = writeGenerated(`.claude/agents/${name}.md`, toClaudeAgent(name, cfg, md)) && allOk;
+    if (kind === 'gemini') allOk = writeGenerated(`.gemini/agents/${name}.md`, toGeminiAgent(name, cfg, md)) && allOk;
+    if (kind === 'codex') allOk = writeGenerated(`.codex/agents/${name.replace(/-/g, '_')}.toml`, toCodexAgentToml(name, cfg, md)) && allOk;
+  }
+  if (!isDryRun && allOk) ok(`${agents.length} ${kind} agents generated`);
+  return allOk;
+}
+
+function generateCodexMcp() {
+  const src = join(CLONE_DIR, '.mcp.json');
+  if (!existsSync(src)) return true;
+  return writeGenerated('.codex/config.toml', mcpToCodexToml(JSON.parse(readFileSync(src, 'utf8'))), { ifAbsent: true });
+}
+
+// Claude Code reads CLAUDE.md, not AGENTS.md. Import it so one file serves every tool.
+function ensureClaudeMd() {
+  return writeGenerated('CLAUDE.md', '@AGENTS.md\n', { ifAbsent: true });
+}
+
+// .agents/skills is read by Gemini CLI, Antigravity and Codex (Agent Skills open standard).
+function installSharedSkills() {
+  return copyDirTo('skills', '.agents/skills');
+}
+
 // ── Doctor mode ───────────────────────────────────────────────────────────────
 
 function runDoctor() {
@@ -237,6 +314,9 @@ function runDoctor() {
   });
   check('rules/ directory exists', () => {
     if (!existsSync('rules')) throw new Error();
+  });
+  check('skills/ directory exists', () => {
+    if (!existsSync('skills')) throw new Error();
   });
   check('AGENTS.md exists', () => {
     if (!existsSync('AGENTS.md')) throw new Error();
@@ -272,7 +352,8 @@ if (isDoctor) {
   process.exit(0);
 }
 
-const common = ['AGENTS.md', 'agents', 'rules'];
+// 'skills' is always copied so paths such as skills/dotnet-forge/references/ resolve for every tool.
+const common = ['AGENTS.md', 'agents', 'rules', 'skills'];
 
 function installForPlatform(detectedPlatform) {
   let success = true;
@@ -280,14 +361,13 @@ function installForPlatform(detectedPlatform) {
   switch (detectedPlatform) {
     case 'claude':
       log('Configuring for Claude Code...');
-      success = copyFiles([...common, 'skills', '.mcp.json']);
-      // Native discovery: project subagents live at .claude/agents/*.md and
-      // project Skills at .claude/skills/<name>/SKILL.md — a bare top-level
-      // agents/ or skills/ folder is NOT picked up as subagents/slash-command
-      // Skills on its own. Mirror both into .claude/ so they actually register.
-      success = copyDirTo('agents', '.claude/agents') && success;
+      success = copyFiles([...common, '.mcp.json']);
+      // Native discovery: subagents are .claude/agents/<name>.md WITH YAML frontmatter (files without it are
+      // skipped), and Skills are .claude/skills/<name>/SKILL.md. Generate the former, copy the latter.
+      success = generateAgentFiles('claude') && success;
       success = copyDirTo('skills', '.claude/skills') && success;
-      if (!isDryRun && success) ok('Files installed — AGENTS.md + .claude/agents (subagents) + .claude/skills (slash commands) + project .mcp.json.');
+      success = ensureClaudeMd() && success;
+      if (!isDryRun && success) ok('Claude Code configured — .claude/agents (subagents) + .claude/skills + CLAUDE.md importing AGENTS.md + .mcp.json. Orchestrators run in the main thread via their skills.');
       break;
 
     case 'cursor':
@@ -299,10 +379,20 @@ function installForPlatform(detectedPlatform) {
     case 'gemini':
       log('Configuring for Gemini CLI...');
       success = copyFiles([...common, '.gemini', 'GEMINI.md', '.mcp.json']);
-      if (!isDryRun && success) ok('Gemini CLI configured.');
+      success = generateAgentFiles('gemini') && success;
+      success = installSharedSkills() && success;
+      if (!isDryRun && success) ok('Gemini CLI configured — .gemini/agents (subagents) + .agents/skills + GEMINI.md/AGENTS.md.');
       break;
 
     case 'codex':
+      log('Configuring for Codex...');
+      success = copyFiles([...common, '.mcp.json']);
+      success = generateAgentFiles('codex') && success;
+      success = installSharedSkills() && success;
+      success = generateCodexMcp() && success;
+      if (!isDryRun && success) ok('Codex configured — AGENTS.md + .codex/agents (custom agents) + .agents/skills + .codex/config.toml (MCP, if it did not already exist).');
+      break;
+
     case 'opencode':
     case 'copilot':
       log(`Configuring for ${detectedPlatform}...`);
@@ -318,7 +408,8 @@ function installForPlatform(detectedPlatform) {
       // top-level agents/ or rules/ folders this repo ships at its own root.
       success = copyDirTo('agents', '.kiro/agents') && success;
       success = copyDirTo('rules', '.kiro/steering') && success;
-      if (!isDryRun && success) ok('Kiro configured — .kiro/agents + .kiro/steering wired for `kiro-cli chat --agent <name>`.');
+      success = copyDirTo('skills', '.kiro/skills') && success;
+      if (!isDryRun && success) ok('Kiro configured — .kiro/agents + .kiro/steering + .kiro/skills wired for `kiro-cli chat --agent <name>`.');
       break;
 
     case 'hermes':
@@ -343,7 +434,8 @@ function installForPlatform(detectedPlatform) {
       // Antigravity doesn't read .mcp.json from the project root — it looks for
       // .agents/mcp_config.json (same mcpServers schema, different path).
       success = copyMcpConfigTo('.agents/mcp_config.json') && success;
-      if (!isDryRun && success) ok('Antigravity configured. AGENTS.md auto-discovered; MCP servers at .agents/mcp_config.json.');
+      success = installSharedSkills() && success;
+      if (!isDryRun && success) ok('Antigravity configured. AGENTS.md auto-discovered; skills at .agents/skills; MCP servers at .agents/mcp_config.json.');
       break;
 
     default:

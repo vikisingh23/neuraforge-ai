@@ -12,12 +12,15 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `tools/normalize-agents` (`npm run normalize:agents`): brings `agents/*.json` to the Kiro v3 schema (tool names, `permissions`, descriptions, faster model on routine agents)
 - OWASP Top 10:2025 mapping, SSRF/BOLA, fail-closed and AI/agent/MCP security rules in `rules/security`
 - Supply chain rules and runtime baselines (.NET 10 LTS, Node 24 LTS, React Native guidance) in `rules/core/DEPENDENCY_POLICY.md`; modern .NET and React Native baselines in `rules/backend` and `rules/frontend`
-
 - React security floor (never below 19.0.1 / 19.1.2 / 19.2.1 after the Dec 2025 Server Components RCE), React 19.3 and React Compiler baseline, TypeScript 7.x baseline, framework security advisory rule
 - npm trusted publishing (OIDC, staged publish) guidance and its runner limits in `rules/core/CICD_PIPELINE.md`
 - `AGENTS.md` "Commands" section and nested-file guidance; orchestrators take their verification gates from a project's Commands
+- Tool-native installs: Claude Code subagents are generated with the required frontmatter (the raw files were skipped before), Gemini CLI gets `.gemini/agents`, Codex gets `.codex/agents/*.toml` and `.codex/config.toml`, and skills install to `.claude/skills`, `.kiro/skills` and the shared `.agents/skills` (Gemini CLI, Antigravity, Codex). `CLAUDE.md` imports `AGENTS.md`
+- `NEURAFORGE_SRC` installs from a local checkout; adapter tests (`npm run test:install`) run in CI
 
 ### Changed
+- Reviewers are read-only (no write or shell); the orchestrator saves their findings to `06-reviews/`
+- `forge.md` code and payment templates moved to `skills/dotnet-forge/references/` and load on demand
 - `fullstack-orchestrator` rewritten: contract-first, architecture approval gate before any code, parallel backend/frontend build, verification gate, review fix loop
 - `feature-pipeline` passes `architecture_approved: true` to generators, runs build/test gates itself, and builds against an API contract
 - Orchestrators and generators that delegate now have the `subagent` tool in their configs
