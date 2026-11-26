@@ -54,10 +54,17 @@
       "pattern": ":\\s*any\\b"
     },
     {
-      "id": "kebab-path",
+      "id": "versioned-api",
       "type": "matches",
       "glob": "src/**/*.ts*",
-      "pattern": "/api/v1/transactions"
+      "pattern": "/api/v1"
+    },
+    {
+      "id": "lowercase-path",
+      "why": "URL paths are lowercase-hyphenated",
+      "type": "not_matches",
+      "glob": "src/**/*.ts*",
+      "pattern": "/api/v1/[A-Z]|['\"`]/Transactions"
     },
     {
       "id": "result-block",

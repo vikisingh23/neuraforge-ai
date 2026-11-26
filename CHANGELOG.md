@@ -22,6 +22,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `tools/verify/post-gen-check.mjs` (`npm run verify:generated`): secret scan of added lines and new-dependency report with unpinned-version warnings; `--audit` runs npm audit and dotnet vulnerability checks
 - Behavior evals (`npm run eval:behavior`): 6 task cases (forge, nestjs-forge, react-forge, debug, refactor, security-reviewer injection) run against a real agent and graded deterministically; grader and case golden examples are tested in CI (`npm run test:tools`)
 
+- Behavior evals ran green on Kiro CLI (6/6, `--platform kiro --cmd 'kiro-cli chat --no-interactive ...'`). They found and fixed: generators ignored the `### Result` block because `AGENTS.md` said to end with the feedback-log line (Result now first, feedback line after, block also inline in each generator's `Finish (required)` section); a too-strict route check. The runner now reports CLI/model failures as errors, not agent failures, and has `--show-reply`
+
 ### Changed
 - Code generators slimmed from 545-788 lines to 175-535: duplicated plan phase replaced by `CODEGEN_CORE`, code templates moved to `skills/<stack>/references/` (loaded on demand), emphatic ALWAYS/NEVER/MANDATORY wording replaced by plain rules
 - `debug` is reproduce-first with a failing test and a verified fix; `refactor` requires a green (or characterization-test) baseline; `scaffold` verifies install, build, tests and a health check

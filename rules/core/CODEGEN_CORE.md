@@ -43,7 +43,7 @@ A task is not done because the code looks right. It is done when the checks ran.
 1. Run the project's commands from the `Commands` section of `AGENTS.md`: build, lint, typecheck, tests. If none are listed, detect them (`package.json` scripts, `*.csproj`, `pyproject.toml`, `pom.xml`, `pubspec.yaml`).
 2. Run `node tools/verify/post-gen-check.mjs` when it exists in the project. It scans changed files for secrets and lists new dependencies so you can report them.
 3. Fix failures and re-run. After two failed attempts at the same error, stop and report it instead of looping.
-4. End your reply with this block (omit nothing; write "not run" with the reason when a check could not run):
+4. Put this block in your reply after your summary (omit nothing; write "not run" with the reason when a check could not run). Any feedback-log line comes after it:
 
 ```markdown
 ### Result
@@ -56,7 +56,7 @@ Open risks: ...
 
 ## 5. Learning loop
 
-After generating, write a feedback log to `.neuraforge/feedback/{agent}-{YYYYMMDD}-{id}.md` as described in `rules/core/FEEDBACK_PROTOCOL.md`, and tell the user the path and how to flag a mistake. In orchestrated mode, skip the log (the orchestrator collects results).
+After generating, write a feedback log to `.neuraforge/feedback/{agent}-{YYYYMMDD}-{id}.md` (create the directory if it does not exist) as described in `rules/core/FEEDBACK_PROTOCOL.md`, and tell the user the path and how to flag a mistake. In orchestrated mode, skip the log (the orchestrator collects results).
 
 ## 6. Reasoning
 

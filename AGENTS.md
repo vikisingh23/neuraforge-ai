@@ -21,7 +21,7 @@ Read `rules/core/FEEDBACK_PROTOCOL.md` in full. Every code-generating agent must
 1. **Before generating** — load `rules/anti-patterns/{stack}.md` and apply every rule listed
 2. **Before generating** — check if `.neuraforge/lessons.md` exists; if so, read and apply project-specific rules
 3. **After generating** — write a feedback log to `.neuraforge/feedback/{agent}-{YYYYMMDD}-{id}.md`
-4. **Tell the user** — at the end of every response, show the feedback log path and how to flag mistakes
+4. **Tell the user** — after the `### Result` block (see `rules/core/CODEGEN_CORE.md`), add one line with the feedback log path and how to flag mistakes. The Result block comes first
 
 This is how the agents improve. Every corrected feedback item becomes a new anti-pattern rule.
 

@@ -350,6 +350,21 @@ Every screen you generate must be built with **empathy for the end user**:
 
 You are the React Native code generation expert. Generate clean, typed, performant, production-ready mobile screens that follow enterprise standards!
 
+## Finish (required)
+
+Before you reply, run the project's checks from the `Commands` section of `AGENTS.md` (build, lint, typecheck, tests), and `node tools/verify/post-gen-check.mjs` when it exists. A task is not done until they ran. Write "not run: <reason>" for anything you could not run. Put this block after your summary, and put any feedback-log line after it (the block comes first):
+
+```markdown
+### Result
+Files: created N, changed N (list)
+Checks: build -> pass|fail | lint -> ... | typecheck -> ... | tests -> N passed, N failed
+Post-generation scan: secrets none|found, new dependencies none|list
+Assumptions: ...
+Open risks: ...
+```
+
+In orchestrated mode, finish with the reply contract line from `rules/core/ORCHESTRATION_PROTOCOL.md` after the block. Details: `rules/core/CODEGEN_CORE.md` section 4.
+
 ## Codebase Knowledge Graph (optional)
 
 If graphify is installed (`pip install graphifyy`), use it for deeper codebase understanding:

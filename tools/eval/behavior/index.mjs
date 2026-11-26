@@ -12,7 +12,7 @@
  *   node tools/eval/behavior/index.mjs --agent forge [--case id] [--model sonnet] [--keep]
  *   node tools/eval/behavior/index.mjs --cmd 'codex exec "$NF_PROMPT"'      other tools (env: NF_PROMPT, NF_AGENT)
  *   node tools/eval/behavior/index.mjs --grade <dir> --case <id> [--reply-file f]   grade a directory you produced yourself
- *   add --json for machine-readable output
+ *   add --json for machine-readable output, --keep to keep the project (reply saved as .nf-reply.txt), --show-reply to print the reply
  */
 import { readdirSync, readFileSync, mkdirSync, writeFileSync, mkdtempSync, rmSync } from 'node:fs';
 import { join, dirname } from 'node:path';
@@ -60,6 +60,8 @@ function runCase(c, opts) {
     if (r.error || r.status !== 0) return { dir, error: `claude failed (${r.error?.message ?? 'exit ' + r.status}): ${(r.stdout || r.stderr || '').slice(0, 300)}` };
     try { reply = JSON.parse(r.stdout).result ?? ''; } catch { reply = r.stdout; }
   }
+  const infra = reply.match(/InvalidModelError|model '[^']+' is not available|Failed to authenticate|OAuth session expired|not logged in|Please (log|sign) ?in/i);
+  if (infra) return { dir, error: `agent CLI could not run (${infra[0]}): ${reply.replace(/\s+/g, ' ').slice(0, 200)}` };
   return { dir, reply };
 }
 
@@ -89,14 +91,16 @@ function main() {
     const run = runCase(c, { model: get('--model'), cmd: get('--cmd'), platform: get('--platform') });
     if (run.error) { report.push({ id: c.id, agent: c.agent, passed: false, error: run.error, results: [] }); continue; }
     const g = grade({ dir: run.dir, reply: run.reply, checks: c.checks, seed: c.seed });
-    report.push({ id: c.id, agent: c.agent, workdir: argv.includes('--keep') ? run.dir : undefined, ...g });
+    if (argv.includes('--keep')) writeFileSync(join(run.dir, '.nf-reply.txt'), run.reply);
+    report.push({ id: c.id, agent: c.agent, workdir: argv.includes('--keep') ? run.dir : undefined, reply: argv.includes('--show-reply') ? run.reply : undefined, ...g });
     if (!argv.includes('--keep')) rmSync(run.dir, { recursive: true, force: true });
   }
 
   if (json) console.log(JSON.stringify(report, null, 2));
   else {
     for (const r of report) {
-      console.log(`${r.passed ? 'PASS' : 'FAIL'}  ${r.id}  (${r.agent})${r.error ? '  ' + r.error : ''}`);
+      console.log(`${r.passed ? 'PASS' : 'FAIL'}  ${r.id}  (${r.agent})${r.error ? '  ' + r.error : ''}${r.workdir ? '  workdir: ' + r.workdir : ''}`);
+      if (r.reply !== undefined) console.log('--- reply ---\n' + r.reply.slice(-3000) + '\n--- end reply ---');
       for (const x of r.results) if (!x.ok || argv.includes('--verbose')) console.log(`   ${x.ok ? 'ok  ' : 'FAIL'} ${x.id}${x.why ? ' - ' + x.why : ''}: ${x.detail}`);
     }
     const p = report.filter((r) => r.passed).length;
