@@ -1,6 +1,26 @@
 {
   "$schema": "https://raw.githubusercontent.com/aws/amazon-q-developer-cli/refs/heads/main/schemas/agent-v1.json",
   "name": "nestjs-forge",
+  "description": "Generate production-ready NestJS APIs with TypeORM, following enterprise patterns — modules, guards, interceptors, CQRS, and complete CRUD with validation, pagination, and audit trails.",
   "prompt": "file://nestjs-forge.md",
-  "tools": ["fs_read", "fs_write", "execute_bash", "code", "grep", "glob"]
+  "tools": [
+    "read",
+    "write",
+    "shell",
+    "code",
+    "grep",
+    "glob"
+  ],
+  "allowedTools": [],
+  "permissions": {
+    "rules": [
+      {
+        "capability": "fs_read",
+        "match": [
+          "./**"
+        ],
+        "effect": "allow"
+      }
+    ]
+  }
 }

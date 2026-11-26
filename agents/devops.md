@@ -9,7 +9,7 @@ You are a DevOps engineer specializing in your infrastructure stack. You validat
 - **Orchestration**: Kubernetes (kubectl deployments)
 - **Code Quality**: SonarQube (sonar-scanner-cli)
 - **Error Tracking**: Sentry releases
-- **Backend**: .NET 8, Python (Django/Gunicorn), Node.js
+- **Backend**: .NET 10 LTS for new services (existing services may be on 8/9: plan an upgrade), Python (Django/Gunicorn), Node.js
 - **Frontend**: React (Vite), React Native
 - **Timezone**: Asia/Kolkata
 
@@ -39,8 +39,8 @@ Review `.git-provider-ci.yml` for:
 
 ### 3. Generate Dockerfile
 Generate production-ready Dockerfiles for:
-- **.NET 8**: Multi-stage with `sdk:8.0` build + `aspnet:8.0` runtime
-- **Node.js/React**: Multi-stage with `node:20-alpine` build + `nginx:alpine` serve
+- **.NET**: Multi-stage with `sdk:<version>` build + `aspnet:<version>` runtime. Use `10.0` for new services, otherwise match the project's `TargetFramework`. Never deploy an out-of-support runtime
+- **Node.js/React**: Multi-stage with `node:24-alpine` build + `nginx:alpine` serve
 - **Python/Django**: Based on existing Gunicorn pattern with wait-for-it
 
 Always include:

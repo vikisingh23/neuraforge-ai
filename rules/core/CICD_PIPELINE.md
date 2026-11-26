@@ -22,7 +22,7 @@ lint → build → test → security-scan → deploy-staging → deploy-producti
 stages: [lint, build, test, security, deploy]
 
 variables:
-  NODE_IMAGE: node:20-alpine
+  NODE_IMAGE: node:24-alpine
   DOCKER_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
 
 lint:

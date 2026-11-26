@@ -8,6 +8,18 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
+- `rules/core/AGENT_COMMON_RULES.md` and `rules/core/ORCHESTRATION_PROTOCOL.md`: untrusted-content, secrets and definition-of-done rules for all agents; delegation briefs, `Done`/`Failed`/`Blocked` replies, orchestrator-run verification gates, human approval gates, parallelism and capped fix loops for orchestrators
+- `tools/normalize-agents` (`npm run normalize:agents`): brings `agents/*.json` to the Kiro v3 schema (tool names, `permissions`, descriptions, faster model on routine agents)
+- OWASP Top 10:2025 mapping, SSRF/BOLA, fail-closed and AI/agent/MCP security rules in `rules/security`
+- Supply chain rules and runtime baselines (.NET 10 LTS, Node 24 LTS, React Native guidance) in `rules/core/DEPENDENCY_POLICY.md`; modern .NET and React Native baselines in `rules/backend` and `rules/frontend`
+
+### Changed
+- `fullstack-orchestrator` rewritten: contract-first, architecture approval gate before any code, parallel backend/frontend build, verification gate, review fix loop
+- `feature-pipeline` passes `architecture_approved: true` to generators, runs build/test gates itself, and builds against an API contract
+- Orchestrators and generators that delegate now have the `subagent` tool in their configs
+- Docker/CI examples use `node:24-alpine` and .NET 10 images; `forge`, `devops`, `migrate` target .NET 10 LTS for new services
+
+### Added
 - `.neuraforge.yml` project config — teams can pin version, set domain, toggle agents, customize line limits, and enable/disable MCP integrations without editing agent files
 - All 22 MCP packages pinned to exact versions in `.mcp.json` — no more `@latest` in production configs
 - `install.mjs` — `--dry-run` flag, `--doctor` health check, proper error surfacing (no more silent failures), input validation against known platforms, directory-based platform detection as primary method

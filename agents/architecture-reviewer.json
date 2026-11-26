@@ -3,5 +3,25 @@
   "name": "architecture-reviewer",
   "description": "Architecture designer + reviewer — Reads codebase, designs 2-3 plans from PRD with pros/cons, requires human approval, then verifies implementation matches design",
   "prompt": "file://architecture-reviewer.md",
-  "tools": ["fs_read", "fs_write", "execute_bash", "code", "grep", "glob", "use_subagent"]
+  "tools": [
+    "read",
+    "write",
+    "shell",
+    "code",
+    "grep",
+    "glob",
+    "subagent"
+  ],
+  "allowedTools": [],
+  "permissions": {
+    "rules": [
+      {
+        "capability": "fs_read",
+        "match": [
+          "./**"
+        ],
+        "effect": "allow"
+      }
+    ]
+  }
 }

@@ -1,6 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/aws/amazon-q-developer-cli/refs/heads/main/schemas/agent-v1.json",
   "name": "product-manager",
+  "description": "A senior Product Manager with deep expertise in your configured industry domain. You understand the full value chain and are well-versed in regulatory requirements.",
   "prompt": "file://product-manager.md",
   "mcpServers": {
     "figma-devmode": {
@@ -8,5 +9,24 @@
       "type": "http"
     }
   },
-  "tools": ["fs_read", "fs_write", "execute_bash", "code", "grep", "glob"]
+  "tools": [
+    "read",
+    "write",
+    "shell",
+    "code",
+    "grep",
+    "glob"
+  ],
+  "allowedTools": [],
+  "permissions": {
+    "rules": [
+      {
+        "capability": "fs_read",
+        "match": [
+          "./**"
+        ],
+        "effect": "allow"
+      }
+    ]
+  }
 }

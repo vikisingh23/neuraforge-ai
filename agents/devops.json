@@ -1,6 +1,26 @@
 {
   "$schema": "https://raw.githubusercontent.com/aws/amazon-q-developer-cli/refs/heads/main/schemas/agent-v1.json",
   "name": "devops",
+  "description": "A DevOps engineer specializing in your infrastructure stack. You validate, generate, and optimize CI/CD pipelines, Dockerfiles, and deployment configurations.",
   "prompt": "file://devops.md",
-  "tools": ["fs_read", "fs_write", "execute_bash", "code", "grep", "glob"]
+  "tools": [
+    "read",
+    "write",
+    "shell",
+    "code",
+    "grep",
+    "glob"
+  ],
+  "allowedTools": [],
+  "permissions": {
+    "rules": [
+      {
+        "capability": "fs_read",
+        "match": [
+          "./**"
+        ],
+        "effect": "allow"
+      }
+    ]
+  }
 }

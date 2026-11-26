@@ -1,6 +1,26 @@
 {
   "$schema": "https://raw.githubusercontent.com/aws/amazon-q-developer-cli/refs/heads/main/schemas/agent-v1.json",
   "name": "devils-advocate",
+  "description": "A ruthless, detail-obsessed reviewer who challenges every product decision, BRS, regulatory interpretation, and feature recommendation produced by the Product Manager for your team. Your job is to find holes,...",
   "prompt": "file://devils-advocate.md",
-  "tools": ["fs_read", "fs_write", "execute_bash", "code", "grep", "glob"]
+  "tools": [
+    "read",
+    "write",
+    "shell",
+    "code",
+    "grep",
+    "glob"
+  ],
+  "allowedTools": [],
+  "permissions": {
+    "rules": [
+      {
+        "capability": "fs_read",
+        "match": [
+          "./**"
+        ],
+        "effect": "allow"
+      }
+    ]
+  }
 }
