@@ -1,11 +1,11 @@
 <p align="center">
   <h1 align="center">🧠 NeuraForge AI</h1>
   <p align="center">
-    <strong>Stop correcting the same AI mistakes.<br>Drop in 45 agents that teach Claude Code, Cursor & Copilot your team's architecture rules.</strong>
+    <strong>Stop correcting the same AI mistakes.<br>Drop in 44 agents that teach Claude Code, Cursor & Copilot your team's architecture rules.</strong>
   </p>
   <p align="center">
     <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache%202.0-blue.svg" alt="License"></a>
-    <img src="https://img.shields.io/badge/agents-45-blueviolet" alt="45 Agents">
+    <img src="https://img.shields.io/badge/agents-44-blueviolet" alt="44 Agents">
     <img src="https://img.shields.io/badge/MCP%20servers-22-orange" alt="22 MCP Servers">
     <img src="https://img.shields.io/badge/skills-39-green" alt="39 Skills">
     <img src="https://img.shields.io/badge/stacks-7-red" alt="7 Stacks">
@@ -31,7 +31,7 @@ You use Cursor, Claude Code, or Copilot. You ask for a NestJS CRUD API. You get 
 
 The model isn't broken. It just doesn't know *your* rules.
 
-NeuraForge solves this by dropping 45 pre-built agents into your project. Each agent encodes real architecture rules for a specific stack — and the AI reads them before generating anything. The first output is already close to what you'd actually commit.
+NeuraForge solves this by dropping 44 pre-built agents into your project. Each agent encodes real architecture rules for a specific stack — and the AI reads them before generating anything. The first output is already close to what you'd actually commit.
 
 > Works as **Cursor Rules**, **Claude Code CLAUDE.md**, **GitHub Copilot Instructions**, **Kiro Steering**, and 10 more platforms (including Codex, Gemini CLI, and Antigravity). One install, all platforms detected automatically.
 
