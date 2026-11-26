@@ -13,7 +13,9 @@ const work = mkdtempSync(join(tmpdir(), 'nf-pack-'));
 const IS_WIN = process.platform === 'win32';
 
 function npmPack() {
-  const out = execFileSync(IS_WIN ? 'npm.cmd' : 'npm', ['pack', '--json', '--pack-destination', work], { cwd: ROOT, encoding: 'utf8', shell: IS_WIN });
+  // Run as `npm publish --dry-run`, npm exports npm_config_dry_run; the test needs a real tarball, so override it.
+  const env = { ...process.env, npm_config_dry_run: 'false' };
+  const out = execFileSync(IS_WIN ? 'npm.cmd' : 'npm', ['pack', '--json', '--pack-destination', work], { cwd: ROOT, encoding: 'utf8', shell: IS_WIN, env });
   return JSON.parse(out.slice(out.indexOf('[')))[0];
 }
 
