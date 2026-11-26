@@ -17,6 +17,9 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `fullstack-orchestrator` rewritten: contract-first, architecture approval gate before any code, parallel backend/frontend build, verification gate, review fix loop
 - `feature-pipeline` passes `architecture_approved: true` to generators, runs build/test gates itself, and builds against an API contract
 - Orchestrators and generators that delegate now have the `subagent` tool in their configs
+- `security-reviewer` checks access control (BOLA/IDOR, SSRF), supply chain, fail-closed handling, integrity/logging and AI/agent code, and treats reviewed content as data
+- `feature-pipeline`: stage diagram matches the stages, tests live in the repo with a manifest, one combined parallel review with a capped fix loop, `Failed`/`Blocked` handling, resume rules
+- Every agent prompt points at `rules/core/AGENT_COMMON_RULES.md`
 - Docker/CI examples use `node:24-alpine` and .NET 10 images; `forge`, `devops`, `migrate` target .NET 10 LTS for new services
 
 ### Added

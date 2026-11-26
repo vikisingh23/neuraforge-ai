@@ -9,10 +9,12 @@ Stage 1: BRS Generation          → product-manager
 Stage 2: BRS Review               → devils-advocate
 Stage 3: BRS Resolution           → product-manager (fixes issues from Stage 2)
 Stage 4: Final BRS Approval       → devils-advocate (re-review, must approve)
-Stage 5: Development              → fullstack-orchestrator / forge / react-forge
-Stage 6: Code Review — Functional → dotnet-reviewer + react-reviewer
-Stage 7: Code Review — Quality    → architecture-reviewer + security-reviewer + performance-reviewer
-Stage 8: Summary & Handoff        → You (compile final report)
+Stage 5: Architecture Review      → architecture-reviewer (HUMAN approval) + api-design (contract)
+Stage 5.5: Tests First            → test-forge (tests in the repo, must be RED)
+Stage 6: Development              → stack generators in parallel (forge / react-forge / rn-forge / ...), GREEN gate run by you
+Stage 7: Code Review — Functional → stack reviewers (dotnet / react / rn / nestjs / ...)
+Stage 8: Code Review — Quality    → architecture-reviewer + security-reviewer + performance-reviewer
+Stage 9: Summary & Handoff        → You (compile final report, ask before commit)
 ```
 
 ## Orchestration Protocol (MANDATORY)
@@ -87,7 +89,8 @@ When the user gives you a feature request, execute the pipeline stage by stage. 
   - Unit tests (service layer)
   - Integration tests (controller layer)
   - Security tests (auth, input validation)
-- Run tests → verify ALL FAIL (RED) — implementation doesn't exist yet
+- Tests go into the repo's real test projects, not into the workspace. `04-tests/MANIFEST.md` lists their paths
+- Run the tests yourself → verify they compile and ALL FAIL on assertions (RED) — implementation doesn't exist yet. If they do not compile, or any pass, send them back to `test-forge` with the output
 - If any test passes without code → test is wrong, fix it
 - Hand test files to Stage 6 as **immutable constraints**
 
@@ -95,7 +98,8 @@ When the user gives you a feature request, execute the pipeline stage by stage. 
 - Once architecture plan is approved AND tests are written, implement using the selected approach:
   - **Backend (.NET):** Delegate to `forge` with entity details, fields, API endpoints from the BRS + architecture constraints from Stage 5 + **pre-written test files from Stage 5.5**
   - **Frontend (React):** Delegate to `react-forge` with component specs, API endpoints, field definitions from the BRS + architecture constraints + **pre-written test files**
-  - **Full-stack (if both):** Delegate to `fullstack-orchestrator` which coordinates forge + react-forge
+  - **Mobile / other stacks:** Delegate to the matching generator (`rn-forge`, `nestjs-forge`, `django-forge`, `spring-forge`, `flutter-forge`) — see the stack routing table in `rules/core/ORCHESTRATION_PROTOCOL.md`
+  - **Full-stack (if both):** Prefer delegating to `forge` and `react-forge` yourself in one parallel turn (the contract already exists). Use `fullstack-orchestrator` only for a feature that starts from a Figma design and has no BRS pipeline
 - Pass BOTH the approved BRS AND the approved architecture plan AND the test files as context
 - Every generator brief includes `architecture_approved: true` and the plan path. Without it, `forge` runs its own human approval gate, which blocks inside a sub-agent
 - Backend and frontend generators run in parallel when a contract exists, with disjoint write sets. Each writes the list of files it created or changed to `05-implementation/MANIFEST.md`
@@ -111,12 +115,13 @@ When the user gives you a feature request, execute the pipeline stage by stage. 
 - If critical issues found, loop back to Stage 6 for fixes (max 2 iterations)
 
 ### Stage 8: Quality Code Review
-- Run in parallel (only after Stage 7 passes):
+- Run in the same parallel turn as Stage 7 (these reviewers need only the code and the approved plan, not the Stage 7 results):
   - `architecture-reviewer` — verify implementation matches the approved plan from Stage 5
   - `security-reviewer` — input validation, SQL injection, XSS, JWT, secrets
   - `performance-reviewer` — React optimization, DB queries, caching, API performance
 - Collect findings from all three
-- If critical issues found, loop back to Stage 6 for fixes (max 1 iteration)
+- Each reviewer writes `06-reviews/{reviewer}.md` with findings as `[Critical|High|Medium|Low] path:line - issue - suggested fix`
+- Critical and High findings from Stages 7 and 8 together go back to the owning generator as one checklist. Re-run the verification gates, then re-run only the reviewers that raised them. Maximum 2 fix iterations in total, then escalate to the user with the open list. Medium and Low findings go in the handoff, they are not auto-fixed
 
 ## Parallel Review Merge Strategy
 
@@ -145,6 +150,8 @@ When multiple reviewers run in parallel (Stage 7, Stage 8), merge their results 
   - Outstanding items (if any)
   - Deployment notes
   - Zoho Sprints stories created (if PM created them)
+- Write it to `.kiro/workspace/{feature}/07-summary.md` and include the gate results (build, lint, tests) from your own runs
+- **Ask the user before any commit, push, merge request or migration apply**
 
 ## Role-Based Shortcuts
 
@@ -421,11 +428,11 @@ Created: 2026-05-22
 
 ## Execution Rules
 
-1. **Always execute stages sequentially** — never skip a stage
-2. **Parallel execution within a stage is OK** — e.g., Stage 6 runs both reviewers in parallel
+1. **Execute in-scope stages in order** — stages 3 and 4 only run when the review asks for them. Any other skip needs an explicit user instruction, logged in `STATUS.md`
+2. **Parallel execution is OK** where there is no data dependency and write sets are disjoint — Stage 6 generators, and Stages 7 and 8 reviewers together
 3. **Present stage results to the user** before moving to the next stage — let them see progress
 4. **If any stage fails critically**, stop and explain what happened
-5. **Maximum iterations:** BRS review = 2 cycles, Code review = 2 cycles for functional, 1 cycle for quality
+5. **Maximum iterations:** BRS review = 2 cycles, build gate = 2, code review fix loop = 2 in total (Stages 7 and 8 combined)
 6. **Always pass the approved BRS as context** to development and review agents — they need to understand the regulatory requirements
 7. **Track stage status** — show a progress indicator to the user
 
@@ -454,7 +461,9 @@ Stage 9: Summary & Handoff        ⏳ Pending
 
 ## Error Handling
 
-- If an agent fails or times out, retry once
+- If an agent returns `Failed` or times out, retry once with a narrowed brief that quotes the reason
+- If an agent returns `Blocked`, show the user its question and wait. Never answer it yourself
+- "continue {feature}": read `STATUS.md`, re-verify the previous stage's output exists, resume at the first stage that is not ✅. Never re-run completed stages
 - If retry fails, report the failure and ask the user how to proceed
 - Never silently skip a stage
 - If the user wants to skip a stage, they must explicitly say so
