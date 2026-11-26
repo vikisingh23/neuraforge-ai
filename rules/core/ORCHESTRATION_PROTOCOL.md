@@ -38,7 +38,7 @@ After every sub-agent returns:
 
 ## 4. Verification gates (run by the orchestrator)
 
-A code stage is not ✅ until the gate passes in the real repo:
+A code stage is not ✅ until the gate passes in the real repo. **Use the commands in the project's `AGENTS.md` "Commands" section when it has one**, and record which commands you ran. Fall back to this table only when the project lists none:
 
 | Stack | Gate |
 |-------|------|

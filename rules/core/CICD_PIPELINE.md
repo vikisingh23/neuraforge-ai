@@ -117,3 +117,10 @@ deploy-celery:
 ```
 
 ### Key: API and Celery workers deploy separately but use the same Docker image.
+
+## Publishing Packages (npm)
+
+- **Use trusted publishing (OIDC), not long-lived tokens.** In GitHub Actions set `permissions: id-token: write`, use Node 24, then `npm ci`, test, `npm publish`. Needs npm 11.5.1+ and Node 22.14+. Provenance attestations are generated automatically for public packages published from public repositories.
+- **Prefer staged publishing** (`npm stage publish`): CI uploads, a maintainer approves each release with 2FA. After the first successful publish (the trusted publisher config expires if unused for 2 days), set the package to "Require two-factor authentication and disallow tokens" and revoke old automation tokens.
+- **Supported CI**: GitHub Actions (GitHub-hosted runners), GitLab.com shared runners, CircleCI cloud. Self-hosted runners, including self-managed GitLab, are not supported yet. There, keep a narrowly scoped, short-lived token in a masked and protected CI variable and rotate it on a schedule.
+- **Installing private dependencies** uses a separate read-only token, never the publish credential.

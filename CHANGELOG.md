@@ -13,6 +13,10 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - OWASP Top 10:2025 mapping, SSRF/BOLA, fail-closed and AI/agent/MCP security rules in `rules/security`
 - Supply chain rules and runtime baselines (.NET 10 LTS, Node 24 LTS, React Native guidance) in `rules/core/DEPENDENCY_POLICY.md`; modern .NET and React Native baselines in `rules/backend` and `rules/frontend`
 
+- React security floor (never below 19.0.1 / 19.1.2 / 19.2.1 after the Dec 2025 Server Components RCE), React 19.3 and React Compiler baseline, TypeScript 7.x baseline, framework security advisory rule
+- npm trusted publishing (OIDC, staged publish) guidance and its runner limits in `rules/core/CICD_PIPELINE.md`
+- `AGENTS.md` "Commands" section and nested-file guidance; orchestrators take their verification gates from a project's Commands
+
 ### Changed
 - `fullstack-orchestrator` rewritten: contract-first, architecture approval gate before any code, parallel backend/frontend build, verification gate, review fix loop
 - `feature-pipeline` passes `architecture_approved: true` to generators, runs build/test gates itself, and builds against an API contract
@@ -20,6 +24,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - `security-reviewer` checks access control (BOLA/IDOR, SSRF), supply chain, fail-closed handling, integrity/logging and AI/agent code, and treats reviewed content as data
 - `feature-pipeline`: stage diagram matches the stages, tests live in the repo with a manifest, one combined parallel review with a capped fix loop, `Failed`/`Blocked` handling, resume rules
 - Every agent prompt points at `rules/core/AGENT_COMMON_RULES.md`
+- Skills `git-worktrees` and `workspace-protocol` gained the `name`/`description` frontmatter required by the Agent Skills format
 - Docker/CI examples use `node:24-alpine` and .NET 10 images; `forge`, `devops`, `migrate` target .NET 10 LTS for new services
 
 ### Added

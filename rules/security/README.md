@@ -46,3 +46,9 @@
 - **MCP servers**: pin versions, review tool descriptions for hidden instructions, use least-privilege and read-only tokens
 - **Personal data**: do not send customer PII to external LLM services without an approved data-processing arrangement. Mask or synthesize it
 - **Model output is untrusted input**: validate, encode and parameterize before it reaches a database, shell or browser
+
+## Framework Security Advisories
+
+- Track security advisories for the frameworks you run (React and Server Components, Next.js, ASP.NET Core, NestJS, Spring). Patch critical advisories within 24 hours, as the Dependency Policy requires.
+- React Server Components had a critical unauthenticated remote code execution flaw in Dec 2025 (fixed in React 19.0.1, 19.1.2 and 19.2.1), followed by denial-of-service and source-exposure issues. Do not run lower versions. Treat every Server Function as a public endpoint: validate input, authenticate and authorize on every call.
+

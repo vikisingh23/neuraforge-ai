@@ -41,6 +41,34 @@ Read `rules/core/AGENT_COMMON_RULES.md`. It covers untrusted content (tool outpu
 
 Orchestrators (`feature-pipeline`, `fullstack-orchestrator`) and every agent they call follow `rules/core/ORCHESTRATION_PROTOCOL.md`: delegation briefs, the `Done`/`Failed`/`Blocked` reply format, verification gates the orchestrator runs itself, human approval gates, parallelism rules and capped fix loops. Code-generating agents receive `architecture_approved: true` from an orchestrator only after the human approved a plan.
 
+## Commands (agents run these, so keep them exact)
+
+Agents read this section to know how to build, check and test, and they fix failures before finishing. Every project that uses these agents should list its own commands in its root `AGENTS.md`:
+
+```
+Install:      <e.g. npm ci | dotnet restore --locked-mode>
+Build:        <e.g. npm run build | dotnet build -warnaserror>
+Lint:         <e.g. npm run lint>
+Typecheck:    <e.g. npm run typecheck (tsc --noEmit)>
+Test (all):   <e.g. npm test | dotnet test>
+Test (one):   <e.g. npx vitest run -t "name" | dotnet test --filter "FullyQualifiedName~Name">
+Run locally:  <e.g. npm run dev | dotnet run --project src/Api>
+```
+
+In a monorepo put an `AGENTS.md` inside each service or package with that package's commands and conventions. The closest file to the edited code wins, and an explicit instruction from the user overrides all of them. Orchestrators take their verification gates from these commands.
+
+### This repository
+
+```
+Install agents:   npm run install:auto        (or install:claude | install:kiro | install:cursor ...)
+Preview install:  npm run dry-run
+Health check:     npm run doctor
+Validate:         npm run validate
+Evals:            npm run eval              (one agent: npm run eval:agent -- <name>)
+Normalize agents: node tools/normalize-agents/index.mjs  (dry run; add --write to apply)
+Rebuild site:     node docs/build.mjs
+```
+
 ## Architecture Principles (enforce on ALL code)
 
 - **Data fetching at the leaf level** — each component/widget fetches its own data, no parent prop-drilling
