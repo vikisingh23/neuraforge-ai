@@ -4,8 +4,8 @@
   "description": "44 agents, 39 skills and architecture rules for Claude Code, Kiro, Gemini CLI, Codex, Antigravity, Cursor and Copilot. One install writes each tool's native layout for .NET, NestJS, React, React Native, Flutter, Django and Spring Boot.",
   "type": "module",
   "bin": {
-    "neuraforge": "./install.mjs",
-    "neuraforge-ai": "./install.mjs"
+    "neuraforge": "install.mjs",
+    "neuraforge-ai": "install.mjs"
   },
   "scripts": {
     "install:claude": "node install.mjs claude",
@@ -68,7 +68,7 @@
   "homepage": "https://github.com/vikisingh23/neuraforge-ai",
   "repository": {
     "type": "git",
-    "url": "https://github.com/vikisingh23/neuraforge-ai.git"
+    "url": "git+https://github.com/vikisingh23/neuraforge-ai.git"
   },
   "bugs": {
     "url": "https://github.com/vikisingh23/neuraforge-ai/issues"
