@@ -18,3 +18,9 @@ MapStruct mapper + GlobalExceptionHandler + Tests (JUnit 5 + Mockito) + Flyway m
 BigDecimal for money. @SQLDelete for soft deletes. Jakarta Validation.
 
 For full instructions, read `agents/spring-forge.md`.
+
+## References (read on demand)
+
+Code templates live here, not in the agent prompt. Read the one you need when you reach that step.
+
+- `references/api-generation-workflow.md`: 🎯 API Generation Workflow (MANDATORY) — templates

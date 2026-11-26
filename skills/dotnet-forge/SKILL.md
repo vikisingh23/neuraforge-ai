@@ -26,5 +26,7 @@ Generate a complete .NET Core API following enterprise enterprise patterns.
 
 ## References (read on demand)
 
-- `references/code-patterns.md` — C# templates for entity, repository, service, controller, CQRS, DTOs, validators, tests. Read before generating any of these.
-- `references/payment-gateway-patterns.md` — only when the task involves a payment gateway.
+Code templates live here, not in the agent prompt. Read the one you need when you reach that step.
+
+- `references/code-patterns.md`: Forge Code Patterns
+- `references/payment-gateway-patterns.md`: Forge Payment Gateway Patterns

@@ -22,6 +22,12 @@ Apply the decision tree:
 - **100-200 lines, 2 responsibilities** → Extract one into a separate file
 - **200+ lines, 3+ responsibilities** → Full decomposition needed
 
+### Step 2.5: Establish a safety net
+Reason: a refactor must not change behavior, and only tests can show that.
+1. Run the existing tests for the target code and record the result. Do not refactor on a red baseline: report it.
+2. If the target has no tests, write characterization tests that pin the current behavior first, and run them green.
+3. Refactor in small steps (one extraction at a time) and re-run the tests after each step.
+
 ### Step 3: Execute
 
 #### For Backend (Services/Controllers)

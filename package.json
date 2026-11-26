@@ -26,6 +26,9 @@
     "feedback:lessons": "node tools/feedback/index.mjs lessons",
     "normalize:agents": "node tools/normalize-agents/index.mjs",
     "test:install":     "node --test tools/install/adapters.test.mjs",
+    "test:tools":       "node --test \"tools/**/*.test.mjs\"",
+    "verify:generated": "node tools/verify/post-gen-check.mjs",
+    "eval:behavior":    "node tools/eval/behavior/index.mjs",
     "eval":             "node tools/eval/index.mjs",
     "eval:agent":       "node tools/eval/index.mjs --agent"
   },

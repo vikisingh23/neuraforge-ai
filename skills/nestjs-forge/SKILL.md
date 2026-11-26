@@ -23,3 +23,11 @@ Generate a complete NestJS + TypeORM API following enterprise enterprise pattern
 7. Swagger decorators on ALL endpoints
 8. ResponseInterceptor for standard envelope `{ statusCode, message, data, timestamp }`
 9. Audit fields, soft deletes, @VersionColumn() on ALL entities
+
+## References (read on demand)
+
+Code templates live here, not in the agent prompt. Read the one you need when you reach that step.
+
+- `references/api-generation-workflow.md`: 🎯 API Generation Workflow (MANDATORY) — templates
+- `references/architecture-principles.md`: Architecture Principles (CRITICAL) — templates
+- `references/enterprise-patterns.md`: Enterprise Patterns (MANDATORY) — templates

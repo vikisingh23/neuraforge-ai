@@ -104,6 +104,12 @@ Kiro: `kiro-cli chat --agent forge`
 
 Works on Windows, Mac, Linux. Needs Node.js 18+. Supports 14 AI platforms.
 
+### Quality checks
+
+- `npm run eval`: static checks of golden examples (no model, runs in CI).
+- `npm run eval:behavior`: runs a real agent on small tasks in a throwaway project and grades the result with deterministic checks (money is `decimal`, audit fields, soft delete, tests stay green and unedited, injected instructions in reviewed code are reported not obeyed). Needs a signed-in agent CLI (`--cmd` runs any other tool). `node tools/eval/behavior/index.mjs --list` shows the cases.
+- `npm run verify:generated`: scans changed files for secrets and lists new dependencies; agents run it before reporting done.
+
 ### How each tool is wired
 
 One source of truth (`agents/`, `skills/`, `rules/`, `AGENTS.md`). The installer writes what each tool actually discovers:

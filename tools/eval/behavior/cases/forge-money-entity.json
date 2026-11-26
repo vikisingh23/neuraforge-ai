@@ -1,0 +1,91 @@
+{
+  "id": "forge-money-entity",
+  "agent": "forge",
+  "description": "Money is decimal, audit fields, soft delete, kebab-case routes, pagination, result block",
+  "prompt": "Add a Payment entity (amount, currency, status, payer id) with a repository and a controller under src/Api. Skip the plan and just generate the code. Keep it small.",
+  "maxTurns": 30,
+  "seed": {
+    "src/Api/Api.csproj": "<Project Sdk=\"Microsoft.NET.Sdk.Web\"><PropertyGroup><TargetFramework>net10.0</TargetFramework><Nullable>enable</Nullable></PropertyGroup></Project>\n"
+  },
+  "checks": [
+    {
+      "id": "files",
+      "type": "file_exists",
+      "glob": "src/**/*Payment*.cs"
+    },
+    {
+      "id": "decimal-money",
+      "why": "money is decimal",
+      "type": "matches",
+      "glob": "src/**/*.cs",
+      "pattern": "decimal\\??\\s+Amount"
+    },
+    {
+      "id": "no-float-money",
+      "why": "never float or double for money",
+      "type": "not_matches",
+      "glob": "src/**/*.cs",
+      "pattern": "\\b(double|float)\\??\\s+(Amount|Price|Total|Balance)\\b"
+    },
+    {
+      "id": "audit-created",
+      "type": "matches",
+      "glob": "src/**/*.cs",
+      "pattern": "Created(At|By)"
+    },
+    {
+      "id": "audit-modified",
+      "type": "matches",
+      "glob": "src/**/*.cs",
+      "pattern": "Modified(At|By)"
+    },
+    {
+      "id": "soft-delete",
+      "why": "financial data is never hard deleted",
+      "type": "matches",
+      "glob": "src/**/*.cs",
+      "pattern": "IsDeleted"
+    },
+    {
+      "id": "no-hard-delete",
+      "type": "not_matches",
+      "glob": "src/**/*.cs",
+      "pattern": "\\.Remove\\("
+    },
+    {
+      "id": "kebab-route",
+      "why": "URL paths are lowercase-hyphenated",
+      "type": "not_matches",
+      "glob": "src/**/*.cs",
+      "pattern": "Route\\(\"api/\\[controller\\]\"\\)"
+    },
+    {
+      "id": "pagination",
+      "type": "matches",
+      "glob": "src/**/*.cs",
+      "pattern": "(page|Page)(Size|Number)?"
+    },
+    {
+      "id": "result-block",
+      "why": "agents report evidence",
+      "type": "reply_matches",
+      "pattern": "### Result[\\s\\S]*Checks:"
+    }
+  ],
+  "golden": {
+    "pass": {
+      "files": {
+        "src/Api/Payment.cs": "public class Payment { public decimal Amount { get; set; } public DateTime CreatedAt { get; set; } public string CreatedBy { get; set; } = \"\"; public DateTime? ModifiedAt { get; set; } public string? ModifiedBy { get; set; } public bool IsDeleted { get; set; } }",
+        "src/Api/PaymentsController.cs": "[Route(\"api/v1/payments\")] public class PaymentsController { public Task<IActionResult> List(int page = 1, int pageSize = 20) => null!; }"
+      },
+      "reply": "### Result\nFiles: created 3, changed 0\nChecks: build -> pass | tests -> 4 passed, 0 failed\nPost-generation scan: secrets none, new dependencies none\nAssumptions: none\nOpen risks: none\n"
+    },
+    "fail": {
+      "files": {
+        "src/Api/Payment.cs": "public class Payment { public double Amount { get; set; } }",
+        "src/Api/PaymentsController.cs": "[Route(\"api/[controller]\")] public class PaymentsController { void Del(){ ctx.Payments.Remove(p); } }"
+      },
+      "reply": "Done."
+    }
+  }
+}

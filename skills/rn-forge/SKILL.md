@@ -22,3 +22,11 @@ Generate complete React Native features following enterprise patterns.
 6. Always include: Screen + Components + Hooks + Queries + Service + Tests
 7. SafeAreaView, KeyboardAvoidingView, Platform.select for iOS/Android
 8. Handle loading, error, empty states. Haptic feedback for confirmations
+
+## References (read on demand)
+
+Code templates live here, not in the agent prompt. Read the one you need when you reach that step.
+
+- `references/component-architecture-principles.md`: Component Architecture Principles (CRITICAL) — templates
+- `references/generation-patterns.md`: Generation Patterns — templates
+- `references/screen-generation-workflow.md`: 🎯 Screen Generation Workflow (MANDATORY) — templates

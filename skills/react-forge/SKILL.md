@@ -22,3 +22,12 @@ Generate complete React features following enterprise patterns.
 6. Always include: Component + Hooks + QueryOptions + Service + Tests (8 files)
 7. Handle loading, error, empty states on every component
 8. Financial formatting: currency symbol symbol, locale-specifics (currency symbol1,23,456.78)
+
+## References (read on demand)
+
+Code templates live here, not in the agent prompt. Read the one you need when you reach that step.
+
+- `references/component-architecture-principles.md`: Component Architecture Principles (CRITICAL) — templates
+- `references/generation-patterns.md`: Generation Patterns — templates
+- `references/real-world-patterns.md`: Real-World Patterns — templates
+- `references/screen-generation-workflow.md`: 🎯 Screen Generation Workflow (MANDATORY) — templates

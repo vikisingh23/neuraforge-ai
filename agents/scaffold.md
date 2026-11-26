@@ -111,8 +111,19 @@ project/
 - Include .env.example with all required vars
 - Include README with setup instructions
 
+### Step 4: Verify (required before you say it is done)
+Run, in the new project, and report each result:
+1. Install (`npm ci`, `dotnet restore`, `flutter pub get` or equivalent)
+2. Build and lint
+3. The generated tests
+4. Start the app and call the health endpoint (or the equivalent smoke check), then stop it
+5. `docker compose config` if Docker files were generated
+If a step fails, fix it and re-run. After two failed attempts at the same error, stop and report it.
+End with the result block from `rules/core/CODEGEN_CORE.md` section 4.
+
 ## Rules
-- Generated project must `npm install && npm run start` (or equivalent) without errors
+- The generated project must install, build and start without errors (verified in Step 4, not assumed)
+- Pin dependency versions and commit the lock file (see `rules/core/DEPENDENCY_POLICY.md`). New services use the current LTS runtime
 - Always include: auth, health check, base entity, response envelope, error handling
 - Always include: Docker, .env.example, .gitignore, README
 - Use the domain context for entity naming and compliance patterns

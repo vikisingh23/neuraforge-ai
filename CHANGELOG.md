@@ -18,7 +18,14 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Tool-native installs: Claude Code subagents are generated with the required frontmatter (the raw files were skipped before), Gemini CLI gets `.gemini/agents`, Codex gets `.codex/agents/*.toml` and `.codex/config.toml`, and skills install to `.claude/skills`, `.kiro/skills` and the shared `.agents/skills` (Gemini CLI, Antigravity, Codex). `CLAUDE.md` imports `AGENTS.md`
 - `NEURAFORGE_SRC` installs from a local checkout; adapter tests (`npm run test:install`) run in CI
 
+- `rules/core/CODEGEN_CORE.md`: one shared process for all code generators (interactive vs orchestrated mode, plan phase, security by default, verification, `### Result` evidence block, learning loop)
+- `tools/verify/post-gen-check.mjs` (`npm run verify:generated`): secret scan of added lines and new-dependency report with unpinned-version warnings; `--audit` runs npm audit and dotnet vulnerability checks
+- Behavior evals (`npm run eval:behavior`): 6 task cases (forge, nestjs-forge, react-forge, debug, refactor, security-reviewer injection) run against a real agent and graded deterministically; grader and case golden examples are tested in CI (`npm run test:tools`)
+
 ### Changed
+- Code generators slimmed from 545-788 lines to 175-535: duplicated plan phase replaced by `CODEGEN_CORE`, code templates moved to `skills/<stack>/references/` (loaded on demand), emphatic ALWAYS/NEVER/MANDATORY wording replaced by plain rules
+- `debug` is reproduce-first with a failing test and a verified fix; `refactor` requires a green (or characterization-test) baseline; `scaffold` verifies install, build, tests and a health check
+- `rn-forge` and `react-forge` follow React Compiler (no default memoization when it is enabled); `nestjs-forge` stack preference follows `.neuraforge.yml` instead of "always"
 - Reviewers are read-only (no write or shell); the orchestrator saves their findings to `06-reviews/`
 - `forge.md` code and payment templates moved to `skills/dotnet-forge/references/` and load on demand
 - `fullstack-orchestrator` rewritten: contract-first, architecture approval gate before any code, parallel backend/frontend build, verification gate, review fix loop

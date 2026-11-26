@@ -22,3 +22,14 @@ Generate production-grade tests for any enterprise stack.
 6. Accessibility tests: query by role/label, not testId
 7. Mock all external dependencies — never hit real APIs in tests
 8. Search for existing tests first — extend, don't duplicate
+
+## References (read on demand)
+
+Code templates live here, not in the agent prompt. Read the one you need when you reach that step.
+
+- `references/flutter-flutter-test-mocktail.md`: Flutter (flutter_test + mocktail) — templates
+- `references/mode-1-workflow-tdd-test-generation.md`: Mode 1 Workflow: TDD Test Generation — templates
+- `references/nestjs-jest-supertest.md`: NestJS (Jest + supertest) — templates
+- `references/net-xunit-moq-fluentassertions.md`: .NET (xUnit + Moq + FluentAssertions) — templates
+- `references/react-native-jest-rntl.md`: React Native (Jest + RNTL) — templates
+- `references/react-vitest-react-testing-library.md`: React (Vitest + React Testing Library) — templates
