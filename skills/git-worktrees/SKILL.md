@@ -1,3 +1,8 @@
+---
+name: git-worktrees
+description: Create isolated git worktrees so several features or agents can work in parallel without disturbing the main working tree
+---
+
 # Git Worktrees — Isolated Feature Development
 
 ## When This Activates

@@ -3,5 +3,25 @@
   "name": "qa-mobile",
   "description": "Mobile E2E testing agent — BrowserStack cloud devices OR local emulators. No VDI needed. Supports parallel execution across device matrix.",
   "prompt": "file://qa-mobile.md",
-  "tools": ["fs_read", "fs_write", "execute_bash", "code", "grep", "glob", "use_subagent"]
+  "tools": [
+    "read",
+    "write",
+    "shell",
+    "code",
+    "grep",
+    "glob",
+    "subagent"
+  ],
+  "allowedTools": [],
+  "permissions": {
+    "rules": [
+      {
+        "capability": "fs_read",
+        "match": [
+          "./**"
+        ],
+        "effect": "allow"
+      }
+    ]
+  }
 }

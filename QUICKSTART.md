@@ -2,16 +2,19 @@
 
 ## Step 1: Install (30 seconds)
 
-**Claude Code:**
+Open a terminal in your project folder (Windows, macOS or Linux, Node.js 18+) and run:
+
+```bash
+npx neuraforge-ai            # configures every supported tool found on this machine
+npx neuraforge-ai claude     # or pick one: kiro | gemini | codex | antigravity | cursor | copilot | opencode | hermes
+```
+
+Preview first with `--dry-run`. Restart your tool afterwards so it picks up the new agents.
+
+**Claude Code plugin instead:**
 ```bash
 /plugin marketplace add vikisingh23/neuraforge-ai
 /plugin install neuraforge-ai
-```
-
-**Any other platform:**
-```bash
-git clone https://github.com/vikisingh23/neuraforge-ai.git
-cd neuraforge-ai && node install.mjs
 ```
 
 ## Step 2: Try These (pick your stack)

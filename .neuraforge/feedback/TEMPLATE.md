@@ -25,7 +25,7 @@ outcome: pending
   If something was wrong:
     1. Change "outcome: pending" in the frontmatter to "outcome: corrected"
     2. Fill in the sections below
-    3. Run: npm run feedback:submit
+    3. Run: npx neuraforge-ai feedback submit
 -->
 
 **What was wrong:**

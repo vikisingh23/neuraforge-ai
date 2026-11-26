@@ -1,0 +1,42 @@
+name: Publish to npm
+
+# Publishes with npm trusted publishing (OIDC): no npm token is stored in this repository.
+# One-time setup on npmjs.com: package neuraforge-ai > Settings > Trusted publishing > GitHub Actions,
+# organization/user vikisingh23, repository neuraforge-ai, workflow filename publish.yml.
+# Release: bump "version" in package.json, update CHANGELOG.md, then push a tag such as v1.2.0.
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Use an npm version that supports trusted publishing
+        run: npm install -g npm@^11.5.1
+
+      - name: Tag matches package.json version
+        run: |
+          expected="v$(node -p "require('./package.json').version")"
+          if [ "$expected" != "$GITHUB_REF_NAME" ]; then
+            echo "Tag $GITHUB_REF_NAME does not match package.json version ($expected)"
+            exit 1
+          fi
+
+      - name: Tests (installer, packaging, post-generation check, eval grader)
+        run: node --test "tools/**/*.test.mjs"
+
+      - name: Publish
+        run: npm publish

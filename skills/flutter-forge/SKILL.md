@@ -22,3 +22,10 @@ Generate complete Flutter features following enterprise patterns.
 6. Always include: Model + Repository + Provider + Screen + Widgets + Tests
 7. const constructors wherever possible. SafeArea wrapping screens
 8. Handle loading (shimmer), error (retry), empty states on every screen
+
+## References (read on demand)
+
+Code templates live here, not in the agent prompt. Read the one you need when you reach that step.
+
+- `references/component-architecture-principles.md`: Component Architecture Principles (CRITICAL) — templates
+- `references/screen-generation-workflow.md`: 🎯 Screen Generation Workflow (MANDATORY) — templates

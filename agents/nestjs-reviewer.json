@@ -1,6 +1,25 @@
 {
   "$schema": "https://raw.githubusercontent.com/aws/amazon-q-developer-cli/refs/heads/main/schemas/agent-v1.json",
   "name": "nestjs-reviewer",
+  "description": "A specialized NestJS + TypeORM code reviewer focused on Enterprise Rulebook standards for enterprise financial services APIs.",
   "prompt": "file://nestjs-reviewer.md",
-  "tools": ["fs_read", "fs_write", "execute_bash", "code", "grep", "glob"]
+  "model": "claude-sonnet-4.6",
+  "tools": [
+    "read",
+    "code",
+    "grep",
+    "glob"
+  ],
+  "allowedTools": [],
+  "permissions": {
+    "rules": [
+      {
+        "capability": "fs_read",
+        "match": [
+          "./**"
+        ],
+        "effect": "allow"
+      }
+    ]
+  }
 }

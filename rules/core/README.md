@@ -7,6 +7,7 @@
 - **Constants**: UPPER_SNAKE_CASE (`MAX_RETRY_COUNT`)
 - **Booleans**: prefix with is/has/should (`isLoading`, `hasError`)
 - **Descriptive names**: `getTransactionsByUserId` not `getData`
+- **API URL paths**: always lowercase-hyphenated (kebab-case) — `/api/v1/bank-accounts`, `/api/v1/transaction-history`, NOT `/api/v1/BankAccounts` or `/api/v1/bankAccounts`. Applies to ALL stacks.
 
 ## Git Workflow
 - Branch naming: `feature/`, `bugfix/`, `hotfix/` prefix

@@ -1,0 +1,90 @@
+{
+  "id": "react-transactions-list",
+  "agent": "react-forge",
+  "description": "Uses React Query for server data, handles loading/error/empty states, no any",
+  "prompt": "Create a TransactionsList component that shows transactions from GET /api/v1/transactions. Skip the plan and just generate the code, including the service and query options. Keep it small.",
+  "maxTurns": 30,
+  "seed": {
+    "package.json": "{\"name\":\"web\",\"version\":\"1.0.0\",\"dependencies\":{\"react\":\"19.3.0\",\"@tanstack/react-query\":\"5.59.0\",\"axios\":\"1.7.7\"},\"devDependencies\":{\"typescript\":\"5.6.3\"}}\n",
+    "tsconfig.json": "{\"compilerOptions\":{\"strict\":true,\"jsx\":\"react-jsx\"}}\n"
+  },
+  "checks": [
+    {
+      "id": "component",
+      "type": "file_exists",
+      "glob": "src/**/*ransactionsList*.tsx"
+    },
+    {
+      "id": "react-query",
+      "why": "server state goes through React Query",
+      "type": "matches",
+      "glob": "src/**/*.ts*",
+      "pattern": "useQuery|queryOptions"
+    },
+    {
+      "id": "no-effect-fetch",
+      "why": "no data fetching in useEffect",
+      "type": "not_matches",
+      "glob": "src/**/*.ts*",
+      "pattern": "useEffect\\([\\s\\S]{0,200}(fetch|axios)"
+    },
+    {
+      "id": "loading-state",
+      "type": "matches",
+      "glob": "src/**/*.tsx",
+      "pattern": "isLoading|isPending"
+    },
+    {
+      "id": "error-state",
+      "type": "matches",
+      "glob": "src/**/*.tsx",
+      "pattern": "isError|error"
+    },
+    {
+      "id": "empty-state",
+      "type": "matches",
+      "glob": "src/**/*.tsx",
+      "pattern": "length\\s*===\\s*0|!data\\?\\.length|!transactions\\?\\.length|isEmpty|No transactions",
+      "flags": "i"
+    },
+    {
+      "id": "no-any",
+      "type": "not_matches",
+      "glob": "src/**/*.ts*",
+      "pattern": ":\\s*any\\b"
+    },
+    {
+      "id": "versioned-api",
+      "type": "matches",
+      "glob": "src/**/*.ts*",
+      "pattern": "/api/v1"
+    },
+    {
+      "id": "lowercase-path",
+      "why": "URL paths are lowercase-hyphenated",
+      "type": "not_matches",
+      "glob": "src/**/*.ts*",
+      "pattern": "/api/v1/[A-Z]|['\"`]/Transactions"
+    },
+    {
+      "id": "result-block",
+      "type": "reply_matches",
+      "pattern": "### Result[\\s\\S]*Checks:"
+    }
+  ],
+  "golden": {
+    "pass": {
+      "files": {
+        "src/services/transactions.ts": "export const getTransactions = () => axios.get('/api/v1/transactions');",
+        "src/components/TransactionsList.tsx": "export const TransactionsList = () => { const { data, isLoading, isError } = useQuery(transactionsOptions()); if (isLoading) return <p>Loading</p>; if (isError) return <p>Error</p>; if (!data?.length) return <p>No transactions</p>; return <ul/>; };"
+      },
+      "reply": "### Result\nFiles: created 3, changed 0\nChecks: build -> pass | tests -> 4 passed, 0 failed\nPost-generation scan: secrets none, new dependencies none\nAssumptions: none\nOpen risks: none\n"
+    },
+    "fail": {
+      "files": {
+        "src/TransactionsList.tsx": "export const TransactionsList = ({ rows }: { rows: any }) => { useEffect(() => { fetch('/api/v1/transactions') }, []); return null; };"
+      },
+      "reply": "Done."
+    }
+  }
+}

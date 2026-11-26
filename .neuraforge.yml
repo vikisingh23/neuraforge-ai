@@ -7,7 +7,7 @@
 # ── Version ───────────────────────────────────────────────────────────────────
 # Pin to a specific NeuraForge release so agent behavior stays consistent
 # across your team. Check https://github.com/vikisingh23/neuraforge-ai/releases
-version: "1.0.0"
+version: "1.2.0"
 
 # ── Domain Context ────────────────────────────────────────────────────────────
 # Agents use this to enforce industry-specific rules (audit fields, compliance, etc.)

@@ -1,3 +1,8 @@
+---
+name: workspace-protocol
+description: Shared file-based communication and status tracking (STATUS.md, numbered artifacts) for multi-agent workflows such as feature-pipeline and fullstack-orchestrator
+---
+
 # Workspace Protocol — Shared File-Based Agent Communication
 
 ## When This Activates

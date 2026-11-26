@@ -1,0 +1,79 @@
+{
+  "id": "nestjs-bank-account",
+  "agent": "nestjs-forge",
+  "description": "Numeric money column, class-validator DTOs, soft delete, kebab-case controller path, pagination",
+  "prompt": "Add a BankAccount module (account number, holder name, balance) with a controller and service in src. Skip the plan and just generate the code. Keep it small.",
+  "maxTurns": 30,
+  "seed": {
+    "package.json": "{\"name\":\"svc\",\"version\":\"1.0.0\",\"dependencies\":{\"@nestjs/common\":\"10.4.0\",\"@nestjs/core\":\"10.4.0\",\"@nestjs/typeorm\":\"10.0.2\",\"typeorm\":\"0.3.20\",\"class-validator\":\"0.14.1\"}}\n",
+    "src/main.ts": "// bootstrap\n"
+  },
+  "checks": [
+    {
+      "id": "files",
+      "type": "file_exists",
+      "glob": "src/**/*bank-account*.ts"
+    },
+    {
+      "id": "numeric-money",
+      "why": "balance is a numeric/decimal column, not float",
+      "type": "matches",
+      "glob": "src/**/*.ts",
+      "pattern": "(type:\\s*['\"](numeric|decimal)['\"]|@Column\\([^)]*(numeric|decimal))"
+    },
+    {
+      "id": "no-float-column",
+      "type": "not_matches",
+      "glob": "src/**/*.ts",
+      "pattern": "type:\\s*['\"](float|double)['\"]"
+    },
+    {
+      "id": "validation",
+      "type": "matches",
+      "glob": "src/**/*.ts",
+      "pattern": "@(IsString|IsNumber|IsNotEmpty|IsDecimal)"
+    },
+    {
+      "id": "soft-delete",
+      "type": "matches",
+      "glob": "src/**/*.ts",
+      "pattern": "(DeleteDateColumn|deletedAt|isDeleted|softDelete|softRemove)"
+    },
+    {
+      "id": "kebab-controller",
+      "why": "URL paths are lowercase-hyphenated",
+      "type": "matches",
+      "glob": "src/**/*.ts",
+      "pattern": "@Controller\\(['\"](api/)?(v1/)?bank-accounts['\"]\\)"
+    },
+    {
+      "id": "pagination",
+      "type": "matches",
+      "glob": "src/**/*.ts",
+      "pattern": "(limit|pageSize|page)\\b"
+    },
+    {
+      "id": "result-block",
+      "type": "reply_matches",
+      "pattern": "### Result[\\s\\S]*Checks:"
+    }
+  ],
+  "golden": {
+    "pass": {
+      "files": {
+        "src/bank-accounts/bank-account.entity.ts": "@Entity() export class BankAccount { @Column({ type: 'numeric', precision: 18, scale: 4 }) balance: string; @DeleteDateColumn() deletedAt?: Date; }",
+        "src/bank-accounts/bank-account.dto.ts": "export class CreateBankAccountDto { @IsString() holderName: string; }",
+        "src/bank-accounts/bank-account.controller.ts": "@Controller('api/v1/bank-accounts') export class C { list(@Query('page') page: number, @Query('limit') limit: number) {} }",
+        "src/bank-accounts/bank-account.service.ts": "export class S {}"
+      },
+      "reply": "### Result\nFiles: created 3, changed 0\nChecks: build -> pass | tests -> 4 passed, 0 failed\nPost-generation scan: secrets none, new dependencies none\nAssumptions: none\nOpen risks: none\n"
+    },
+    "fail": {
+      "files": {
+        "src/bank-account.entity.ts": "@Entity() export class BankAccount { @Column({ type: 'float' }) balance: number; }",
+        "src/bank-account.controller.ts": "@Controller('BankAccounts') export class C {}"
+      },
+      "reply": "Done."
+    }
+  }
+}
