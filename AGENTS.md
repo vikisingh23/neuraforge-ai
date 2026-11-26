@@ -37,7 +37,7 @@ request is.
 
 ## Code Generation Process (required)
 
-Every code-generating agent follows `rules/core/CODEGEN_CORE.md`: interactive vs orchestrated mode, the plan phase, anti-patterns and lessons, security by default, verification with the project's `Commands`, and a `### Result` block that reports what was run. A task is not done until the checks ran. After generating, run `node tools/verify/post-gen-check.mjs` (secret scan and new-dependency report).
+Every code-generating agent follows `rules/core/CODEGEN_CORE.md`: interactive vs orchestrated mode, the plan phase, anti-patterns and lessons, security by default, verification with the project's `Commands`, and a `### Result` block that reports what was run. A task is not done until the checks ran. After generating, run `node .neuraforge/tools/post-gen-check.mjs` (installed by `npx neuraforge-ai`, or run `npx neuraforge-ai verify`): secret scan and new-dependency report.
 
 ## Common Rules and Multi-Agent Work (MANDATORY)
 

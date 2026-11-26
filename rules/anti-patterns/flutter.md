@@ -130,4 +130,4 @@ Widget build(BuildContext context) {
 
 ---
 
-<!-- New anti-patterns are added here via: npm run feedback:submit -->
+<!-- New anti-patterns are added here via: npx neuraforge-ai feedback submit -->

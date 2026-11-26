@@ -1,7 +1,7 @@
 <p align="center">
-  <h1 align="center">🧠 NeuraForge AI</h1>
+  <h1 align="center">NeuraForge AI</h1>
   <p align="center">
-    <strong>Stop correcting the same AI mistakes.<br>Drop in 44 agents that teach Claude Code, Cursor & Copilot your team's architecture rules.</strong>
+    <strong>Stop correcting the same AI mistakes.<br>Drop in 44 agents that teach Claude Code, Kiro, Gemini CLI, Codex, Antigravity, Cursor and Copilot your team's architecture rules.</strong>
   </p>
   <p align="center">
     <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache%202.0-blue.svg" alt="License"></a>
@@ -10,6 +10,7 @@
     <img src="https://img.shields.io/badge/skills-39-green" alt="39 Skills">
     <img src="https://img.shields.io/badge/stacks-7-red" alt="7 Stacks">
     <img src="https://img.shields.io/badge/platform-Windows%20%7C%20Mac%20%7C%20Linux-lightgrey" alt="Cross-platform">
+    <img src="https://img.shields.io/badge/node-%3E%3D18-brightgreen" alt="Node 18+">
     <img src="https://img.shields.io/badge/eval-42%2F42%20passing-success" alt="42/42 eval assertions passing">
     <a href="https://www.npmjs.com/package/neuraforge-ai"><img src="https://img.shields.io/npm/v/neuraforge-ai.svg" alt="npm version"></a>
   </p>
@@ -35,7 +36,7 @@ NeuraForge solves this by dropping 44 pre-built agents into your project. Each a
 
 > Works as **Cursor Rules**, **Claude Code CLAUDE.md**, **GitHub Copilot Instructions**, **Kiro Steering**, and 10 more platforms (including Codex, Gemini CLI, and Antigravity). One install, all platforms detected automatically.
 
-Every forge/reviewer pair ships with automated eval cases that pin down what "correct" means per stack — **42/42 assertions passing** across all 7 stacks right now (`npm run eval`). Not a vibes-based claim: run it yourself.
+Every forge/reviewer pair ships with automated eval cases that pin down what "correct" means per stack: **42/42 assertions passing** across all 7 stacks (`npm run eval`, clone the repo to run it). Six behavior checks run a real agent on small tasks and grade the output.
 
 <p align="center">
   <img src="assets/eval-demo.gif" alt="npm run eval — real terminal recording, 42/42 passing" width="70%">
@@ -43,72 +44,24 @@ Every forge/reviewer pair ships with automated eval cases that pin down what "co
 
 ## Install
 
-**npm** (recommended — runs the same cross-platform installer, no need to trust a raw curl pipe):
-```bash
-npx neuraforge-ai [claude|cursor|gemini|codex|kiro|copilot|opencode]
-
-# Health-check an existing install
-npx neuraforge-ai --doctor
-```
-
-**Auto-detect via curl** (if you'd rather not use npm):
-```bash
-node <(curl -fsSL https://raw.githubusercontent.com/vikisingh23/neuraforge-ai/main/install.mjs)
-
-# Or on Windows (PowerShell):
-git clone https://github.com/vikisingh23/neuraforge-ai.git; node neuraforge-ai/install.mjs
-```
-
-Or install for a specific platform:
-
-<details>
-<summary><strong>Claude Code</strong></summary>
+Run this in your project folder. It needs Node.js 18+ and works the same on Windows (Command Prompt or PowerShell), macOS and Linux. No admin rights, no git and no network are needed after the package downloads.
 
 ```bash
-/plugin marketplace add vikisingh23/neuraforge-ai
-/plugin install neuraforge-ai
-```
-</details>
-
-<details>
-<summary><strong>Cursor</strong></summary>
-
-Import rules from GitHub: Settings → Rules → Import → `https://github.com/vikisingh23/neuraforge-ai.git`
-
-Or manually: clone the repo and copy `.cursor/` to your project.
-</details>
-
-<details>
-<summary><strong>Gemini CLI</strong></summary>
-
-Clone and copy `.gemini/settings.json` + `AGENTS.md` to your project. Gemini auto-discovers both.
-</details>
-
-<details>
-<summary><strong>GitHub Copilot CLI</strong></summary>
-
-Copy `AGENTS.md` to your project root. Copilot reads it automatically.
-</details>
-
-<details>
-<summary><strong>Codex / OpenCode / Kiro CLI / Antigravity</strong></summary>
-
-```bash
-npx neuraforge-ai antigravity   # or codex / opencode / kiro / hermes
+npx neuraforge-ai              # configure every supported tool found on this machine
+npx neuraforge-ai claude       # or one tool: kiro | gemini | codex | antigravity | cursor | copilot | opencode | hermes
 ```
 
-Or manually: copy `AGENTS.md` + `agents/` + `rules/` to your project. All four auto-discover `AGENTS.md` (Antigravity added native support in v1.20.3, March 2026).
+| Command | What it does |
+|---------|--------------|
+| `npx neuraforge-ai <tool> --dry-run` | Show what would be written, change nothing |
+| `npx neuraforge-ai --doctor` | Health-check an install |
+| `npx neuraforge-ai verify` | Scan changed files for secrets and list new dependencies (agents run this before reporting done) |
+| `npx neuraforge-ai feedback submit` | Turn a corrected agent mistake into a rule |
+| `npx neuraforge-ai@1.2.0 <tool>` | Pin an exact version. The installer writes the version bundled in the package, so the same version always installs the same files |
+| `npx neuraforge-ai@latest <tool>` | Update. Re-run it after a new release |
+| `npx neuraforge-ai <tool> --latest` | Install the newest `main` from GitHub instead of the bundled version |
 
-Kiro: `kiro-cli chat --agent forge`
-</details>
-
-Works on Windows, Mac, Linux. Needs Node.js 18+. Supports 14 AI platforms.
-
-### Quality checks
-
-- `npm run eval`: static checks of golden examples (no model, runs in CI).
-- `npm run eval:behavior`: runs a real agent on small tasks in a throwaway project and grades the result with deterministic checks (money is `decimal`, audit fields, soft delete, tests stay green and unedited, injected instructions in reviewed code are reported not obeyed). Needs a signed-in agent CLI (`--cmd` runs any other tool). `node tools/eval/behavior/index.mjs --list` shows the cases.
-- `npm run verify:generated`: scans changed files for secrets and lists new dependencies; agents run it before reporting done.
+No npm? `git clone https://github.com/vikisingh23/neuraforge-ai.git` and run `node neuraforge-ai/install.mjs <tool>` (or `bash neuraforge-ai/install.sh <tool>` on macOS and Linux).
 
 ### How each tool is wired
 
@@ -123,7 +76,97 @@ One source of truth (`agents/`, `skills/`, `rules/`, `AGENTS.md`). The installer
 | Codex | `.codex/agents/*.toml` (generated) | `.agents/skills/` | `AGENTS.md` | `.codex/config.toml` (created only if absent) |
 | Cursor, Copilot, OpenCode, Hermes | `AGENTS.md` + `agents/` | `skills/` | tool rules / `AGENTS.md` | `.mcp.json` |
 
-The two orchestrators (`feature-pipeline`, `fullstack-orchestrator`) run in the main thread through their skills, because subagents cannot spawn subagents. Reviewers are read-only. Test an install without cloning: `NEURAFORGE_SRC=$PWD node install.mjs <tool> --dry-run`.
+Every install also copies `AGENTS.md`, `agents/`, `rules/` and `skills/` into the project (agent prompts reference them by path) and puts the post-generation check in `.neuraforge/tools/`. The two orchestrators (`feature-pipeline`, `fullstack-orchestrator`) run in the main thread through their skills, because subagents cannot spawn subagents. Reviewers are read-only.
+
+### Manual setup for one tool
+
+<details>
+<summary><strong>Claude Code plugin</strong></summary>
+
+```bash
+/plugin marketplace add vikisingh23/neuraforge-ai
+/plugin install neuraforge-ai
+```
+</details>
+
+<details>
+<summary><strong>Cursor</strong></summary>
+
+Import rules from GitHub: Settings → Rules → Import → `https://github.com/vikisingh23/neuraforge-ai.git`. Or copy `.cursor/` to your project.
+</details>
+
+<details>
+<summary><strong>Gemini CLI, GitHub Copilot, Codex, OpenCode, Antigravity, Kiro</strong></summary>
+
+```bash
+npx neuraforge-ai gemini   # or copilot / codex / opencode / antigravity / kiro
+```
+
+By hand: copy `AGENTS.md` + `agents/` + `rules/` + `skills/` to your project. All of these tools read `AGENTS.md` (Antigravity added native support in v1.20.3, March 2026). Kiro: `kiro-cli chat --agent forge`.
+</details>
+
+<details>
+<summary><strong>Windsurf</strong></summary>
+
+Copy `.windsurfrules` + `AGENTS.md` + `agents/` + `rules/` to your project. Windsurf reads `.windsurfrules` automatically.
+</details>
+
+<details>
+<summary><strong>Cline (VS Code)</strong></summary>
+
+Copy `.cline/mcp.json` + `.clinerules` + `AGENTS.md` + `agents/` to your project.
+</details>
+
+<details>
+<summary><strong>Continue.dev</strong></summary>
+
+Copy `.continue/config.json` + `AGENTS.md` + `agents/` to your project.
+</details>
+
+<details>
+<summary><strong>Aider</strong></summary>
+
+Copy `.aider.conf.yml` + `AGENTS.md` + `agents/` to your project. Aider reads conventions automatically.
+</details>
+
+<details>
+<summary><strong>ChatGPT (Custom GPT)</strong></summary>
+
+See `chatgpt/README.md` for setup. Copy `chatgpt/GPT_INSTRUCTIONS.md` into your Custom GPT's instructions field.
+</details>
+
+<details>
+<summary><strong>Hermes Agent</strong></summary>
+
+```bash
+npx neuraforge-ai hermes
+```
+
+Or manually:
+```bash
+# Hermes' skill directory is global (~/.hermes/skills/), not per-project
+cp -r skills/* ~/.hermes/skills/neuraforge/
+# Or symlink for auto-updates
+ln -s $(pwd)/skills ~/.hermes/skills/neuraforge
+# AGENTS.md + agents/ + rules/ still need to be in your project root —
+# each skill's "for full instructions, read agents/{name}.md" only
+# resolves when Hermes is run from a project that has that folder
+cp -r AGENTS.md agents rules /path/to/your/project/
+```
+
+Skills are discovered via `/skill-name` or by Hermes reading each skill's
+`description` in natural-language mode — Hermes doesn't use a `triggers`
+field (unlike this repo's own frontmatter, which is harmless extra metadata
+Hermes just ignores).
+</details>
+
+### Quality checks (for contributors)
+
+Clone the repo to run these.
+
+- `npm run eval`: static checks of golden example files. No model needed, runs in CI.
+- `npm run eval:behavior`: runs a real agent on six small tasks in a throwaway project and grades the result with fixed checks (money is `decimal`, audit fields, soft delete, paginated lists, tests stay green and unedited, an instruction hidden in reviewed code is reported and not obeyed). It needs a signed-in agent CLI. `--platform kiro --cmd '<your tool command>'` runs it against another tool, and `node tools/eval/behavior/index.mjs --list` shows the cases.
+- `npm run test:tools`: installer, packaging, post-generation check and eval-grader tests, also run in CI.
 
 ---
 
@@ -264,45 +307,16 @@ Apache 2.0
 
 ## Limitations & Honest Notes
 
-This is a v1. Here's what to expect:
+Here's what to expect:
 
 - **Agents are sophisticated prompts, not autonomous systems.** They guide AI models to follow patterns — they don't self-correct or chain actions independently. Quality depends on the underlying model.
 - **Line limits are opinionated.** The "controllers <150 lines" rule works for our teams. Your mileage may vary. Treat these as starting points, not gospel.
 - **.NET, NestJS, and React agents have the longest production track record.** Django, Spring Boot, React Native, and Flutter reached the same reviewer/eval rigor more recently (see `npm run eval`) — same bar, less wall-clock time in production. Feedback welcome, especially from real usage.
 - **Domain presets are starting points.** The AI adapts based on its training data + your configuration. It won't replace a compliance expert.
+- **Not every tool is tested the same.** Kiro is verified end to end (all six behavior checks passed in a real session). Claude Code installs are validated by Claude's own validator and the packaging tests, but not yet run against a model. Gemini CLI, Codex, Antigravity, Cursor, Copilot, OpenCode and Hermes get the layouts their documentation describes, and have not been run end to end. Behavior results come from single runs and can vary.
 - **MCP servers are curated, not built by us.** We configure and test existing open-source MCP servers. The value is in the agent prompts and architecture rules.
 
 We'd rather ship something useful and iterate with the community than wait for perfection.
-
-<details>
-<summary><strong>Windsurf</strong></summary>
-
-Copy `.windsurfrules` + `AGENTS.md` + `agents/` + `rules/` to your project. Windsurf reads `.windsurfrules` automatically.
-</details>
-
-<details>
-<summary><strong>Cline (VS Code)</strong></summary>
-
-Copy `.cline/mcp.json` + `.clinerules` + `AGENTS.md` + `agents/` to your project.
-</details>
-
-<details>
-<summary><strong>Continue.dev</strong></summary>
-
-Copy `.continue/config.json` + `AGENTS.md` + `agents/` to your project.
-</details>
-
-<details>
-<summary><strong>Aider</strong></summary>
-
-Copy `.aider.conf.yml` + `AGENTS.md` + `agents/` to your project. Aider reads conventions automatically.
-</details>
-
-<details>
-<summary><strong>ChatGPT (Custom GPT)</strong></summary>
-
-See `chatgpt/README.md` for setup. Copy `chatgpt/GPT_INSTRUCTIONS.md` into your Custom GPT's instructions field.
-</details>
 
 ---
 
@@ -347,7 +361,7 @@ See [QUICKSTART.md](QUICKSTART.md). Start with `/debug` (paste any error), then 
 <details>
 <summary><strong>Can I use it with my existing project?</strong></summary>
 
-Yes. Copy `AGENTS.md` + `agents/` + `rules/` into your project root. The agents will search your existing codebase before generating new code.
+Yes. Run `npx neuraforge-ai <tool>` in the project folder. It adds `AGENTS.md`, `agents/`, `rules/`, `skills/` and the tool-specific folders, and does not touch your source. The agents search your existing codebase before generating new code.
 </details>
 
 <details>
@@ -356,27 +370,4 @@ Yes. Copy `AGENTS.md` + `agents/` + `rules/` into your project root. The agents 
 NeuraForge is a complete SDLC platform, not just coding rules. It includes: requirements agents, code generation across 7 stacks, 10 code reviewers, testing, debugging, refactoring, database design, API design, CI/CD, and document generation — all with a plan-before-act workflow.
 </details>
 
-<details>
-<summary><strong>Hermes Agent</strong></summary>
-
-```bash
-npx neuraforge-ai hermes
-```
-
-Or manually:
-```bash
-# Hermes' skill directory is global (~/.hermes/skills/), not per-project
-cp -r skills/* ~/.hermes/skills/neuraforge/
-# Or symlink for auto-updates
-ln -s $(pwd)/skills ~/.hermes/skills/neuraforge
-# AGENTS.md + agents/ + rules/ still need to be in your project root —
-# each skill's "for full instructions, read agents/{name}.md" only
-# resolves when Hermes is run from a project that has that folder
-cp -r AGENTS.md agents rules /path/to/your/project/
-```
-
-Skills are discovered via `/skill-name` or by Hermes reading each skill's
-`description` in natural-language mode — Hermes doesn't use a `triggers`
-field (unlike this repo's own frontmatter, which is harmless extra metadata
-Hermes just ignores).
 </details>

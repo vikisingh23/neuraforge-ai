@@ -4,22 +4,34 @@
  * NeuraForge AI — Cross-platform installer
  * Works on Windows, Mac, Linux
  *
- * Usage: npx neuraforge-ai-setup
+ * Usage: npx neuraforge-ai [platform] [--dry-run] [--latest]
  *    or: node install.mjs [platform] [--dry-run]
+ *        npx neuraforge-ai verify     scan changed files for secrets and list new dependencies
+ *        npx neuraforge-ai feedback   review and submit agent feedback
  *
- * Platforms: claude | cursor | gemini | codex | kiro | copilot | opencode | antigravity
+ * Installs the version bundled in the package (reproducible, no network). --latest fetches the newest from GitHub instead.
+ *
+ * Platforms: claude | cursor | gemini | codex | kiro | copilot | opencode | antigravity | hermes
  */
 
 import { execSync } from 'child_process';
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from 'fs';
 import { join, dirname, resolve } from 'path';
+import { fileURLToPath } from 'url';
+import { spawnSync } from 'child_process';
 import { homedir, platform as osPlatform } from 'os';
 import { MAIN_THREAD_ONLY, toClaudeAgent, toGeminiAgent, toCodexAgentToml, mcpToCodexToml } from './tools/install/adapters.mjs';
 
 const REPO = 'https://github.com/vikisingh23/neuraforge-ai';
 // NEURAFORGE_SRC=/path/to/checkout installs from a local copy instead of cloning (used for testing and offline installs).
 const LOCAL_SRC = process.env.NEURAFORGE_SRC ? resolve(process.env.NEURAFORGE_SRC) : null;
-const CLONE_DIR = LOCAL_SRC ?? join(homedir(), '.neuraforge-ai');
+// The files next to this installer: the npm package (or a checkout). Used by default so an install is reproducible
+// for the version you ran, needs no network and no git. `--latest` fetches the newest main from GitHub instead.
+const PKG_ROOT = dirname(fileURLToPath(import.meta.url));
+const FROM_LATEST = process.argv.includes('--latest');
+const BUNDLED = !FROM_LATEST && existsSync(join(PKG_ROOT, 'agents')) ? PKG_ROOT : null;
+const CLONE_DIR = LOCAL_SRC ?? BUNDLED ?? join(homedir(), '.neuraforge-ai');
+const PKG_VERSION = (() => { try { return JSON.parse(readFileSync(join(PKG_ROOT, 'package.json'), 'utf8')).version; } catch { return 'unknown'; } })();
 
 const KNOWN_PLATFORMS = ['claude', 'cursor', 'gemini', 'codex', 'kiro', 'copilot', 'opencode', 'antigravity', 'hermes'];
 
@@ -32,7 +44,23 @@ const err = (msg) => console.error(`\x1b[31m❌ ${msg}\x1b[0m`);
 const args = process.argv.slice(2);
 const isDryRun = args.includes('--dry-run');
 const isDoctor = args.includes('--doctor');
-const platformArg = args.find((a) => !a.startsWith('--'));
+const platformArg = args.find((a) => !a.startsWith('-'));
+
+// Subcommands that run bundled tools in the current project.
+const SUBCOMMANDS = { verify: 'tools/verify/post-gen-check.mjs', feedback: 'tools/feedback/index.mjs' };
+if (args.includes('--version') || args.includes('-v')) {
+  console.log(PKG_VERSION);
+  process.exit(0);
+}
+if (args.includes('--help') || args.includes('-h')) {
+  console.log(`NeuraForge AI ${PKG_VERSION}\n\nUsage:\n  npx neuraforge-ai [platform] [--dry-run] [--latest]\n  npx neuraforge-ai verify [--strict] [--audit] [--json]\n  npx neuraforge-ai feedback <list|submit|clean|lessons|init>\n  npx neuraforge-ai --doctor | --version\n\nPlatforms: claude | cursor | gemini | codex | kiro | copilot | opencode | antigravity | hermes\nWithout a platform, every tool found on this machine is configured.\n--latest installs the newest version from GitHub instead of the bundled one.`);
+  process.exit(0);
+}
+if (platformArg && SUBCOMMANDS[platformArg]) {
+  const rest = args.slice(args.indexOf(platformArg) + 1);
+  const r = spawnSync(process.execPath, [join(PKG_ROOT, SUBCOMMANDS[platformArg]), ...rest], { stdio: 'inherit' });
+  process.exit(r.status ?? 1);
+}
 
 // Validate platform argument if provided
 if (platformArg && !KNOWN_PLATFORMS.includes(platformArg)) {
@@ -80,6 +108,10 @@ function cloneRepo() {
       process.exit(1);
     }
     log(`Using local source: ${LOCAL_SRC}`);
+    return;
+  }
+  if (BUNDLED) {
+    log(`Installing bundled version ${PKG_VERSION} (use --latest for the newest from GitHub)`);
     return;
   }
   if (existsSync(CLONE_DIR)) {
@@ -290,6 +322,13 @@ function installSharedSkills() {
   return copyDirTo('skills', '.agents/skills');
 }
 
+// The post-generation check is installed into the project so agents can run it without npm or network.
+function installProjectTools() {
+  const src = join(CLONE_DIR, 'tools', 'verify', 'post-gen-check.mjs');
+  if (!existsSync(src)) return true;
+  return writeGenerated('.neuraforge/tools/post-gen-check.mjs', readFileSync(src, 'utf8'));
+}
+
 // ── Doctor mode ───────────────────────────────────────────────────────────────
 
 function runDoctor() {
@@ -356,7 +395,7 @@ if (isDoctor) {
 const common = ['AGENTS.md', 'agents', 'rules', 'skills'];
 
 function installForPlatform(detectedPlatform) {
-  let success = true;
+  let success = installProjectTools();
 
   switch (detectedPlatform) {
     case 'claude':
@@ -450,7 +489,7 @@ function installForPlatform(detectedPlatform) {
   return success;
 }
 
-log('NeuraForge AI Installer');
+log(`NeuraForge AI ${PKG_VERSION}`);
 if (isDryRun) warn('Dry-run mode — no files will be written');
 console.log('');
 
@@ -475,13 +514,18 @@ if (!success) {
   process.exit(1);
 }
 
-ok('44 agents · 22 MCP servers · 39 skills · 7 stacks');
+{
+  const count = (dir, test) => { try { return readdirSync(join(CLONE_DIR, dir)).filter(test).length; } catch { return 0; } };
+  let servers = 0;
+  try { servers = Object.keys(JSON.parse(readFileSync(join(CLONE_DIR, '.mcp.json'), 'utf8')).mcpServers || {}).length; } catch { /* no mcp config */ }
+  ok(`${count('agents', (f) => f.endsWith('.json'))} agents · ${servers} MCP servers · ${count('skills', (f) => existsSync(join(CLONE_DIR, 'skills', f, 'SKILL.md')))} skills · 7 stacks`);
+}
 console.log(`Docs: ${REPO}`);
 
 if (!isDryRun && success) {
   console.log('');
   log('If this saves you time, a star helps other devs find it:');
   console.log(`   ${REPO}`);
-  log('Something generated wrong? Tell the agent to run `npm run feedback:submit` —');
+  log('Something generated wrong? Run `npx neuraforge-ai feedback submit` —');
   log('that\'s how the anti-pattern rules get sharper for everyone.');
 }

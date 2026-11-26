@@ -198,5 +198,5 @@ Then tell the user:
 ```
 ---
 Feedback logged to `.neuraforge/feedback/{filename}`.
-If anything was wrong: open the file, set `outcome: corrected`, fill in what was wrong, then run `npm run feedback:submit`.
+If anything was wrong: open the file, set `outcome: corrected`, fill in what was wrong, then run `npx neuraforge-ai feedback submit`.
 ```

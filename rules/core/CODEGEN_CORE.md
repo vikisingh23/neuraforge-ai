@@ -41,7 +41,7 @@ Approve this plan? (y/n/adjust)
 A task is not done because the code looks right. It is done when the checks ran.
 
 1. Run the project's commands from the `Commands` section of `AGENTS.md`: build, lint, typecheck, tests. If none are listed, detect them (`package.json` scripts, `*.csproj`, `pyproject.toml`, `pom.xml`, `pubspec.yaml`).
-2. Run `node tools/verify/post-gen-check.mjs` when it exists in the project. It scans changed files for secrets and lists new dependencies so you can report them.
+2. Run `node .neuraforge/tools/post-gen-check.mjs` when it exists in the project (the installer puts it there; otherwise `npx neuraforge-ai verify`). It scans changed files for secrets and lists new dependencies so you can report them.
 3. Fix failures and re-run. After two failed attempts at the same error, stop and report it instead of looping.
 4. Put this block in your reply after your summary (omit nothing; write "not run" with the reason when a check could not run). Any feedback-log line comes after it:
 

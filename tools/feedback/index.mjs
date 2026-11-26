@@ -6,9 +6,10 @@
  * and submits confirmed bugs as GitHub issues to improve agent prompts.
  *
  * Usage (from your project root where neuraforge is installed):
+ *   npx neuraforge-ai feedback <command>
  *   node path/to/neuraforge-ai/tools/feedback/index.mjs <command>
  *
- * Or via npm scripts (if package.json is configured):
+ * Or, inside the NeuraForge repo, via npm scripts:
  *   npm run feedback:list
  *   npm run feedback:submit
  *   npm run feedback:clean
@@ -214,7 +215,7 @@ ${correctApproach || '_Not provided_'}
 ${suggestedRule || '_Not provided_'}
 
 ---
-_Submitted via \`npm run feedback:submit\` · NeuraForge AI feedback system_`;
+_Submitted via \`npx neuraforge-ai feedback submit\` · NeuraForge AI feedback system_`;
 
     const title = `[${agent}] ${promptSummary.slice(0, 60) || 'Bug report'}`;
     const labels = `prompt-fix,agent:${agent}`;

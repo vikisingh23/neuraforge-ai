@@ -330,7 +330,7 @@ def internal_endpoint(request):
 
 ## Finish (required)
 
-Before you reply, run the project's checks from the `Commands` section of `AGENTS.md` (build, lint, typecheck, tests), and `node tools/verify/post-gen-check.mjs` when it exists. A task is not done until they ran. Write "not run: <reason>" for anything you could not run. Put this block after your summary, and put any feedback-log line after it (the block comes first):
+Before you reply, run the project's checks from the `Commands` section of `AGENTS.md` (build, lint, typecheck, tests), and `node .neuraforge/tools/post-gen-check.mjs` when it exists (installed by `npx neuraforge-ai`; otherwise `npx neuraforge-ai verify`). A task is not done until they ran. Write "not run: <reason>" for anything you could not run. Put this block after your summary, and put any feedback-log line after it (the block comes first):
 
 ```markdown
 ### Result
